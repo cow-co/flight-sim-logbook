@@ -2,6 +2,11 @@
 
 ## A generic logbook app for combat flight simulators ##
 
+[![codecov](https://codecov.io/gh/cow-co/flight-sim-logbook/branch/develop/graph/badge.svg)](https://codecov.io/gh/cow-co/flight-sim-logbook)
+[![Maintainability](https://api.codeclimate.com/v1/badges/4dac0ab134218ce98336/maintainability)](https://codeclimate.com/github/cow-co/flight-sim-logbook/maintainability)
+[![Known Vulnerabilities](https://snyk.io/test/github/cow-co/flight-sim-logbook/badge.svg)](https://snyk.io/test/github/cow-co/flight-sim-logbook)
+[![Build Status](https://travis-ci.org/cow-co/flight-sim-logbook.svg?branch=master)](https://travis-ci.org/cow-co/flight-sim-logbook)
+
 ## Planned Features ##
 
 - [ ] User login
