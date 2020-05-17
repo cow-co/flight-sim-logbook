@@ -69,8 +69,8 @@ router.post("/create", async (req, res) => {
   return response;
 });
 
-router.get("/authenticated", authenticate(req, res, (req, res) => {
-  res.json({ "message": "success" });
-}));
+router.get("/authenticated", authenticate, (req, res) => {
+  return res.json({ message: "Success" });
+});
 
 module.exports = router;
