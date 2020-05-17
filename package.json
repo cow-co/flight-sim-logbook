@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "nyc jasmine JASMINE_CONFIG_PATH=jasmine.json",
-    "start": "node server.js",
+    "start": "node index.js",
     "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
   "repository": {
