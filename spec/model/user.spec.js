@@ -1,6 +1,7 @@
 const expect = require("chai").expect;
 const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
+const userMethods = require("../../db_interface/users");
 
 describe("User model tests", () => {
 	it("Should be invalid without a name", async () => {
@@ -98,37 +99,14 @@ describe("User model tests", () => {
 		}
 	});
 	
-	it("Should generate password hash and salt", async () => {
-		const validUser = {
-			name: "someone",
-			email: "someone@something.com"
-		};
-
-		const userModel = new User(validUser);
-		const hash = await userModel.setPassword("password");
-		expect(hash).to.exist;
-	});
-	
-	it("Should validate a given password", async () => {
-		const validUser = {
-			name: "someone",
-			email: "someone@something.com"
-		};
-
-		const userModel = new User(validUser);
-		await userModel.setPassword("password");
-		const valid = await userModel.checkPassword("password");
-		expect(valid).to.be.true;
-	});
-	
 	it("Should generate a JWT", async () => {
 		const validUser = {
 			name: "someone",
 			email: "someone@something.com"
 		};
 
-		const userModel = new User(validUser);
-		const token = await userModel.generateJWT();
+		const userModel = new User(validUser);		
+		const token = await userMethods.generateJWT(userModel);
 		const decoded = await jwt.decode(token);
 
 		expect(decoded.name).to.equal("someone");
