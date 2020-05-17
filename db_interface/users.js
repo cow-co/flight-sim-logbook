@@ -7,7 +7,13 @@ const millisecondsExpiry = 1000 * 60 * 60 * 12;	// 12 hours
 
 const getUserByName = async username => {
 	let user = null;
-	user = await User.findOne({name: username});
+
+	try {
+		user = await User.findOne({name: username});
+	} catch(error) {
+		throw error;
+	}
+	
 	return user;
 };
 
