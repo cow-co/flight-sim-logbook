@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const JWT_KEY = require("../config/keys").JWT_KEY;
 const { isEmptyOrNull } = require("../helpers/validation");
 
-const millisecondsExpiry = 1000 * 60 * 60 * 12;	// 12 hours
+const secondsExpiry = 60 * 60 * 12;	// 12 hours
 const minPassLength = 13;
 
 const getUserByName = async username => {
@@ -70,15 +70,16 @@ const checkPassword = async (user, givenPassword) => {
 // TODO A "checkJWT" method to validate the JWT is correct (and if it is not, we then redirect to the login page)
 
 const generateJWT = async (user) => {
-	const now = new Date();
-	const expiresOn = new Date(now);
-	expiresOn.setTime(now.getTime() + millisecondsExpiry);
-	const token = jwt.sign({
+	const token = jwt.sign(
+		{
 			name: user.name,
 			id: user._id,
-			exp: parseInt(expiresOn.getTime() / 1000, 10)	// Decimal representation of the expiry, in seconds
 		},
-		JWT_KEY);
+		JWT_KEY,
+		{
+			expiresIn: secondsExpiry
+		}
+	);
 
 	// Save the token onto the user in the database; this will then be removed when the user logs out.
 	// This allows us to track exactly which JWT is valid for that user (note that this also means they can only 
@@ -89,4 +90,21 @@ const generateJWT = async (user) => {
 	return token;
 };
 
-module.exports = { getUserByName, getUserByEmail, createUser, checkPassword, generateJWT };
+// Verifies the given token, and returns the associated user ID (if valid, `null` if not)
+const checkJWT = (token) => {
+	let userId = null;
+
+	try {
+		const decoded = jwt.verify(token, JWT_KEY);
+
+		if(decoded) {
+			userId = decoded.id;
+		}
+	} catch(error) {
+		console.log("Invalid JWT");
+	}	
+	
+	return userId;
+}
+
+module.exports = { getUserByName, getUserByEmail, createUser, checkPassword, generateJWT, checkJWT };

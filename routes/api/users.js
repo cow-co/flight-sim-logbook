@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const statusCodes = require("../../config/status_codes");
+const authenticate = require("../../middleware/security");
 const userMethods = require("../../db_interface/users");
 
 router.post("/login", async (req, res) => {
@@ -67,5 +68,9 @@ router.post("/create", async (req, res) => {
 
   return response;
 });
+
+router.get("/authenticated", authenticate(req, res, (req, res) => {
+  res.json({ "message": "success" });
+}));
 
 module.exports = router;
