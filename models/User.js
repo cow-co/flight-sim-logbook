@@ -22,7 +22,8 @@ const userSchema = new Schema({
 		match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Please fill a valid email address"],
 		required: true
 	},
-	passwordHash: String
+	passwordHash: String,
+	jwt: String
 });
 
 module.exports = User = mongoose.model("Users", userSchema);

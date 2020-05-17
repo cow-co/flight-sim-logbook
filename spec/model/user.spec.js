@@ -98,17 +98,4 @@ describe("User model tests", () => {
 			fail(err);
 		}
 	});
-	
-	it("Should generate a JWT", async () => {
-		const validUser = {
-			name: "someone",
-			email: "someone@something.com"
-		};
-
-		const userModel = new User(validUser);		
-		const token = await userMethods.generateJWT(userModel);
-		const decoded = await jwt.decode(token);
-
-		expect(decoded.name).to.equal("someone");
-	});
 });
