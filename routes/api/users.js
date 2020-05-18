@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const statusCodes = require("../../config/status_codes");
+const authenticate = require("../../middleware/security");
 const userMethods = require("../../db_interface/users");
 
 router.post("/login", async (req, res) => {
@@ -53,6 +54,8 @@ router.post("/create", async (req, res) => {
     } else {
       const newUser = await userMethods.createUser(userDetails);
       if (newUser.errors.length > 0) {
+        // TODO Send email verification
+        // TODO Add "verified" to user model; if not verified, user cannot get a JWT on login (error returned, saying to verify email, with a link to resend verification)
         response = res.status(statusCodes.INVALID_STATUS).json({ errors: newUser.errors });
       } else {
         response = res.json({ user: newUser });
@@ -64,6 +67,10 @@ router.post("/create", async (req, res) => {
   }
 
   return response;
+});
+
+router.get("/authenticated", authenticate, (req, res) => {
+  return res.json({ message: "Success" });
 });
 
 module.exports = router;
