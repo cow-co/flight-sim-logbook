@@ -2,9 +2,8 @@ const checkJWT = require("../db_interface/users").checkJWT;
 const statusCodes = require("../config/status_codes");
 
 const authenticate = (req, res, next) => {
-	const bearerToken = req.headers[Authorization];
-
 	try {
+		const bearerToken = req.header("Authorization");
 		const token = bearerToken.split(" ")[1];
 		const userId = checkJWT(token);
 		if(userId) {
