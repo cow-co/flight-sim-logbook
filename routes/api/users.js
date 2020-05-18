@@ -70,8 +70,9 @@ router.post("/create", async (req, res) => {
   return response;
 });
 
-router.get("/logout", authenticate, async (req, res) => {
+router.get("/logout", authenticate, async (req, res) => {  
   const username = jwtDecoding.getUsernameFromToken(jwtDecoding.getTokenFromRequest(req));
+  console.log(`Received logout request for ${username}`);
   const errors = await userMethods.deleteJWT(username);
 
   if(errors.length === 0) {

@@ -9,9 +9,13 @@ const authenticate = (req, res, next) => {
 		if(userId) {
 			next();
 		} else {
+			console.log("Invalid token received");
+			
 			return res.status(statusCodes.INVALID_STATUS).json({ errors: ["Invalid Token"] });
 		}
 	} catch(error) {
+		console.error(error);
+		
 		return res.status(statusCodes.INVALID_STATUS).json({ errors: ["Invalid Token"] });
 	}
 }
