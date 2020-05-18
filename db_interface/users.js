@@ -67,8 +67,6 @@ const checkPassword = async (user, givenPassword) => {
 	return await argon2.verify(user.passwordHash, givenPassword);
 };
 
-// TODO A "checkJWT" method to validate the JWT is correct (and if it is not, we then redirect to the login page)
-
 const generateJWT = async (user) => {
 	const token = jwt.sign(
 		{
@@ -91,14 +89,18 @@ const generateJWT = async (user) => {
 };
 
 // Verifies the given token, and returns the associated user ID (if valid, `null` if not)
-const checkJWT = (token) => {
+const checkJWT = async (token) => {
 	let userId = null;
 
 	try {
 		const decoded = jwt.verify(token, JWT_KEY);
 
 		if(decoded) {
-			userId = decoded.id;
+			// Validate that the token matches what is saved in the DB
+			const user = await getUserByName(decoded.name);
+			if(user.jwt === token) {
+				userId = decoded.id;
+			}
 		}
 	} catch(error) {
 		console.log("Invalid JWT");
@@ -107,4 +109,20 @@ const checkJWT = (token) => {
 	return userId;
 }
 
-module.exports = { getUserByName, getUserByEmail, createUser, checkPassword, generateJWT, checkJWT };
+const deleteJWT = async (username) => {
+	let errors = [];
+
+	try {
+		const user = await getUserByName(username);
+		if(user) {
+			user.jwt = null;
+			await user.save();
+		}
+	} catch(error) {
+		errors.push("Server Error");
+	}
+
+	return errors;
+}
+
+module.exports = { getUserByName, getUserByEmail, createUser, checkPassword, generateJWT, checkJWT, deleteJWT };
