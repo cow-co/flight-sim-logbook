@@ -89,7 +89,7 @@ const generateJWT = async (user) => {
 };
 
 // Verifies the given token, and returns the associated user ID (if valid, `null` if not)
-const checkJWT = (token) => {
+const checkJWT = async (token) => {
 	let userId = null;
 
 	try {
