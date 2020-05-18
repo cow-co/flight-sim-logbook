@@ -97,7 +97,7 @@ const checkJWT = (token) => {
 
 		if(decoded) {
 			// Validate that the token matches what is saved in the DB
-			const user = getUserByName(decoded.name);
+			const user = await getUserByName(decoded.name);
 			if(user.jwt === token) {
 				userId = decoded.id;
 			}
