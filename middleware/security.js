@@ -1,10 +1,10 @@
 const checkJWT = require("../db_interface/users").checkJWT;
 const statusCodes = require("../config/status_codes");
+const jwtDecoding = require("../helpers/jwt_decoding");
 
 const authenticate = (req, res, next) => {
 	try {
-		const bearerToken = req.header("Authorization");
-		const token = bearerToken.split(" ")[1];
+		const token = jwtDecoding.getTokenFromRequest(req);
 		const userId = checkJWT(token);
 		if(userId) {
 			next();

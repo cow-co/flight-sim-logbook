@@ -3,6 +3,7 @@ const router = express.Router();
 const statusCodes = require("../../config/status_codes");
 const authenticate = require("../../middleware/security");
 const userMethods = require("../../db_interface/users");
+const jwtDecoding = require("../../helpers/jwt_decoding");
 
 router.post("/login", async (req, res) => {
   const loginDetails = req.body;
@@ -69,8 +70,15 @@ router.post("/create", async (req, res) => {
   return response;
 });
 
-router.get("/authenticated", authenticate, (req, res) => {
-  return res.json({ message: "Success" });
+router.get("/logout", authenticate, async (req, res) => {
+  const username = jwtDecoding.getUsernameFromToken(jwtDecoding.getTokenFromRequest(req));
+  const errors = await userMethods.deleteJWT(username);
+
+  if(errors.length === 0) {
+    return res.json({ "message": "Successfully Logged Out" });
+  } else {
+    return res.status(statusCodes.SERVER_ERROR).json({ errors: errors });
+  }
 });
 
 module.exports = router;
