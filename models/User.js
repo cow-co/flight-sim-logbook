@@ -29,7 +29,7 @@ const userSchema = new Schema({
 		default: false
 	},
 	verificationToken: String,
-	verificationSet: Date
+	verificationSet: Number
 });
 
 module.exports = User = mongoose.model("Users", userSchema);

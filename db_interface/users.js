@@ -3,9 +3,10 @@ const argon2 = require("argon2");
 const cryptoString = require("crypto-random-string");
 const jwt = require("jsonwebtoken");
 const JWT_KEY = require("../config/keys").JWT_KEY;
+const AUTH_EXPIRY_HOURS = require("../config/keys").AUTH_EXPIRY_HOURS;
 const { isEmptyOrNull } = require("../helpers/validation");
 
-const secondsExpiry = 60 * 60 * 12; // 12 hours
+const secondsExpiry = 60 * 60 * AUTH_EXPIRY_HOURS; // 12 hours
 const minPassLength = 13;
 
 const getUserByName = async (username) => {
@@ -137,6 +138,17 @@ const generateEmailVerificationToken = async (username) => {
   return token;
 };
 
+const verifyEmail = async (username, givenToken) => {
+  const user = await getUserByName(username);
+  const timePassed = Date.now() - user.verificationSet;
+  let valid = false;
+  if (timePassed < secondsExpiry * 1000 && user.verificationToken === givenToken) {
+    valid = true;
+  }
+
+  return valid;
+};
+
 module.exports = {
   getUserByName,
   getUserByEmail,
@@ -146,4 +158,5 @@ module.exports = {
   checkJWT,
   deleteJWT,
   generateEmailVerificationToken,
+  verifyEmail
 };

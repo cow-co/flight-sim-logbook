@@ -92,11 +92,20 @@ router.get("/logout", authenticate, isVerified, async (req, res) => {
 // This is used when the user's original verification token is lost or expired (i.e. this is how they request a new one)
 // Requires login first.
 router.post("/verify/send/", authenticate, async (req, res) => {
-  // TODO Implement
+  const user = res.locals.user;
+  const token = await userMethods.generateEmailVerificationToken(user.name);
+  await sendVerificationEmail(user.name, user.email, token);
+  return res.status(statusCodes.SUCCESS).json({message: "Email verification sent!"});
 });
 
-router.get("/verify/:token", async (req, res) => {
-  // TODO Implement
+router.get("/verify/:username/:token", async (req, res) => {
+  const isValid = await userMethods.verifyEmail(req.params.username, req.params.token);
+
+  if(isValid) {
+    return res.redirect("/login").json({message: "Email verification succeeded!"});
+  } else {
+    return res.status(statusCodes.INVALID_STATUS).json({message: "Email verification failed!"});
+  }
 });
 
 module.exports = router;
