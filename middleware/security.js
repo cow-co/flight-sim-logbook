@@ -1,13 +1,16 @@
 const checkJWT = require("../db_interface/users").checkJWT;
 const statusCodes = require("../config/status_codes");
 const jwtDecoding = require("../helpers/jwt_decoding");
+const getUserByName = require("../db_interface/users").getUserByName;
 
-const authenticate = (req, res, next) => {
+const authenticate = async (req, res, next) => {
 	try {
 		const token = jwtDecoding.getTokenFromRequest(req);
-		const userId = checkJWT(token);
-		if(userId) {
-			next();
+		const user = await checkJWT(token);
+
+		if(user._id) {
+			res.locals.user = user;
+			next();	// This will be `isVerified` if email verification is required for the endpoint in question
 		} else {
 			console.log("Invalid token received");
 			
@@ -20,4 +23,24 @@ const authenticate = (req, res, next) => {
 	}
 }
 
-module.exports = authenticate;
+const isVerified = async (req, res, next) => {
+	let user = null;
+	let isVerified = false;
+
+	// Some endpoints may call this first (if authentication tokens are not required - e.g. login endpoint) so res.locals.user won't be set
+	if(res.locals.user !== undefined) {
+		isVerified = user.isVerified;
+	} else {
+		username = req.body.user.name;
+		user = await getUserByName(username);
+		isVerified = user.isVerified;
+	}
+
+	if(!isVerified) {
+		return res.status(statusCodes.INVALID_STATUS).json({ isVerified: false, errors: ["Please verify your email"] });
+	} else {
+		next();
+	}
+}
+
+module.exports = {authenticate, isVerified};

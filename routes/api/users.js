@@ -1,11 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const statusCodes = require("../../config/status_codes");
-const authenticate = require("../../middleware/security");
+const { authenticate, isVerified } = require("../../middleware/security");
 const userMethods = require("../../db_interface/users");
 const jwtDecoding = require("../../helpers/jwt_decoding");
+const {sendVerificationEmail} = require("../../helpers/emailing");
 
-router.post("/login", async (req, res) => {
+// Don't want to log a user in if their email has not been verified
+router.post("/login", isVerified, async (req, res) => {
   const loginDetails = req.body;
   console.log("Received login request");
   let valid = false;
@@ -38,8 +40,9 @@ router.post("/login", async (req, res) => {
 router.post("/create", async (req, res) => {
   const userDetails = req.body;
   console.log("Received user-creation request");
-  let response = null;
   let userExists = false;
+  let responseJSON = {user: null, errors: []};
+  let returnStatus = statusCodes.SUCCESS;
 
   try {
     let user = await userMethods.getUserByName(userDetails.name);
@@ -51,26 +54,30 @@ router.post("/create", async (req, res) => {
     }
 
     if (userExists) {
-      response = res.status(statusCodes.INVALID_STATUS).json({ errors: ["User already exists!"] });
+      returnStatus = statusCodes.INVALID_STATUS;
+      responseJSON.errors.push("User already exists!");
     } else {
       const newUser = await userMethods.createUser(userDetails);
       if (newUser.errors.length > 0) {
-        // TODO Send email verification
-        // TODO Add "verified" to user model; if not verified, user cannot get a JWT on login (error returned, saying to verify email, with a link to resend verification)
-        response = res.status(statusCodes.INVALID_STATUS).json({ errors: newUser.errors });
+        returnStatus = statusCodes.INVALID_STATUS;
+        responseJSON.errors = newUser.errors;
       } else {
-        response = res.json({ user: newUser });
+        const token = await userMethods.generateEmailVerificationToken(newUser.name);
+        await sendVerificationEmail(newUser.name, newUser.email, token);
+        responseJSON.user.name = newUser.name;
+        responseJSON.user.email = newUser.email;
       }
     }
   } catch (error) {
-    console.error("Other error");
-    response = res.status(statusCodes.SERVER_ERROR).json({ errors: ["Server Error"] });
+    console.error(error.message);
+    returnStatus = statusCodes.SERVER_ERROR;
+    responseJSON.errors.push("Server-side error");
   }
 
-  return response;
+  return res.status(returnStatus).json(responseJSON);
 });
 
-router.get("/logout", authenticate, async (req, res) => {  
+router.get("/logout", authenticate, isVerified, async (req, res) => {  
   const username = jwtDecoding.getUsernameFromToken(jwtDecoding.getTokenFromRequest(req));
   console.log(`Received logout request for ${username}`);
   const errors = await userMethods.deleteJWT(username);
@@ -79,6 +86,25 @@ router.get("/logout", authenticate, async (req, res) => {
     return res.json({ "message": "Successfully Logged Out" });
   } else {
     return res.status(statusCodes.SERVER_ERROR).json({ errors: errors });
+  }
+});
+
+// This is used when the user's original verification token is lost or expired (i.e. this is how they request a new one)
+// Requires login first.
+router.post("/verify/send/", authenticate, async (req, res) => {
+  const user = res.locals.user;
+  const token = await userMethods.generateEmailVerificationToken(user.name);
+  await sendVerificationEmail(user.name, user.email, token);
+  return res.status(statusCodes.SUCCESS).json({message: "Email verification sent!"});
+});
+
+router.get("/verify/:username/:token", async (req, res) => {
+  const isValid = await userMethods.verifyEmail(req.params.username, req.params.token);
+
+  if(isValid) {
+    return res.redirect("/login").json({message: "Email verification succeeded!"});
+  } else {
+    return res.status(statusCodes.INVALID_STATUS).json({message: "Email verification failed!"});
   }
 });
 
