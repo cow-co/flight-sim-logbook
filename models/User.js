@@ -23,7 +23,13 @@ const userSchema = new Schema({
 		required: true
 	},
 	passwordHash: String,
-	jwt: String
+	jwt: String,
+	isVerified: {
+		type: Boolean,
+		default: false
+	},
+	verificationToken: String,
+	verificationSet: Date
 });
 
 module.exports = User = mongoose.model("Users", userSchema);
