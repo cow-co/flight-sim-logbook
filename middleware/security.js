@@ -43,6 +43,7 @@ const isVerified = async (req, res, next) => {
 			next();
 		}
 	} catch(error) {
+		console.log(error)
 		return res.status(statusCodes.INVALID_STATUS).json({ isVerified: false, errors: ["Malformed Request"] })
 	}
 

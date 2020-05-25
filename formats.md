@@ -6,3 +6,6 @@
   - name
   - password
 
+## Change Password (authenticated, verified) ##
+
+- password
