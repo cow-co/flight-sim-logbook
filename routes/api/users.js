@@ -115,17 +115,20 @@ router.post("/change-password", authenticate, isVerified, async (req, res) => {
   if(userMethods.isValidPassword(password)) {
     try {
       await userMethods.changePassword(res.locals.user, password);
+      await userMethods.deleteJWT(res.locals.user.name);
+      return res.redirect("../login");
     } catch(error) {
       console.error(error.message);
       returnStatus = statusCodes.SERVER_ERROR;
       responseJSON.errors.push("Server Error");
+      return res.status(returnStatus).json(responseJSON);
     }
   } else {
     returnStatus = statusCodes.INVALID_STATUS;
     responseJSON.errors.push("Invalid Password");
+    return res.status(returnStatus).json(responseJSON);
   }
 
-  return res.status(returnStatus).json(responseJSON);
 });
 
 module.exports = router;
