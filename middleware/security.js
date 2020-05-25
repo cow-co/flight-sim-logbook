@@ -30,7 +30,7 @@ const isVerified = async (req, res, next) => {
 	try {
 		// Some endpoints may call this first (if authentication tokens are not required - e.g. login endpoint) so res.locals.user won't be set
 		if(res.locals.user !== undefined) {
-			isVerified = user.isVerified;
+			isVerified = res.locals.user.isVerified;
 		} else {
 			username = req.body.user.name;
 			user = await getUserByName(username);
