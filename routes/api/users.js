@@ -8,7 +8,7 @@ const {sendVerificationEmail} = require("../../helpers/emailing");
 
 // Don't want to log a user in if their email has not been verified
 router.post("/login", isVerified, async (req, res) => {
-  const loginDetails = req.body;
+  const loginDetails = req.body.user;
   console.log("Received login request");
   let valid = false;
   let response = null;
@@ -106,6 +106,29 @@ router.get("/verify/:username/:token", async (req, res) => {
   } else {
     return res.status(statusCodes.INVALID_STATUS).json({message: "Email verification failed!"});
   }
+});
+
+router.post("/change-password", authenticate, isVerified, async (req, res) => {
+  const password = req.body.password;
+  let responseJSON = {errors: []};
+  let returnStatus = statusCodes.SUCCESS;
+  if(userMethods.isValidPassword(password)) {
+    try {
+      await userMethods.changePassword(res.locals.user, password);
+      await userMethods.deleteJWT(res.locals.user.name);
+      return res.redirect("../login");
+    } catch(error) {
+      console.error(error.message);
+      returnStatus = statusCodes.SERVER_ERROR;
+      responseJSON.errors.push("Server Error");
+      return res.status(returnStatus).json(responseJSON);
+    }
+  } else {
+    returnStatus = statusCodes.INVALID_STATUS;
+    responseJSON.errors.push("Invalid Password");
+    return res.status(returnStatus).json(responseJSON);
+  }
+
 });
 
 module.exports = router;

@@ -27,6 +27,16 @@ const getUserByEmail = async (email) => {
   return user;
 };
 
+const isValidPassword = (password) => {
+  return password.length >= minPassLength;
+}
+
+const changePassword = async (user, password) => {
+  const hash = await argon2.hash(password);
+  user.passwordHash = hash;
+  await user.save();
+}
+
 const createUser = async (userSetup) => {
   let newUser = {
     name: null,
@@ -44,7 +54,7 @@ const createUser = async (userSetup) => {
 
   if (newUser.errors.length === 0) {
     try {
-      if (userSetup.password.length >= minPassLength) {
+      if (isValidPassword(userSetup.password)) {
         const hash = await argon2.hash(userSetup.password);
         await User.create({
           name: userSetup.name,
@@ -152,6 +162,8 @@ const verifyEmail = async (username, givenToken) => {
 module.exports = {
   getUserByName,
   getUserByEmail,
+  isValidPassword,
+  changePassword,
   createUser,
   checkPassword,
   generateJWT,
