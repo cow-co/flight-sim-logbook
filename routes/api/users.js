@@ -8,7 +8,7 @@ const {sendVerificationEmail} = require("../../helpers/emailing");
 
 // Don't want to log a user in if their email has not been verified
 router.post("/login", isVerified, async (req, res) => {
-  const loginDetails = req.body;
+  const loginDetails = req.body.user;
   console.log("Received login request");
   let valid = false;
   let response = null;
