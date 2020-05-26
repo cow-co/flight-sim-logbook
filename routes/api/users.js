@@ -64,8 +64,10 @@ router.post("/create", async (req, res) => {
       } else {
         const token = await userMethods.generateEmailVerificationToken(newUser.name);
         await sendVerificationEmail(newUser.name, newUser.email, token);
-        responseJSON.user.name = newUser.name;
-        responseJSON.user.email = newUser.email;
+        responseJSON.user = {
+          name: newUser.name,
+          email: newUser.email
+        };
       }
     }
   } catch (error) {
