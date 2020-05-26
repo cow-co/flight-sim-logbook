@@ -5,7 +5,7 @@ const EMAIL_UN = require("../config/keys").EMAIL_UN;
 const transport = mailer.createTransport({
 	pool: true,
 	host: "smtp.gmail.com",
-	port: 587,
+	port: 465,
 	secure: true,
 	auth: {
 		user: EMAIL_UN,
