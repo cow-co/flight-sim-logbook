@@ -63,7 +63,7 @@ router.post("/create", async (req, res) => {
         responseJSON.errors = newUser.errors;
       } else {
         const token = await userMethods.generateEmailVerificationToken(newUser.name);
-        const url = req.protocol + "://" + req.get("Host") + `/api/users/verify/${user.name}/${token}`;
+        const url = req.protocol + "://" + req.get("Host") + `/api/users/verify/${newUser.name}/${token}`;
         await sendVerificationEmail(newUser.name, newUser.email, url);
         responseJSON.user = {
           name: newUser.name,
