@@ -94,7 +94,8 @@ router.get("/logout", authenticate, isVerified, async (req, res) => {
 router.post("/verify/send/", authenticate, async (req, res) => {
   const user = res.locals.user;
   const token = await userMethods.generateEmailVerificationToken(user.name);
-  await sendVerificationEmail(user.name, user.email, token);
+  const url = req.protocol + "://" + req.get("Host") + `/verify/${user.name}/token`;
+  await sendVerificationEmail(user.name, user.email, url);
   return res.status(statusCodes.SUCCESS).json({message: "Email verification sent!"});
 });
 
