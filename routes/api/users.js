@@ -63,7 +63,8 @@ router.post("/create", async (req, res) => {
         responseJSON.errors = newUser.errors;
       } else {
         const token = await userMethods.generateEmailVerificationToken(newUser.name);
-        await sendVerificationEmail(newUser.name, newUser.email, token);
+        const url = req.protocol + "://" + req.get("Host") + `/api/users/verify/${user.name}/${token}`;
+        await sendVerificationEmail(newUser.name, newUser.email, url);
         responseJSON.user = {
           name: newUser.name,
           email: newUser.email
@@ -96,7 +97,7 @@ router.get("/logout", authenticate, isVerified, async (req, res) => {
 router.post("/verify/send/", authenticate, async (req, res) => {
   const user = res.locals.user;
   const token = await userMethods.generateEmailVerificationToken(user.name);
-  const url = req.protocol + "://" + req.get("Host") + `/verify/${user.name}/token`;
+  const url = req.protocol + "://" + req.get("Host") + `/api/users/verify/${user.name}/${token}`;
   await sendVerificationEmail(user.name, user.email, url);
   return res.status(statusCodes.SUCCESS).json({message: "Email verification sent!"});
 });
