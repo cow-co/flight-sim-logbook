@@ -8,7 +8,7 @@ const { sendVerificationEmail, sendResetEmail } = require("../../helpers/emailin
 
 // Don't want to log a user in if their email has not been verified
 router.post("/login", isVerified, async (req, res) => {
-  const loginDetails = req.body.user;
+  const loginDetails = req.body;
   console.log("Received login request");
   let valid = false;
   let response = null;
@@ -40,36 +40,22 @@ router.post("/login", isVerified, async (req, res) => {
 router.post("/create", async (req, res) => {
   const userDetails = req.body;
   console.log("Received user-creation request");
-  let userExists = false;
   let responseJSON = { user: null, errors: [] };
   let returnStatus = statusCodes.SUCCESS;
 
   try {
-    let user = await userMethods.getUserByName(userDetails.name);
-    if (user) {
-      userExists = true;
-    } else {
-      user = await userMethods.getUserByEmail(userDetails.email);
-      userExists = user ? true : false;
-    }
-
-    if (userExists) {
+    const newUser = await userMethods.createUser(userDetails);
+    if (newUser.errors.length > 0) {
       returnStatus = statusCodes.INVALID_STATUS;
-      responseJSON.errors.push("User already exists!");
+      responseJSON.errors = newUser.errors;
     } else {
-      const newUser = await userMethods.createUser(userDetails);
-      if (newUser.errors.length > 0) {
-        returnStatus = statusCodes.INVALID_STATUS;
-        responseJSON.errors = newUser.errors;
-      } else {
-        const token = await userMethods.generateEmailVerificationToken(newUser.name);
-        const url = req.protocol + "://" + req.get("Host") + `/api/users/verify/${newUser.name}/${token}`;
-        sendVerificationEmail(newUser.name, newUser.email, url);
-        responseJSON.user = {
-          name: newUser.name,
-          email: newUser.email,
-        };
-      }
+      const token = await userMethods.generateEmailVerificationToken(newUser.name);
+      const url = req.protocol + "://" + req.get("Host") + `/api/users/verify/${newUser.name}/${token}`;
+      sendVerificationEmail(newUser.name, newUser.email, url);
+      responseJSON.user = {
+        name: newUser.name,
+        email: newUser.email,
+      };
     }
   } catch (error) {
     console.error(error.message);
@@ -94,7 +80,7 @@ router.get("/logout", authenticate, isVerified, async (req, res) => {
 
 // This is used when the user's original verification token is lost or expired (i.e. this is how they request a new one)
 // Requires login first.
-router.post("/verify/send/", authenticate, async (req, res) => {
+router.get("/verify/send", authenticate, async (req, res) => {
   const user = res.locals.user;
   const token = await userMethods.generateEmailVerificationToken(user.name);
   const url = req.protocol + "://" + req.get("Host") + `/api/users/verify/${user.name}/${token}`;
@@ -114,9 +100,11 @@ router.get("/verify/:username/:token", async (req, res) => {
 
 router.post("/change-password", authenticate, isVerified, async (req, res) => {
   const password = req.body.password;
+  const confirmation = req.body.passwordConfirmation;
   let responseJSON = { errors: [] };
   let returnStatus = statusCodes.SUCCESS;
-  if (userMethods.isValidPassword(password)) {
+
+  if (password === confirmation && userMethods.isValidPassword(password)) {
     try {
       await userMethods.changePassword(res.locals.user, password);
       await userMethods.deleteJWT(res.locals.user.name);
@@ -133,9 +121,6 @@ router.post("/change-password", authenticate, isVerified, async (req, res) => {
     return res.status(returnStatus).json(responseJSON);
   }
 });
-
-// TODO implement password confirmation in change-password
-// TODO implement password confirmation in create-user
 
 // This does not require authentication (since the user, by definition, has forgotten their password)
 // Instead, the request must include the reset-password token from the email the user received

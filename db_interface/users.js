@@ -44,13 +44,29 @@ const createUser = async (userSetup) => {
     errors: [],
   };
 
-  if (isEmptyOrNull(userSetup.name)) {
-    newUser.errors.push("Please enter a username");
+  let existingUser = await getUserByName(userSetup.name);
+  if (existingUser) {
+    userExists = true;
+  } else {
+    existingUser = await getUserByEmail(userSetup.email);
+    userExists = existingUser ? true : false;
   }
 
-  if (isEmptyOrNull(userSetup.email)) {
-    newUser.errors.push("Please enter an email");
-  }
+  if (userExists) {
+    newUser.errors.push("User already exists!");
+  } else {
+    if (isEmptyOrNull(userSetup.name)) {
+      newUser.errors.push("Please enter a username");
+    }
+  
+    if (isEmptyOrNull(userSetup.email)) {
+      newUser.errors.push("Please enter an email");
+    }
+  
+    if(userSetup.password !== userSetup.passwordConfirmation) {
+      newUser.errors.push("Password confirmation does not match");
+    }
+  }  
 
   if (newUser.errors.length === 0) {
     try {
