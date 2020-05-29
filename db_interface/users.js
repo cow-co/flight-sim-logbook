@@ -29,13 +29,13 @@ const getUserByEmail = async (email) => {
 
 const isValidPassword = (password) => {
   return password.length >= minPassLength;
-}
+};
 
 const changePassword = async (user, password) => {
   const hash = await argon2.hash(password);
   user.passwordHash = hash;
   await user.save();
-}
+};
 
 const createUser = async (userSetup) => {
   let newUser = {
@@ -58,15 +58,15 @@ const createUser = async (userSetup) => {
     if (isEmptyOrNull(userSetup.name)) {
       newUser.errors.push("Please enter a username");
     }
-  
+
     if (isEmptyOrNull(userSetup.email)) {
       newUser.errors.push("Please enter an email");
     }
-  
-    if(userSetup.password !== userSetup.passwordConfirmation) {
+
+    if (userSetup.password !== userSetup.passwordConfirmation) {
       newUser.errors.push("Password confirmation does not match");
     }
-  }  
+  }
 
   if (newUser.errors.length === 0) {
     try {
@@ -168,8 +168,8 @@ const verifyEmail = async (username, givenToken) => {
   const user = await getUserByName(username);
   const timePassed = Date.now() - user.verificationSet;
   let valid = false;
-  if (timePassed < secondsExpiry * 1000){
-    if(user.verificationToken === givenToken) {
+  if (timePassed < secondsExpiry * 1000) {
+    if (user.verificationToken === givenToken) {
       valid = true;
     }
   } else {
@@ -187,20 +187,20 @@ const generateForgotPasswordToken = async (username) => {
   const dateSet = Date.now();
   user.resetPasswordToken = token;
   user.resetTokenSet = dateSet;
-  // We don't want the account to be useable until the password is reset. 
+  // We don't want the account to be useable until the password is reset.
   // This allows us to use password-reset as a quick way to lock out an account.
-  user.isActive = false;  
+  user.isActive = false;
   await user.save();
 
   return token;
-}
+};
 
 const verifyForgotPassword = async (username, token) => {
   const user = await getUserByName(username);
   const timePassed = Date.now() - user.resetTokenSet;
   let valid = false;
-  if (timePassed < secondsExpiry * 1000){
-    if(user.resetPasswordToken === token) {
+  if (timePassed < secondsExpiry * 1000) {
+    if (user.resetPasswordToken === token) {
       valid = true;
     }
   } else {
@@ -210,7 +210,7 @@ const verifyForgotPassword = async (username, token) => {
   }
 
   return valid;
-}
+};
 
 module.exports = {
   getUserByName,
@@ -225,5 +225,5 @@ module.exports = {
   generateEmailVerificationToken,
   verifyEmail,
   generateForgotPasswordToken,
-  verifyForgotPassword
+  verifyForgotPassword,
 };

@@ -159,17 +159,17 @@ router.post("/request-reset-password", async (req, res) => {
   const userEmail = req.body.email;
   try {
     const user = userMethods.getUserByEmail(userEmail);
-    if(user) {
+    if (user) {
       const token = await userMethods.generateForgotPasswordToken(user.name);
       const url = req.protocol + "://" + req.get("Host") + `/api/users/reset-password/${user.name}/${token}`;
       sendResetEmail(user.name, user.email, url);
       return res.status(statusCodes.SUCCESS).json({ message: "Password reset email sent!" });
     } else {
-      return res.status(statusCodes.INVALID_STATUS).json({errors: ["User not found"]});
+      return res.status(statusCodes.INVALID_STATUS).json({ errors: ["User not found"] });
     }
-  } catch(err) {
+  } catch (err) {
     console.error(err);
-    return res.status(statusCodes.SERVER_ERROR).json({errors: ["Server Error"]});
+    return res.status(statusCodes.SERVER_ERROR).json({ errors: ["Server Error"] });
   }
 });
 
