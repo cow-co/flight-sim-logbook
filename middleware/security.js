@@ -8,7 +8,7 @@ const authenticate = async (req, res, next) => {
 		const token = jwtDecoding.getTokenFromRequest(req);
 		const user = await checkJWT(token);
 
-		if(user._id) {
+		if(user._id && user.isActive) {
 			res.locals.user = user;
 			next();	// This will be `isVerified` if email verification is required for the endpoint in question
 		} else {

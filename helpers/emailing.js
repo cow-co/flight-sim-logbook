@@ -13,7 +13,7 @@ const transport = mailer.createTransport({
 	}
 });
 
-const sendVerificationEmail = async (username, email, url) => {
+const sendVerificationEmail = (username, email, url) => {
 	const msg = {
 		to: email,
 		from: "verification@flight-sim-logbook.herokuapp.com",
@@ -28,4 +28,19 @@ const sendVerificationEmail = async (username, email, url) => {
 	});
 }
 
-module.exports = { sendVerificationEmail }
+const sendResetEmail = (username, email, url) => {
+	const msg = {
+		to: email,
+		from: "reset@flight-sim-logbook.herokuapp.com",
+		subject: "Flight Sim Logbook Password Reset",
+		text: `Hello ${username}!\n\nPlease click the link, or paste the link into your browser, to reset your password.\n\n${url}`,
+		html: `Hello ${username}!<br/><br/>Please click the link, or paste the link into your browser, to reset your password.<br/><br/><a href = "${url}">Reset Password!</a>`
+	};
+	transport.sendMail(msg, (err, info) => {
+		if(err) {
+			console.log(err);
+		}
+	});
+}
+
+module.exports = { sendVerificationEmail, sendResetEmail }

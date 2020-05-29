@@ -152,12 +152,49 @@ const verifyEmail = async (username, givenToken) => {
   const user = await getUserByName(username);
   const timePassed = Date.now() - user.verificationSet;
   let valid = false;
-  if (timePassed < secondsExpiry * 1000 && user.verificationToken === givenToken) {
-    valid = true;
+  if (timePassed < secondsExpiry * 1000){
+    if(user.verificationToken === givenToken) {
+      valid = true;
+    }
+  } else {
+    // unset the expired token
+    user.verificationToken = null;
+    await user.save();
   }
 
   return valid;
 };
+
+const generateForgotPasswordToken = async (username) => {
+  const user = await getUserByName(username);
+  const token = cryptoString({ length: 15, type: "url-safe" });
+  const dateSet = Date.now();
+  user.resetPasswordToken = token;
+  user.resetTokenSet = dateSet;
+  // We don't want the account to be useable until the password is reset. 
+  // This allows us to use password-reset as a quick way to lock out an account.
+  user.isActive = false;  
+  await user.save();
+
+  return token;
+}
+
+const verifyForgotPassword = async (username, token) => {
+  const user = await getUserByName(username);
+  const timePassed = Date.now() - user.resetTokenSet;
+  let valid = false;
+  if (timePassed < secondsExpiry * 1000){
+    if(user.resetPasswordToken === token) {
+      valid = true;
+    }
+  } else {
+    // unset the expired token
+    user.resetPasswordToken = null;
+    await user.save();
+  }
+
+  return valid;
+}
 
 module.exports = {
   getUserByName,
@@ -170,5 +207,7 @@ module.exports = {
   checkJWT,
   deleteJWT,
   generateEmailVerificationToken,
-  verifyEmail
+  verifyEmail,
+  generateForgotPasswordToken,
+  verifyForgotPassword
 };

@@ -28,8 +28,14 @@ const userSchema = new Schema({
 		type: Boolean,
 		default: false
 	},
+	isActive: {
+		type: Boolean,
+		default: true
+	},
 	verificationToken: String,
-	verificationSet: Number
+	verificationSet: Number,
+	resetPasswordToken: String,
+	resetTokenSet: Number
 });
 
 module.exports = User = mongoose.model("Users", userSchema);
