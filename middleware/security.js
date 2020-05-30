@@ -3,6 +3,7 @@ const statusCodes = require("../config/status_codes");
 const jwtDecoding = require("../helpers/jwt_decoding");
 const getUserByName = require("../services/users").getUserByName;
 
+// UNTESTED
 const authenticate = async (req, res, next) => {
   try {
     const token = jwtDecoding.getTokenFromRequest(req);
@@ -23,6 +24,7 @@ const authenticate = async (req, res, next) => {
   }
 };
 
+// UNTESTED
 const isVerified = async (req, res, next) => {
   let user = null;
   let isVerified = false;

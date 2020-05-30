@@ -10,6 +10,68 @@ afterEach(async () => await utils.clearDB());
 
 afterAll(async () => await utils.closeDB());
 
+describe("User-retrieval tests", () => {
+  it("Should retrieve a user by name", async () => {
+    const userDetails = {
+      name: "name",
+      email: "someone@something.com",
+    };
+
+    try {
+      const user = await utils.createUser(userDetails);
+      const retrieved = await userService.getUserByName(userDetails.name);
+      expect(retrieved.email).to.equal(userDetails.email);
+    } catch (err) {
+      fail(err);
+    }
+  });
+
+  it("Should fail to retrieve a user by an invalid name", async () => {
+    const userDetails = {
+      name: "name",
+      email: "someone@something.com",
+    };
+
+    try {
+      const user = await utils.createUser(userDetails);
+      const retrieved = await userService.getUserByName(userDetails.name + "aaaaa");
+      expect(retrieved).to.be.null;
+    } catch (err) {
+      fail(err);
+    }
+  });
+
+  it("Should retrieve a user by email", async () => {
+    const userDetails = {
+      name: "name",
+      email: "someone@something.com",
+    };
+
+    try {
+      const user = await utils.createUser(userDetails);
+      const retrieved = await userService.getUserByEmail(userDetails.email);
+      expect(retrieved.name).to.equal(userDetails.name);
+    } catch (err) {
+      fail(err);
+    }
+  });
+
+  it("Should fail to retrieve a user by an invalid email", async () => {
+    const userDetails = {
+      name: "name",
+      email: "someone@something.com",
+    };
+
+    try {
+      const user = await utils.createUser(userDetails);
+      const retrieved = await userService.getUserByEmail(userDetails.email + "aaaaa");
+      expect(retrieved).to.be.null;
+    } catch (err) {
+      fail(err);
+    }
+  });
+});
+
 describe("User creation tests", () => {
   it("Should fail to create a user with an empty username", async () => {
     const invalidUser = {

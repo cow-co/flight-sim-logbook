@@ -6,6 +6,7 @@ const userMethods = require("../../services/users");
 const jwtDecoding = require("../../helpers/jwt_decoding");
 const { sendVerificationEmail, sendResetEmail } = require("../../helpers/emailing");
 
+// UNTESTED
 // Don't want to log a user in if their email has not been verified
 router.post("/login", isVerified, async (req, res) => {
   const loginDetails = req.body;
@@ -37,6 +38,7 @@ router.post("/login", isVerified, async (req, res) => {
   return response;
 });
 
+// UNTESTED
 router.post("/create", async (req, res) => {
   const userDetails = req.body;
   console.log("Received user-creation request");
@@ -66,6 +68,7 @@ router.post("/create", async (req, res) => {
   return res.status(returnStatus).json(responseJSON);
 });
 
+// UNTESTED
 router.get("/logout", authenticate, isVerified, async (req, res) => {
   const username = jwtDecoding.getUsernameFromToken(jwtDecoding.getTokenFromRequest(req));
   console.log(`Received logout request for ${username}`);
@@ -78,6 +81,7 @@ router.get("/logout", authenticate, isVerified, async (req, res) => {
   }
 });
 
+// UNTESTED
 // This is used when the user's original verification token is lost or expired (i.e. this is how they request a new one)
 // Requires login first.
 router.get("/verify/send", authenticate, async (req, res) => {
@@ -98,6 +102,7 @@ router.get("/verify/:username/:token", async (req, res) => {
   }
 });
 
+// UNTESTED
 router.post("/change-password", authenticate, isVerified, async (req, res) => {
   const password = req.body.password;
   const confirmation = req.body.passwordConfirmation;
@@ -122,6 +127,7 @@ router.post("/change-password", authenticate, isVerified, async (req, res) => {
   }
 });
 
+// UNTESTED
 // This does not require authentication (since the user, by definition, has forgotten their password)
 // Instead, the request must include the reset-password token from the email the user received
 router.post("/reset-password", async (req, res) => {
@@ -155,6 +161,7 @@ router.post("/reset-password", async (req, res) => {
   return res.status(returnStatus).json(responseJSON);
 });
 
+// UNTESTED
 router.post("/request-reset-password", async (req, res) => {
   const userEmail = req.body.email;
   try {
@@ -173,6 +180,7 @@ router.post("/request-reset-password", async (req, res) => {
   }
 });
 
+// UNTESTED
 router.delete("/delete-user", authenticate, isVerified, async (req, res) => {
   try {
     await userMethods.deleteUser(res.locals.user.name);
