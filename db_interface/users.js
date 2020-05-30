@@ -34,6 +34,9 @@ const isValidPassword = (password) => {
 const changePassword = async (user, password) => {
   const hash = await argon2.hash(password);
   user.passwordHash = hash;
+  if(!user.isActive) {
+    user.isActive = true;
+  }
   await user.save();
 };
 
