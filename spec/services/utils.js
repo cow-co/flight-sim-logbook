@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
+const User = require("../../models/User");
 
 const mongod = new MongoMemoryServer();
 
@@ -31,8 +32,14 @@ const clearDB = async () => {
   }
 };
 
+const createUser = async (userDetails) => {
+  const newUser = await User.create(userDetails);
+  return newUser;
+};
+
 module.exports = {
   connect,
   closeDB,
   clearDB,
+  createUser,
 };
