@@ -137,8 +137,8 @@ router.post("/reset-password", async (req, res) => {
     try {
       const user = await userMethods.getUserByEmail(email);
       if (user && userMethods.verifyForgotPassword(user.name, resetToken)) {
-        await userMethods.changePassword(res.locals.user, password);
-        await userMethods.deleteJWT(res.locals.user.name);
+        await userMethods.changePassword(user, password);
+        await userMethods.deleteJWT(user.name);
 
         return res.redirect("../login");
       }
