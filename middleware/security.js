@@ -1,7 +1,7 @@
-const checkJWT = require("../db_interface/users").checkJWT;
+const checkJWT = require("../services/users").checkJWT;
 const statusCodes = require("../config/status_codes");
 const jwtDecoding = require("../helpers/jwt_decoding");
-const getUserByName = require("../db_interface/users").getUserByName;
+const getUserByName = require("../services/users").getUserByName;
 
 const authenticate = async (req, res, next) => {
   try {

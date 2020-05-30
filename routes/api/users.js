@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const statusCodes = require("../../config/status_codes");
 const { authenticate, isVerified } = require("../../middleware/security");
-const userMethods = require("../../db_interface/users");
+const userMethods = require("../../services/users");
 const jwtDecoding = require("../../helpers/jwt_decoding");
 const { sendVerificationEmail, sendResetEmail } = require("../../helpers/emailing");
 
