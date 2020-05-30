@@ -10,13 +10,12 @@ app.use(express.urlencoded({ extended: true }));
 const db = require("./config/keys").mongo_uri;
 
 // Only connect to the database if we are in prod
-if(process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === "production") {
   mongoose
     .connect(db, { useNewUrlParser: true })
     .then(() => console.log("MongoDB connection successful"))
     .catch((err) => console.error(err));
 }
-
 
 app.use("/api/users", users);
 const port = process.env.PORT || 5500;
@@ -27,14 +26,14 @@ let server = app.listen(port, async () => {
 const stop = () => {
   console.log("Closing server...");
 
-  if(process.env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV === "production") {
     mongoose.disconnect();
   }
 
   server.shutdown(() => {
     console.log("Server closed.");
   });
-}
+};
 
 server = shutdown(server);
 module.exports = server;

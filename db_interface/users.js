@@ -29,13 +29,21 @@ const getUserByEmail = async (email) => {
 
 const isValidPassword = (password) => {
   return password.length >= minPassLength;
-}
+};
 
 const changePassword = async (user, password) => {
   const hash = await argon2.hash(password);
   user.passwordHash = hash;
+  
+  if(!user.isActive) {
+    user.isActive = true;
+  }
+
+  user.verificationToken = null;
+  user.resetPasswordToken = null;
+
   await user.save();
-}
+};
 
 const createUser = async (userSetup) => {
   let newUser = {
@@ -44,12 +52,28 @@ const createUser = async (userSetup) => {
     errors: [],
   };
 
-  if (isEmptyOrNull(userSetup.name)) {
-    newUser.errors.push("Please enter a username");
+  let existingUser = await getUserByName(userSetup.name);
+  if (existingUser) {
+    userExists = true;
+  } else {
+    existingUser = await getUserByEmail(userSetup.email);
+    userExists = existingUser ? true : false;
   }
 
-  if (isEmptyOrNull(userSetup.email)) {
-    newUser.errors.push("Please enter an email");
+  if (userExists) {
+    newUser.errors.push("User already exists!");
+  } else {
+    if (isEmptyOrNull(userSetup.name)) {
+      newUser.errors.push("Please enter a username");
+    }
+
+    if (isEmptyOrNull(userSetup.email)) {
+      newUser.errors.push("Please enter an email");
+    }
+
+    if (userSetup.password !== userSetup.passwordConfirmation) {
+      newUser.errors.push("Password confirmation does not match");
+    }
   }
 
   if (newUser.errors.length === 0) {
@@ -152,8 +176,45 @@ const verifyEmail = async (username, givenToken) => {
   const user = await getUserByName(username);
   const timePassed = Date.now() - user.verificationSet;
   let valid = false;
-  if (timePassed < secondsExpiry * 1000 && user.verificationToken === givenToken) {
-    valid = true;
+  if (timePassed < secondsExpiry * 1000) {
+    if (user.verificationToken === givenToken) {
+      valid = true;
+    }
+  } else {
+    // unset the expired token
+    user.verificationToken = null;
+    await user.save();
+  }
+
+  return valid;
+};
+
+const generateForgotPasswordToken = async (username) => {
+  const user = await getUserByName(username);
+  const token = cryptoString({ length: 15, type: "url-safe" });
+  const dateSet = Date.now();
+  user.resetPasswordToken = token;
+  user.resetTokenSet = dateSet;
+  // We don't want the account to be useable until the password is reset.
+  // This allows us to use password-reset as a quick way to lock out an account.
+  user.isActive = false;
+  await user.save();
+
+  return token;
+};
+
+const verifyForgotPassword = async (username, token) => {
+  const user = await getUserByName(username);
+  const timePassed = Date.now() - user.resetTokenSet;
+  let valid = false;
+  if (timePassed < secondsExpiry * 1000) {
+    if (user.resetPasswordToken === token) {
+      valid = true;
+    }
+  } else {
+    // unset the expired token
+    user.resetPasswordToken = null;
+    await user.save();
   }
 
   return valid;
@@ -170,5 +231,7 @@ module.exports = {
   checkJWT,
   deleteJWT,
   generateEmailVerificationToken,
-  verifyEmail
+  verifyEmail,
+  generateForgotPasswordToken,
+  verifyForgotPassword,
 };
