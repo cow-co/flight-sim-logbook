@@ -9,6 +9,7 @@
     - [`POST /change-password` (authenticated, verified)](#post-change-password-authenticated-verified)
     - [`POST /request-reset-password`](#post-request-reset-password)
     - [`POST /reset-password`](#post-reset-password)
+    - [`DELETE /delete-user` (authenticated, verified)](#delete-delete-user-authenticated-verified)
 
 ## `/users` ##
 
@@ -52,3 +53,6 @@ N/A
 - `passwordConfirmation`
 - `resetToken`
 
+### `DELETE /delete-user` (authenticated, verified) ###
+
+N/A 

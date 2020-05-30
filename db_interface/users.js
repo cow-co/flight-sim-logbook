@@ -34,8 +34,8 @@ const isValidPassword = (password) => {
 const changePassword = async (user, password) => {
   const hash = await argon2.hash(password);
   user.passwordHash = hash;
-  
-  if(!user.isActive) {
+
+  if (!user.isActive) {
     user.isActive = true;
   }
 
@@ -220,6 +220,10 @@ const verifyForgotPassword = async (username, token) => {
   return valid;
 };
 
+const deleteUser = async (username) => {
+  await User.deleteOne({ name: username }); // Usernames are (should be) unique
+};
+
 module.exports = {
   getUserByName,
   getUserByEmail,
@@ -234,4 +238,5 @@ module.exports = {
   verifyEmail,
   generateForgotPasswordToken,
   verifyForgotPassword,
+  deleteUser,
 };
