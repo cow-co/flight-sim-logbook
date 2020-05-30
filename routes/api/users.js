@@ -173,7 +173,7 @@ router.post("/request-reset-password", async (req, res) => {
   }
 });
 
-router.post("/delete-user", authenticate, isVerified, async (req, res) => {
+router.delete("/delete-user", authenticate, isVerified, async (req, res) => {
   try {
     await userMethods.deleteUser(res.locals.user.name);
     return res.redirect("../../../"); // Redirect to index
