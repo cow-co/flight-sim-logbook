@@ -27,12 +27,10 @@ const getUserByEmail = async (email) => {
   return user;
 };
 
-// UNTESTED
 const isValidPassword = (password) => {
   return password.length >= minPassLength;
 };
 
-// UNTESTED
 const changePassword = async (user, password) => {
   const hash = await argon2.hash(password);
   user.passwordHash = hash;

@@ -72,6 +72,37 @@ describe("User-retrieval tests", () => {
   });
 });
 
+describe("Password-validation and -setting tests", () => {
+  it("Should pass validation", async () => {
+    const valid = "validpassword001";
+    expect(userService.isValidPassword(valid)).to.be.true;
+  });
+
+  it("Should fail validation", async () => {
+    const invalid = "invalid";
+    expect(userService.isValidPassword(invalid)).to.be.false;
+  });
+
+  it("Should change password", async () => {
+    const userDetails = {
+      name: "name",
+      email: "someone@something.com",
+      passwordHash: "password12345",
+    };
+
+    try {
+      let user = await utils.createUser(userDetails);
+      const prevHash = user.passwordHash;
+      await userService.changePassword(user, "newPassword123");
+      user = await userService.getUserByName(userDetails.name);
+      expect(user.passwordHash).to.exist;
+      expect(user.passwordHash).to.not.equal(prevHash);
+    } catch (err) {
+      fail(err);
+    }
+  });
+});
+
 describe("User creation tests", () => {
   it("Should fail to create a user with an empty username", async () => {
     const invalidUser = {
