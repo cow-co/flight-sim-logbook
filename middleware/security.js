@@ -3,13 +3,12 @@ const statusCodes = require("../config/status_codes");
 const jwtDecoding = require("../helpers/jwt_decoding");
 const getUserByName = require("../services/users").getUserByName;
 
-// UNTESTED
 const authenticate = async (req, res, next) => {
   try {
     const token = jwtDecoding.getTokenFromRequest(req);
     const user = await checkJWT(token);
 
-    if (user._id && user.isActive) {
+    if (user && user.isActive) {
       res.locals.user = user;
       next(); // This will be `isVerified` if email verification is required for the endpoint in question
     } else {
