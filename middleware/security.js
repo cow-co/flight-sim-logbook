@@ -23,7 +23,6 @@ const authenticate = async (req, res, next) => {
   }
 };
 
-// UNTESTED
 const isVerified = async (req, res, next) => {
   let user = null;
   let isVerified = false;

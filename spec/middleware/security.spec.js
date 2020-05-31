@@ -77,4 +77,78 @@ describe("Security middleware tests", () => {
       }
     });
   });
+
+  describe("Verification tests", () => {
+    it("Should check a verified email", async () => {
+      const user = {
+        name: "name",
+        email: "someone@something.com",
+        passwordHash: "hash",
+        isActive: true,
+        isVerified: true,
+      };
+      const createdUser = await utils.createUser(user);
+
+      try {
+        const request = {
+          body: {
+            user: {
+              name: user.name,
+            },
+          },
+        };
+        let res = {
+          locals: {},
+          status: (code) => {
+            expect(code).to.equal(400);
+            return {
+              json: (jsonCode) => {},
+            };
+          },
+        };
+
+        await security.isVerified(request, res, () => {
+          expect(true).to.be.true;
+        });
+      } catch (err) {
+        fail(err);
+      }
+    });
+
+    it("Should check a non-verified email", async () => {
+      const user = {
+        name: "name",
+        email: "someone@something.com",
+        passwordHash: "hash",
+        isActive: true,
+        isVerified: false,
+      };
+      const createdUser = await utils.createUser(user);
+
+      try {
+        const request = {
+          body: {
+            user: {
+              name: user.name,
+            },
+          },
+        };
+        let res = {
+          locals: {},
+          status: (code) => {
+            expect(code).to.equal(400);
+            return {
+              json: (jsonCode) => {},
+            };
+          },
+        };
+
+        await security.isVerified(request, res, () => {
+          fail();
+        });
+      } catch (err) {
+        fail(err);
+      }
+    });
+  });
 });
