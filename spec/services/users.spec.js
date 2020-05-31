@@ -244,4 +244,169 @@ describe("JWT tests", () => {
       fail(err);
     }
   });
+
+  it("Should delete a token", async () => {
+    const user = {
+      name: "name",
+      email: "someone@something.com",
+      passwordHash: "hash",
+    };
+    const createdUser = await utils.createUser(user);
+
+    try {
+      await userService.generateJWT(createdUser);
+      await userService.deleteJWT(user.name);
+      const retrievedUser = await userService.getUserByName(user.name);
+      const token = retrievedUser.jwt;
+      expect(token).to.not.exist;
+    } catch (err) {
+      fail(err);
+    }
+  });
+});
+
+describe("Email Verification and Forgot-Password Tests", () => {
+  it("Should generate an email-verification token", async () => {
+    const user = {
+      name: "name",
+      email: "someone@something.com",
+      passwordHash: "hash",
+    };
+    const createdUser = await utils.createUser(user);
+
+    try {
+      const token = await userService.generateEmailVerificationToken(createdUser.name);
+      const retrievedUser = await userService.getUserByName(createdUser.name);
+      expect(token).to.exist;
+      expect(token).to.equal(retrievedUser.verificationToken);
+      expect(retrievedUser.verificationSet).to.exist;
+    } catch (err) {
+      fail(err);
+    }
+  });
+
+  it("Should verify a correct email-verification token", async () => {
+    const user = {
+      name: "name",
+      email: "someone@something.com",
+      passwordHash: "hash",
+    };
+    const createdUser = await utils.createUser(user);
+
+    try {
+      const token = await userService.generateEmailVerificationToken(createdUser.name);
+      const isValid = await userService.verifyEmail(user.name, token);
+      expect(isValid).to.be.true;
+    } catch (err) {
+      fail(err);
+    }
+  });
+
+  it("Should fail on an incorrect email-verification token", async () => {
+    const user = {
+      name: "name",
+      email: "someone@something.com",
+      passwordHash: "hash",
+    };
+    const createdUser = await utils.createUser(user);
+
+    try {
+      const token = await userService.generateEmailVerificationToken(createdUser.name);
+      const isValid = await userService.verifyEmail(user.name, token + "aaa");
+      expect(isValid).to.be.false;
+    } catch (err) {
+      fail(err);
+    }
+  });
+
+  it("Should fail on an expired email-verification token", async () => {
+    const user = {
+      name: "name",
+      email: "someone@something.com",
+      passwordHash: "hash",
+    };
+    const createdUser = await utils.createUser(user);
+
+    try {
+      const token = await userService.generateEmailVerificationToken(createdUser.name);
+      createdUser.verificationSet = 1000000; // Way in the past
+      await createdUser.save();
+      const isValid = await userService.verifyEmail(user.name, token);
+      expect(isValid).to.be.false;
+    } catch (err) {
+      fail(err);
+    }
+  });
+
+  it("Should generate a password-reset token", async () => {
+    const user = {
+      name: "name",
+      email: "someone@something.com",
+      passwordHash: "hash",
+    };
+    const createdUser = await utils.createUser(user);
+
+    try {
+      const token = await userService.generateForgotPasswordToken(createdUser.name);
+      const retrievedUser = await userService.getUserByName(createdUser.name);
+      expect(token).to.exist;
+      expect(token).to.equal(retrievedUser.resetPasswordToken);
+      expect(retrievedUser.resetTokenSet).to.exist;
+    } catch (err) {
+      fail(err);
+    }
+  });
+
+  it("Should verify a correct email-verification token", async () => {
+    const user = {
+      name: "name",
+      email: "someone@something.com",
+      passwordHash: "hash",
+    };
+    const createdUser = await utils.createUser(user);
+
+    try {
+      const token = await userService.generateForgotPasswordToken(createdUser.name);
+      const isValid = await userService.verifyForgotPassword(user.name, token);
+      expect(isValid).to.be.true;
+    } catch (err) {
+      fail(err);
+    }
+  });
+
+  it("Should fail on an incorrect email-verification token", async () => {
+    const user = {
+      name: "name",
+      email: "someone@something.com",
+      passwordHash: "hash",
+    };
+    const createdUser = await utils.createUser(user);
+
+    try {
+      const token = await userService.generateForgotPasswordToken(createdUser.name);
+      const isValid = await userService.verifyForgotPassword(user.name, token + "aaa");
+      expect(isValid).to.be.false;
+    } catch (err) {
+      fail(err);
+    }
+  });
+
+  it("Should fail on an expired email-verification token", async () => {
+    const user = {
+      name: "name",
+      email: "someone@something.com",
+      passwordHash: "hash",
+    };
+    const createdUser = await utils.createUser(user);
+
+    try {
+      const token = await userService.generateForgotPasswordToken(createdUser.name);
+      createdUser.resetTokenSet = 1000000; // Way in the past
+      await createdUser.save();
+      const isValid = await userService.verifyForgotPassword(user.name, token);
+      expect(isValid).to.be.false;
+    } catch (err) {
+      fail(err);
+    }
+  });
 });

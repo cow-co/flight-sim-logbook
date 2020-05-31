@@ -145,7 +145,6 @@ const checkJWT = async (token) => {
   return user;
 };
 
-// UNTESTED
 const deleteJWT = async (username) => {
   let errors = [];
 
@@ -162,7 +161,6 @@ const deleteJWT = async (username) => {
   return errors;
 };
 
-// UNTESTED
 const generateEmailVerificationToken = async (username) => {
   const user = await getUserByName(username);
   const token = cryptoString({ length: 15, type: "url-safe" });
@@ -174,7 +172,6 @@ const generateEmailVerificationToken = async (username) => {
   return token;
 };
 
-// UNTESTED
 const verifyEmail = async (username, givenToken) => {
   const user = await getUserByName(username);
   const timePassed = Date.now() - user.verificationSet;
@@ -192,7 +189,6 @@ const verifyEmail = async (username, givenToken) => {
   return valid;
 };
 
-// UNTESTED
 const generateForgotPasswordToken = async (username) => {
   const user = await getUserByName(username);
   const token = cryptoString({ length: 15, type: "url-safe" });
@@ -207,7 +203,6 @@ const generateForgotPasswordToken = async (username) => {
   return token;
 };
 
-// UNTESTED
 const verifyForgotPassword = async (username, token) => {
   const user = await getUserByName(username);
   const timePassed = Date.now() - user.resetTokenSet;
