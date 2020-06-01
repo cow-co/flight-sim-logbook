@@ -79,7 +79,6 @@ router.get("/logout", authenticate, isVerified, async (req, res) => {
   }
 });
 
-// UNTESTED
 // This is used when the user's original verification token is lost or expired (i.e. this is how they request a new one)
 // Requires login first.
 router.get("/verify/send", authenticate, async (req, res) => {
@@ -100,7 +99,6 @@ router.get("/verify/:username/:token", async (req, res) => {
   }
 });
 
-// UNTESTED
 router.post("/change-password", authenticate, isVerified, async (req, res) => {
   const password = req.body.password;
   const confirmation = req.body.passwordConfirmation;
@@ -125,7 +123,6 @@ router.post("/change-password", authenticate, isVerified, async (req, res) => {
   }
 });
 
-// UNTESTED
 router.post("/request-reset-password", async (req, res) => {
   const userEmail = req.body.email;
   try {

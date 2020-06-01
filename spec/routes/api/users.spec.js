@@ -100,4 +100,39 @@ describe("User endpoint tests", () => {
       expect(res.body.errors.length).to.equal(1);
     });
   });
+
+  describe("change-password", () => {
+    it("should change the user's password", async () => {
+      await request(server).post("/api/users/create").send(baseUser);
+      await utils.verifyUser(baseUser.name);
+      const loginRes = await request(server).post("/api/users/login").send({
+        name: baseUser.name,
+        password: baseUser.password,
+      });
+      const token = loginRes.body;
+
+      const res = await request(server)
+        .post("/api/users/change-password")
+        .set("Authorization", `Bearer ${token}`)
+        .send({ password: "password123456", passwordConfirmation: "password123456" });
+      expect(res.statusCode).to.equal(302);
+    });
+
+    it("should fail to change password with non-matching confirmation", async () => {
+      await request(server).post("/api/users/create").send(baseUser);
+      await utils.verifyUser(baseUser.name);
+      const loginRes = await request(server).post("/api/users/login").send({
+        name: baseUser.name,
+        password: baseUser.password,
+      });
+      const token = loginRes.body;
+
+      const res = await request(server)
+        .post("/api/users/change-password")
+        .set("Authorization", `Bearer ${token}`)
+        .send({ password: "password123456", passwordConfirmation: "password123457" });
+      expect(res.statusCode).to.equal(400);
+      expect(res.body.errors.length).to.equal(1);
+    });
+  });
 });
