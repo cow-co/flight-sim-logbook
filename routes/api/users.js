@@ -6,6 +6,36 @@ const userMethods = require("../../services/users");
 const jwtDecoding = require("../../helpers/jwt_decoding");
 const { sendVerificationEmail, sendResetEmail } = require("../../helpers/emailing");
 
+router.post("/create", async (req, res) => {
+  const userDetails = req.body;
+  console.log("Received user-creation request");
+  let responseJSON = { user: null, errors: [] };
+  let returnStatus = statusCodes.SUCCESS;
+
+  try {
+    const newUser = await userMethods.createUser(userDetails);
+    if (newUser.errors.length > 0) {
+      returnStatus = statusCodes.INVALID_STATUS;
+      responseJSON.errors = newUser.errors;
+    } else {
+      const token = await userMethods.generateEmailVerificationToken(newUser.name);
+      const url = req.protocol + "://" + req.get("Host") + `/api/users/verify/${newUser.name}/${token}`;
+      sendVerificationEmail(newUser.name, newUser.email, url);
+      responseJSON.user = {
+        name: newUser.name,
+        email: newUser.email,
+      };
+      returnStatus = statusCodes.CREATED;
+    }
+  } catch (error) {
+    console.error(error.message);
+    returnStatus = statusCodes.SERVER_ERROR;
+    responseJSON.errors.push("Server-side error");
+  }
+
+  return res.status(returnStatus).json(responseJSON);
+});
+
 // UNTESTED
 // Don't want to log a user in if their email has not been verified
 router.post("/login", isVerified, async (req, res) => {
@@ -36,36 +66,6 @@ router.post("/login", isVerified, async (req, res) => {
   }
 
   return response;
-});
-
-// UNTESTED
-router.post("/create", async (req, res) => {
-  const userDetails = req.body;
-  console.log("Received user-creation request");
-  let responseJSON = { user: null, errors: [] };
-  let returnStatus = statusCodes.SUCCESS;
-
-  try {
-    const newUser = await userMethods.createUser(userDetails);
-    if (newUser.errors.length > 0) {
-      returnStatus = statusCodes.INVALID_STATUS;
-      responseJSON.errors = newUser.errors;
-    } else {
-      const token = await userMethods.generateEmailVerificationToken(newUser.name);
-      const url = req.protocol + "://" + req.get("Host") + `/api/users/verify/${newUser.name}/${token}`;
-      sendVerificationEmail(newUser.name, newUser.email, url);
-      responseJSON.user = {
-        name: newUser.name,
-        email: newUser.email,
-      };
-    }
-  } catch (error) {
-    console.error(error.message);
-    returnStatus = statusCodes.SERVER_ERROR;
-    responseJSON.errors.push("Server-side error");
-  }
-
-  return res.status(returnStatus).json(responseJSON);
 });
 
 // UNTESTED

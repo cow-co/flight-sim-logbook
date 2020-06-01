@@ -1,5 +1,5 @@
 const security = require("../../middleware/security");
-const utils = require("../services/utils");
+const utils = require("../utils");
 const expect = require("chai").expect;
 const userService = require("../../services/users");
 

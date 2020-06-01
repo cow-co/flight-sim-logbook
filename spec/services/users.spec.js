@@ -1,5 +1,5 @@
 const userService = require("../../services/users");
-const utils = require("./utils");
+const utils = require("../utils");
 const expect = require("chai").expect;
 const jwt = require("jsonwebtoken");
 const JWT_KEY = require("../../config/keys").JWT_KEY;
