@@ -76,4 +76,28 @@ describe("User endpoint tests", () => {
     expect(res.statusCode).to.equal(400);
     expect(res.body.errors.length).to.equal(1);
   });
+
+  describe("logout", () => {
+    it("should log the user out", async () => {
+      await request(server).post("/api/users/create").send(baseUser);
+      await utils.verifyUser(baseUser.name);
+
+      const loginRes = await request(server).post("/api/users/login").send({
+        name: baseUser.name,
+        password: baseUser.password,
+      });
+      const token = loginRes.body;
+      const res = await request(server).get("/api/users/logout").set("Authorization", `Bearer ${token}`);
+      expect(res.statusCode).to.equal(200);
+    });
+
+    it("should fail to log out without a token", async () => {
+      await request(server).post("/api/users/create").send(baseUser);
+      await utils.verifyUser(baseUser.name);
+
+      const res = await request(server).get("/api/users/logout");
+      expect(res.statusCode).to.equal(400);
+      expect(res.body.errors.length).to.equal(1);
+    });
+  });
 });

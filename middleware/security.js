@@ -6,6 +6,10 @@ const getUserByName = require("../services/users").getUserByName;
 const authenticate = async (req, res, next) => {
   try {
     const token = jwtDecoding.getTokenFromRequest(req);
+    if (token == null) {
+      return res.status(statusCodes.INVALID_STATUS).json({ errors: ["Invalid Token"] });
+    }
+
     const user = await checkJWT(token);
 
     if (user && user.isActive) {

@@ -67,7 +67,6 @@ router.post("/login", isVerified, async (req, res) => {
   return response;
 });
 
-// UNTESTED
 router.get("/logout", authenticate, isVerified, async (req, res) => {
   const username = jwtDecoding.getUsernameFromToken(jwtDecoding.getTokenFromRequest(req));
   console.log(`Received logout request for ${username}`);
