@@ -32,9 +32,11 @@ const isVerified = async (req, res, next) => {
     if (res.locals.user !== undefined) {
       isVerified = res.locals.user.isVerified;
     } else {
-      username = req.body.user.name;
+      username = req.body.name;
       user = await getUserByName(username);
-      isVerified = user.isVerified;
+      if (user) {
+        isVerified = user.isVerified;
+      }
     }
 
     if (!isVerified) {

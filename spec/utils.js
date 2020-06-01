@@ -37,9 +37,15 @@ const createUser = async (userDetails) => {
   return newUser;
 };
 
+const verifyUser = async (username) => {
+  const newUser = await User.findOneAndUpdate({ name: username }, { isVerified: true });
+  return newUser;
+};
+
 module.exports = {
   connect,
   closeDB,
   clearDB,
   createUser,
+  verifyUser,
 };

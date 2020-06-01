@@ -36,7 +36,6 @@ router.post("/create", async (req, res) => {
   return res.status(returnStatus).json(responseJSON);
 });
 
-// UNTESTED
 // Don't want to log a user in if their email has not been verified
 router.post("/login", isVerified, async (req, res) => {
   const loginDetails = req.body;
@@ -128,6 +127,25 @@ router.post("/change-password", authenticate, isVerified, async (req, res) => {
 });
 
 // UNTESTED
+router.post("/request-reset-password", async (req, res) => {
+  const userEmail = req.body.email;
+  try {
+    const user = userMethods.getUserByEmail(userEmail);
+    if (user) {
+      const token = await userMethods.generateForgotPasswordToken(user.name);
+      const url = req.protocol + "://" + req.get("Host") + `/api/users/reset-password/${user.name}/${token}`;
+      sendResetEmail(user.name, user.email, url);
+      return res.status(statusCodes.SUCCESS).json({ message: "Password reset email sent!" });
+    } else {
+      return res.status(statusCodes.INVALID_STATUS).json({ errors: ["User not found"] });
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(statusCodes.SERVER_ERROR).json({ errors: ["Server Error"] });
+  }
+});
+
+// UNTESTED
 // This does not require authentication (since the user, by definition, has forgotten their password)
 // Instead, the request must include the reset-password token from the email the user received
 router.post("/reset-password", async (req, res) => {
@@ -159,25 +177,6 @@ router.post("/reset-password", async (req, res) => {
   returnStatus = statusCodes.INVALID_STATUS;
   responseJSON.errors.push("Invalid Request");
   return res.status(returnStatus).json(responseJSON);
-});
-
-// UNTESTED
-router.post("/request-reset-password", async (req, res) => {
-  const userEmail = req.body.email;
-  try {
-    const user = userMethods.getUserByEmail(userEmail);
-    if (user) {
-      const token = await userMethods.generateForgotPasswordToken(user.name);
-      const url = req.protocol + "://" + req.get("Host") + `/api/users/reset-password/${user.name}/${token}`;
-      sendResetEmail(user.name, user.email, url);
-      return res.status(statusCodes.SUCCESS).json({ message: "Password reset email sent!" });
-    } else {
-      return res.status(statusCodes.INVALID_STATUS).json({ errors: ["User not found"] });
-    }
-  } catch (err) {
-    console.error(err);
-    return res.status(statusCodes.SERVER_ERROR).json({ errors: ["Server Error"] });
-  }
 });
 
 // UNTESTED
