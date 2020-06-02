@@ -10,3 +10,4 @@ branches:
 
 script:
   - npm run test
+  - npm run report-coverage

@@ -2,14 +2,44 @@ const express = require("express");
 const router = express.Router();
 const statusCodes = require("../../config/status_codes");
 const { authenticate, isVerified } = require("../../middleware/security");
-const userMethods = require("../../db_interface/users");
+const userMethods = require("../../services/users");
 const jwtDecoding = require("../../helpers/jwt_decoding");
 const { sendVerificationEmail, sendResetEmail } = require("../../helpers/emailing");
+
+// TODO Improve error logging (say where the error is, not just what it is)
+
+router.post("/create", async (req, res) => {
+  const userDetails = req.body;
+  let responseJSON = { user: null, errors: [] };
+  let returnStatus = statusCodes.SUCCESS;
+
+  try {
+    const newUser = await userMethods.createUser(userDetails);
+    if (newUser.errors.length > 0) {
+      returnStatus = statusCodes.INVALID_STATUS;
+      responseJSON.errors = newUser.errors;
+    } else {
+      const token = await userMethods.generateEmailVerificationToken(newUser.name);
+      const url = req.protocol + "://" + req.get("Host") + `/api/users/verify/${newUser.name}/${token}`;
+      sendVerificationEmail(newUser.name, newUser.email, url);
+      responseJSON.user = {
+        name: newUser.name,
+        email: newUser.email,
+      };
+      returnStatus = statusCodes.CREATED;
+    }
+  } catch (error) {
+    console.error(error.message);
+    returnStatus = statusCodes.SERVER_ERROR;
+    responseJSON.errors.push("Server-side error");
+  }
+
+  return res.status(returnStatus).json(responseJSON);
+});
 
 // Don't want to log a user in if their email has not been verified
 router.post("/login", isVerified, async (req, res) => {
   const loginDetails = req.body;
-  console.log("Received login request");
   let valid = false;
   let response = null;
 
@@ -37,38 +67,8 @@ router.post("/login", isVerified, async (req, res) => {
   return response;
 });
 
-router.post("/create", async (req, res) => {
-  const userDetails = req.body;
-  console.log("Received user-creation request");
-  let responseJSON = { user: null, errors: [] };
-  let returnStatus = statusCodes.SUCCESS;
-
-  try {
-    const newUser = await userMethods.createUser(userDetails);
-    if (newUser.errors.length > 0) {
-      returnStatus = statusCodes.INVALID_STATUS;
-      responseJSON.errors = newUser.errors;
-    } else {
-      const token = await userMethods.generateEmailVerificationToken(newUser.name);
-      const url = req.protocol + "://" + req.get("Host") + `/api/users/verify/${newUser.name}/${token}`;
-      sendVerificationEmail(newUser.name, newUser.email, url);
-      responseJSON.user = {
-        name: newUser.name,
-        email: newUser.email,
-      };
-    }
-  } catch (error) {
-    console.error(error.message);
-    returnStatus = statusCodes.SERVER_ERROR;
-    responseJSON.errors.push("Server-side error");
-  }
-
-  return res.status(returnStatus).json(responseJSON);
-});
-
 router.get("/logout", authenticate, isVerified, async (req, res) => {
   const username = jwtDecoding.getUsernameFromToken(jwtDecoding.getTokenFromRequest(req));
-  console.log(`Received logout request for ${username}`);
   const errors = await userMethods.deleteJWT(username);
 
   if (errors.length === 0) {
@@ -122,43 +122,10 @@ router.post("/change-password", authenticate, isVerified, async (req, res) => {
   }
 });
 
-// This does not require authentication (since the user, by definition, has forgotten their password)
-// Instead, the request must include the reset-password token from the email the user received
-router.post("/reset-password", async (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
-  const pwConfirm = req.body.passwordConfirmation;
-  const resetToken = req.body.resetToken;
-
-  let responseJSON = { errors: [] };
-  let returnStatus = statusCodes.SUCCESS;
-
-  if (password === pwConfirm && userMethods.isValidPassword(password)) {
-    try {
-      const user = await userMethods.getUserByEmail(email);
-      if (user && userMethods.verifyForgotPassword(user.name, resetToken)) {
-        await userMethods.changePassword(user, password);
-        await userMethods.deleteJWT(user.name);
-
-        return res.redirect("../login");
-      }
-    } catch (error) {
-      console.error(error.message);
-      returnStatus = statusCodes.SERVER_ERROR;
-      responseJSON.errors.push("Server Error");
-      return res.status(returnStatus).json(responseJSON);
-    }
-  }
-
-  returnStatus = statusCodes.INVALID_STATUS;
-  responseJSON.errors.push("Invalid Request");
-  return res.status(returnStatus).json(responseJSON);
-});
-
 router.post("/request-reset-password", async (req, res) => {
   const userEmail = req.body.email;
   try {
-    const user = userMethods.getUserByEmail(userEmail);
+    const user = await userMethods.getUserByEmail(userEmail);
     if (user) {
       const token = await userMethods.generateForgotPasswordToken(user.name);
       const url = req.protocol + "://" + req.get("Host") + `/api/users/reset-password/${user.name}/${token}`;
@@ -173,7 +140,42 @@ router.post("/request-reset-password", async (req, res) => {
   }
 });
 
-router.delete("/delete-user", authenticate, isVerified, async (req, res) => {
+// This does not require authentication (since the user, by definition, has forgotten their password)
+// Instead, the request must include the reset-password token from the email the user received
+router.post("/reset-password", async (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  const pwConfirm = req.body.passwordConfirmation;
+  const resetToken = req.body.resetToken;
+
+  let responseJSON = { errors: [] };
+  let returnStatus = statusCodes.SUCCESS;
+
+  if (password === pwConfirm && userMethods.isValidPassword(password)) {
+    try {
+      const user = await userMethods.getUserByEmail(email);
+      const passwordResetVerified = await userMethods.verifyForgotPassword(user.name, resetToken);
+      if (user && passwordResetVerified) {
+        await userMethods.changePassword(user, password);
+        await userMethods.deleteJWT(user.name);
+
+        return res.redirect("../login");
+      }
+    } catch (error) {
+      console.error(error.message);
+      returnStatus = statusCodes.SERVER_ERROR;
+      responseJSON.errors.push("Server Error");
+      return res.status(returnStatus).json(responseJSON);
+    }
+  }
+
+  console.log("Invalid reset");
+  returnStatus = statusCodes.INVALID_STATUS;
+  responseJSON.errors.push("Invalid Request");
+  return res.status(returnStatus).json(responseJSON);
+});
+
+router.delete("/delete", authenticate, isVerified, async (req, res) => {
   try {
     await userMethods.deleteUser(res.locals.user.name);
     return res.redirect("../../../"); // Redirect to index

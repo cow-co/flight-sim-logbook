@@ -1,7 +1,7 @@
 const expect = require("chai").expect;
 const jwt = require("jsonwebtoken");
 const User = require("../../models/User");
-const userMethods = require("../../db_interface/users");
+const userMethods = require("../../services/users");
 
 describe("User model tests", () => {
   it("Should be invalid without a name", async () => {

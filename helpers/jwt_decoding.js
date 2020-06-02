@@ -7,8 +7,12 @@ const getUsernameFromToken = (token) => {
 
 const getTokenFromRequest = (req) => {
   const bearerToken = req.header("Authorization");
-  const token = bearerToken.split(" ")[1];
-  return token;
+  if (bearerToken) {
+    const token = bearerToken.split(" ")[1];
+    return token;
+  } else {
+    return null;
+  }
 };
 
 module.exports = { getUsernameFromToken, getTokenFromRequest };

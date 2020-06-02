@@ -191,6 +191,7 @@ const verifyEmail = async (username, givenToken) => {
 
 const generateForgotPasswordToken = async (username) => {
   const user = await getUserByName(username);
+
   const token = cryptoString({ length: 15, type: "url-safe" });
   const dateSet = Date.now();
   user.resetPasswordToken = token;

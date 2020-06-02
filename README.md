@@ -7,7 +7,7 @@
 
 ## Planned Features ##
 
-- [ ] User login
+- [x] User login
 - [ ] Logbooks tracked per user
 - [ ] Logbooks contain hours flown on a given mission
 - [ ] Logbooks contain "factors" present in a given mission (e.g. BVR, BFM, SEAD, NoE, CAS...)
