@@ -183,4 +183,33 @@ describe("User endpoint tests", () => {
       expect(res.body.errors.length).to.equal(1);
     });
   });
+
+  describe("user deletion", () => {
+    it("should delete the user", async () => {
+      await request(server).post("/api/users/create").send(baseUser);
+      await utils.verifyUser(baseUser.name);
+      const loginRes = await request(server).post("/api/users/login").send({
+        name: baseUser.name,
+        password: baseUser.password,
+      });
+      const token = loginRes.body;
+
+      const res = await request(server).delete("/api/users/delete").set("Authorization", `Bearer ${token}`);
+      expect(res.statusCode).to.equal(302);
+    });
+
+    it("should fail to delete a non-logged-in user", async () => {
+      await request(server).post("/api/users/create").send(baseUser);
+      await utils.verifyUser(baseUser.name);
+      const loginRes = await request(server).post("/api/users/login").send({
+        name: baseUser.name,
+        password: baseUser.password,
+      });
+      const token = loginRes.body;
+
+      const res = await request(server).delete("/api/users/delete");
+      expect(res.statusCode).to.equal(400);
+      expect(res.body.errors.length).to.equal(1);
+    });
+  });
 });
