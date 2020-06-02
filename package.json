@@ -4,8 +4,9 @@
   "description": "A generic logbook for combat flight sims",
   "main": "index.js",
   "scripts": {
-    "test": "jasmine JASMINE_CONFIG_PATH=jasmine.json",
-    "start": "node server.js"
+    "test": "nyc jasmine JASMINE_CONFIG_PATH=jasmine.json",
+    "start": "node index.js",
+    "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
   "repository": {
     "type": "git",
@@ -18,12 +19,21 @@
   },
   "homepage": "https://github.com/cow-co/flight-sim-logbook#readme",
   "dependencies": {
+    "argon2": "^0.26.2",
+    "crypto-random-string": "^3.2.0",
     "express": "^4.17.1",
-    "mongoose": "^5.9.14"
+    "http-shutdown": "^1.2.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.14",
+    "nodemailer": "^6.4.6"
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "codecov": "^3.7.0",
     "jasmine": "^3.5.0",
-    "mocha": "^7.1.2"
+    "mocha": "^7.1.2",
+    "mongodb-memory-server": "^6.6.1",
+    "nyc": "^15.0.1",
+    "supertest": "^4.0.2"
   }
 }
