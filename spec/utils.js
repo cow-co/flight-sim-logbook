@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const User = require("../models/User");
+const userService = require("../services/users");
 
 const mongod = new MongoMemoryServer();
 
@@ -38,8 +39,15 @@ const createUser = async (userDetails) => {
 };
 
 const verifyUser = async (username) => {
-  const newUser = await User.findOneAndUpdate({ name: username }, { isVerified: true });
-  return newUser;
+  let user = await userService.getUserByName(username);
+  user.isVerified = true;
+  await user.save();
+  return user;
+};
+
+const setupPasswordReset = async (username) => {
+  const token = await userService.generateForgotPasswordToken(username);
+  return token;
 };
 
 module.exports = {
@@ -48,4 +56,5 @@ module.exports = {
   clearDB,
   createUser,
   verifyUser,
+  setupPasswordReset,
 };

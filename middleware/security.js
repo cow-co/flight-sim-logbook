@@ -29,24 +29,20 @@ const authenticate = async (req, res, next) => {
 
 const isVerified = async (req, res, next) => {
   let user = null;
-  let isVerified = false;
 
   try {
     // Some endpoints may call this first (if authentication tokens are not required - e.g. login endpoint) so res.locals.user won't be set
     if (res.locals.user !== undefined) {
-      isVerified = res.locals.user.isVerified;
+      user = res.locals.user;
     } else {
       username = req.body.name;
       user = await getUserByName(username);
-      if (user) {
-        isVerified = user.isVerified;
-      }
     }
 
-    if (!isVerified) {
-      return res.status(statusCodes.INVALID_STATUS).json({ isVerified: false, errors: ["Please verify your email"] });
-    } else {
+    if (user && user.isVerified) {
       next();
+    } else {
+      return res.status(statusCodes.INVALID_STATUS).json({ isVerified: false, errors: ["Please verify your email"] });
     }
   } catch (error) {
     console.log(error);

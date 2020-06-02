@@ -11,6 +11,7 @@
     - [`POST /reset-password`](#post-reset-password)
     - [`DELETE /delete-user` (authenticated, verified)](#delete-delete-user-authenticated-verified)
 
+// TODO note the return values/status codes
 ## `/users` ##
 
 ### `POST /create` ###

@@ -6,9 +6,10 @@ const userMethods = require("../../services/users");
 const jwtDecoding = require("../../helpers/jwt_decoding");
 const { sendVerificationEmail, sendResetEmail } = require("../../helpers/emailing");
 
+// TODO Improve error logging (say where the error is, not just what it is)
+
 router.post("/create", async (req, res) => {
   const userDetails = req.body;
-  console.log("Received user-creation request");
   let responseJSON = { user: null, errors: [] };
   let returnStatus = statusCodes.SUCCESS;
 
@@ -39,7 +40,6 @@ router.post("/create", async (req, res) => {
 // Don't want to log a user in if their email has not been verified
 router.post("/login", isVerified, async (req, res) => {
   const loginDetails = req.body;
-  console.log("Received login request");
   let valid = false;
   let response = null;
 
@@ -69,7 +69,6 @@ router.post("/login", isVerified, async (req, res) => {
 
 router.get("/logout", authenticate, isVerified, async (req, res) => {
   const username = jwtDecoding.getUsernameFromToken(jwtDecoding.getTokenFromRequest(req));
-  console.log(`Received logout request for ${username}`);
   const errors = await userMethods.deleteJWT(username);
 
   if (errors.length === 0) {
@@ -126,7 +125,7 @@ router.post("/change-password", authenticate, isVerified, async (req, res) => {
 router.post("/request-reset-password", async (req, res) => {
   const userEmail = req.body.email;
   try {
-    const user = userMethods.getUserByEmail(userEmail);
+    const user = await userMethods.getUserByEmail(userEmail);
     if (user) {
       const token = await userMethods.generateForgotPasswordToken(user.name);
       const url = req.protocol + "://" + req.get("Host") + `/api/users/reset-password/${user.name}/${token}`;
@@ -141,7 +140,6 @@ router.post("/request-reset-password", async (req, res) => {
   }
 });
 
-// UNTESTED
 // This does not require authentication (since the user, by definition, has forgotten their password)
 // Instead, the request must include the reset-password token from the email the user received
 router.post("/reset-password", async (req, res) => {
@@ -156,7 +154,8 @@ router.post("/reset-password", async (req, res) => {
   if (password === pwConfirm && userMethods.isValidPassword(password)) {
     try {
       const user = await userMethods.getUserByEmail(email);
-      if (user && userMethods.verifyForgotPassword(user.name, resetToken)) {
+      const passwordResetVerified = await userMethods.verifyForgotPassword(user.name, resetToken);
+      if (user && passwordResetVerified) {
         await userMethods.changePassword(user, password);
         await userMethods.deleteJWT(user.name);
 
@@ -170,6 +169,7 @@ router.post("/reset-password", async (req, res) => {
     }
   }
 
+  console.log("Invalid reset");
   returnStatus = statusCodes.INVALID_STATUS;
   responseJSON.errors.push("Invalid Request");
   return res.status(returnStatus).json(responseJSON);

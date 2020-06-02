@@ -135,4 +135,52 @@ describe("User endpoint tests", () => {
       expect(res.body.errors.length).to.equal(1);
     });
   });
+
+  describe("reset-password", () => {
+    it("should reset the user's password", async () => {
+      await request(server).post("/api/users/create").send(baseUser);
+      await utils.verifyUser(baseUser.name);
+      const token = await utils.setupPasswordReset(baseUser.name);
+
+      const res = await request(server).post("/api/users/reset-password").send({
+        email: baseUser.email,
+        password: "password123456",
+        passwordConfirmation: "password123456",
+        resetToken: token,
+      });
+      expect(res.statusCode).to.equal(302);
+    });
+
+    it("should fail to reset password with non-matching confirmation", async () => {
+      await request(server).post("/api/users/create").send(baseUser);
+      await utils.verifyUser(baseUser.name);
+      const token = await utils.setupPasswordReset(baseUser.name);
+
+      const res = await request(server).post("/api/users/reset-password").send({
+        email: baseUser.email,
+        password: "password123456",
+        passwordConfirmation: "password123457",
+        resetToken: token,
+      });
+      expect(res.statusCode).to.equal(400);
+      expect(res.body.errors.length).to.equal(1);
+    });
+
+    it("should fail to reset password with invalid reset token", async () => {
+      await request(server).post("/api/users/create").send(baseUser);
+      await utils.verifyUser(baseUser.name);
+      const token = await utils.setupPasswordReset(baseUser.name);
+
+      const res = await request(server)
+        .post("/api/users/reset-password")
+        .send({
+          email: baseUser.email,
+          password: "password123456",
+          passwordConfirmation: "password123456",
+          resetToken: token + "aaa",
+        });
+      expect(res.statusCode).to.equal(400);
+      expect(res.body.errors.length).to.equal(1);
+    });
+  });
 });
