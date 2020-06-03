@@ -86,7 +86,7 @@ describe("User endpoint tests", () => {
         name: baseUser.name,
         password: baseUser.password,
       });
-      const token = loginRes.body;
+      const token = loginRes.body.jwt;
       const res = await request(server).get("/api/users/logout").set("Authorization", `Bearer ${token}`);
       expect(res.statusCode).to.equal(200);
     });
@@ -109,7 +109,7 @@ describe("User endpoint tests", () => {
         name: baseUser.name,
         password: baseUser.password,
       });
-      const token = loginRes.body;
+      const token = loginRes.body.jwt;
 
       const res = await request(server)
         .post("/api/users/change-password")
@@ -125,7 +125,7 @@ describe("User endpoint tests", () => {
         name: baseUser.name,
         password: baseUser.password,
       });
-      const token = loginRes.body;
+      const token = loginRes.body.jwt;
 
       const res = await request(server)
         .post("/api/users/change-password")
@@ -192,7 +192,7 @@ describe("User endpoint tests", () => {
         name: baseUser.name,
         password: baseUser.password,
       });
-      const token = loginRes.body;
+      const token = loginRes.body.jwt;
 
       const res = await request(server).delete("/api/users/delete").set("Authorization", `Bearer ${token}`);
       expect(res.statusCode).to.equal(302);
@@ -205,7 +205,7 @@ describe("User endpoint tests", () => {
         name: baseUser.name,
         password: baseUser.password,
       });
-      const token = loginRes.body;
+      const token = loginRes.body.jwt;
 
       const res = await request(server).delete("/api/users/delete");
       expect(res.statusCode).to.equal(400);
