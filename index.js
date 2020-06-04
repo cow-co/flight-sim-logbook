@@ -2,6 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const users = require("./routes/api/users");
 const shutdown = require("http-shutdown");
+const swaggerUI = require("swagger-ui-express");
+const YAML = require("yamljs");
+const swaggerDocUsers = YAML.load("docs/openapi/users.yaml");
 
 const app = express();
 app.use(express.json());
@@ -16,7 +19,9 @@ if (process.env.NODE_ENV === "production") {
     .catch((err) => console.error(err));
 }
 
+app.use("/api-docs/users", swaggerUI.serve, swaggerUI.setup(swaggerDocUsers));
 app.use("/api/users", users);
+
 const port = process.env.PORT || 5500;
 let server = app.listen(port, async () => {
   console.log(`server running on port ${port}`);

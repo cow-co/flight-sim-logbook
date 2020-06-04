@@ -7,7 +7,7 @@ const authenticate = async (req, res, next) => {
   try {
     const token = jwtDecoding.getTokenFromRequest(req);
     if (token == null) {
-      return res.status(statusCodes.INVALID_STATUS).json({ errors: ["Invalid Token"] });
+      return res.status(statusCodes.CREDS_ERROR).json({ errors: ["Invalid Token"] });
     }
 
     const user = await checkJWT(token);
@@ -18,12 +18,12 @@ const authenticate = async (req, res, next) => {
     } else {
       console.log("Invalid token received");
 
-      return res.status(statusCodes.INVALID_STATUS).json({ errors: ["Invalid Token"] });
+      return res.status(statusCodes.CREDS_ERROR).json({ errors: ["Invalid Token"] });
     }
   } catch (error) {
     console.error(error);
 
-    return res.status(statusCodes.INVALID_STATUS).json({ errors: ["Invalid Token"] });
+    return res.status(statusCodes.SERVER_ERROR).json({ errors: ["Invalid Token"] });
   }
 };
 
@@ -42,11 +42,11 @@ const isVerified = async (req, res, next) => {
     if (user && user.isVerified) {
       next();
     } else {
-      return res.status(statusCodes.INVALID_STATUS).json({ isVerified: false, errors: ["Please verify your email"] });
+      return res.status(statusCodes.CREDS_ERROR).json({ isVerified: false, errors: ["Please verify your email"] });
     }
   } catch (error) {
     console.log(error);
-    return res.status(statusCodes.INVALID_STATUS).json({ isVerified: false, errors: ["Malformed Request"] });
+    return res.status(statusCodes.CREDS_ERROR).json({ isVerified: false, errors: ["Malformed Request"] });
   }
 };
 

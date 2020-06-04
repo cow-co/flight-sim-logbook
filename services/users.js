@@ -163,11 +163,15 @@ const deleteJWT = async (username) => {
 
 const generateEmailVerificationToken = async (username) => {
   const user = await getUserByName(username);
-  const token = cryptoString({ length: 15, type: "url-safe" });
-  const dateSet = Date.now();
-  user.verificationToken = token;
-  user.verificationSet = dateSet;
-  await user.save();
+  let token = null;
+
+  if (user) {
+    token = cryptoString({ length: 15, type: "url-safe" });
+    const dateSet = Date.now();
+    user.verificationToken = token;
+    user.verificationSet = dateSet;
+    await user.save();
+  }
 
   return token;
 };
