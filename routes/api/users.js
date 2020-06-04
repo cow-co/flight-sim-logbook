@@ -79,13 +79,16 @@ router.get("/logout", authenticate, isVerified, async (req, res) => {
 });
 
 // This is used when the user's original verification token is lost or expired (i.e. this is how they request a new one)
-// Requires login first.
-router.get("/verify/send", authenticate, async (req, res) => {
-  const user = res.locals.user;
+router.post("/verify/send", async (req, res) => {
+  const user = req.body.user;
   const token = await userMethods.generateEmailVerificationToken(user.name);
-  const url = req.protocol + "://" + req.get("Host") + `/api/users/verify/${user.name}/${token}`;
-  sendVerificationEmail(user.name, user.email, url);
-  return res.status(statusCodes.SUCCESS).json({ message: "Email verification sent!" });
+  if (token) {
+    const url = req.protocol + "://" + req.get("Host") + `/api/users/verify/${user.name}/${token}`;
+    sendVerificationEmail(user.name, user.email, url);
+    return res.status(statusCodes.SUCCESS).json({ message: "Email verification sent!" });
+  } else {
+    return res.status(statusCodes.INVALID_STATUS).json({ errors: ["User not found"] });
+  }
 });
 
 router.get("/verify/:username/:token", async (req, res) => {

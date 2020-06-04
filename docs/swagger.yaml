@@ -92,7 +92,7 @@
                           type: string
       /users/login:
         post:
-          summary: Creates a user account and sends a verification email.
+          summary: Logs the user in
           requestBody:
             description: Details of the user to log in
             content:
@@ -109,7 +109,7 @@
             required: true
           responses:
             '200':    # status code
-              description: Basic details of the created user.
+              description: Login token
               content:
                 application/json:
                   schema: 
@@ -136,6 +136,73 @@
                   schema: 
                     type: object
                     properties:
+                      errors:
+                        type: array
+                        items:
+                          type: string
+      /users/logout:
+        get:
+          summary: Logs the user out, by deleting the saved JWT in the database
+          responses:
+            '200':    # status code
+              description: Successful logout
+              content:
+                application/json:
+                  schema: 
+                    type: object
+                    properties: 
+                      message:
+                        type: string
+                        description: A basic response message, indicating success.
+            '500':    # status code
+              description: An unexpected server-side error
+              content:
+                application/json:
+                  schema: 
+                    type: object
+                    properties:
+                      errors:
+                        type: array
+                        items:
+                          type: string
+      /users/verify/send:
+        post:
+          summary: Sends a verification email (e.g. if the original expired)
+          requestBody:
+            description: Details of the user whose email we want to verify
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    user:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: The username
+                        email:
+                          type: string
+                          description: The user's email address
+            required: true
+          responses:
+            '200':    # status code
+              description: Login token
+              content:
+                application/json:
+                  schema: 
+                    type: object
+                    properties: 
+                      message:
+                        type: string
+                        description: A generic success message
+            '400':    # status code
+              description: User does not exist
+              content:
+                application/json:
+                  schema: 
+                    type: object
+                    properties: 
                       errors:
                         type: array
                         items:

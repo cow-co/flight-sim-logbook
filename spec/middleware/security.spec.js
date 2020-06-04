@@ -62,7 +62,7 @@ describe("Security middleware tests", () => {
             user: null,
           },
           status: (code) => {
-            expect(code).to.equal(400);
+            expect(code).to.equal(401);
             return {
               json: (jsonCode) => {},
             };
@@ -100,7 +100,7 @@ describe("Security middleware tests", () => {
         let res = {
           locals: {},
           status: (code) => {
-            expect(code).to.equal(400);
+            expect(code).to.equal(401);
             return {
               json: (jsonCode) => {},
             };
@@ -136,7 +136,7 @@ describe("Security middleware tests", () => {
         let res = {
           locals: {},
           status: (code) => {
-            expect(code).to.equal(400);
+            expect(code).to.equal(401);
             return {
               json: (jsonCode) => {},
             };

@@ -73,7 +73,7 @@ describe("User endpoint tests", () => {
         name: baseUser.name + "a",
         password: baseUser.password,
       });
-    expect(res.statusCode).to.equal(400);
+    expect(res.statusCode).to.equal(401);
     expect(res.body.errors.length).to.equal(1);
   });
 
@@ -96,7 +96,7 @@ describe("User endpoint tests", () => {
       await utils.verifyUser(baseUser.name);
 
       const res = await request(server).get("/api/users/logout");
-      expect(res.statusCode).to.equal(400);
+      expect(res.statusCode).to.equal(401);
       expect(res.body.errors.length).to.equal(1);
     });
   });
@@ -208,7 +208,7 @@ describe("User endpoint tests", () => {
       const token = loginRes.body.jwt;
 
       const res = await request(server).delete("/api/users/delete");
-      expect(res.statusCode).to.equal(400);
+      expect(res.statusCode).to.equal(401);
       expect(res.body.errors.length).to.equal(1);
     });
   });
