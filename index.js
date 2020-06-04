@@ -4,7 +4,7 @@ const users = require("./routes/api/users");
 const shutdown = require("http-shutdown");
 const swaggerUI = require("swagger-ui-express");
 const YAML = require("yamljs");
-const swaggerDoc = YAML.load("docs/swagger.yaml");
+const swaggerDocUsers = YAML.load("docs/openapi/users.yaml");
 
 const app = express();
 app.use(express.json());
@@ -19,7 +19,7 @@ if (process.env.NODE_ENV === "production") {
     .catch((err) => console.error(err));
 }
 
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDoc));
+app.use("/api-docs/users", swaggerUI.serve, swaggerUI.setup(swaggerDocUsers));
 app.use("/api/users", users);
 
 const port = process.env.PORT || 5500;
