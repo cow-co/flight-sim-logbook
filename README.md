@@ -3,7 +3,7 @@
 ## A generic logbook app for combat flight simulators ##
 
 [![Known Vulnerabilities](https://snyk.io/test/github/cow-co/flight-sim-logbook/badge.svg)](https://snyk.io/test/github/cow-co/flight-sim-logbook)
-[![Build Status](https://travis-ci.org/cow-co/flight-sim-logbook.svg?branch=master)](https://travis-ci.org/cow-co/flight-sim-logbook)
+[![Build Status](https://travis-ci.com/cow-co/flight-sim-logbook.svg?branch=develop)](https://travis-ci.org/cow-co/flight-sim-logbook)
 
 ## Planned Features ##
 
