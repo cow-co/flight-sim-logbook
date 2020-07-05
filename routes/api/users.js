@@ -8,7 +8,7 @@ const { sendVerificationEmail, sendResetEmail } = require("../../helpers/emailin
 
 // TODO Improve error logging (say where the error is, not just what it is)
 
-router.post("/create", async (req, res) => {
+router.post("/register", async (req, res) => {
   const userDetails = req.body;
   let responseJSON = { user: null, errors: [] };
   let returnStatus = statusCodes.SUCCESS;
@@ -95,7 +95,7 @@ router.get("/verify/:username/:token", async (req, res) => {
   const isValid = await userMethods.verifyEmail(req.params.username, req.params.token);
 
   if (isValid) {
-    return res.redirect("/login").json({ message: "Email verification succeeded!" });
+    return res.redirect("/login");
   } else {
     return res.status(statusCodes.INVALID_STATUS).json({ message: "Email verification failed!" });
   }
