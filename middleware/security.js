@@ -39,10 +39,14 @@ const isVerified = async (req, res, next) => {
       user = await getUserByName(username);
     }
 
-    if (user && user.isVerified) {
-      next();
+    if (user) {
+      if (user.isVerified) {
+        next();
+      } else {
+        return res.status(statusCodes.CREDS_ERROR).json({ isVerified: false, errors: ["Please verify your email"] });
+      }
     } else {
-      return res.status(statusCodes.CREDS_ERROR).json({ isVerified: false, errors: ["Please verify your email"] });
+      return res.status(statusCodes.CREDS_ERROR).json({ isVerified: false, errors: ["User does not exist"] });
     }
   } catch (error) {
     console.log(error);
