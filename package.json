@@ -7,7 +7,8 @@
     "test": "nyc jasmine JASMINE_CONFIG_PATH=jasmine.json",
     "run-server": "node index.js",
     "run-client": "cd client && npm run start",
-    "start": "npm run run-server & npm run run-client",
+    "start": "node index.js",
+    "heroku-postbuild": "cd client && npm install && npm run build",
     "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },
   "repository": {
