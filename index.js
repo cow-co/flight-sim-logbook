@@ -10,6 +10,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, "client/build")));
+
 // Only connect to the database if we are in prod
 if (process.env.NODE_ENV === "production") {
   const db = require("./config/keys").mongo_uri;
