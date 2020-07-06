@@ -5,6 +5,7 @@ const shutdown = require("http-shutdown");
 const swaggerUI = require("swagger-ui-express");
 const YAML = require("yamljs");
 const swaggerDocUsers = YAML.load("docs/openapi/users.yaml");
+const path = require("path");
 
 const app = express();
 app.use(express.json());
