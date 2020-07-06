@@ -14,6 +14,7 @@ router.post("/register", async (req, res) => {
   let returnStatus = statusCodes.SUCCESS;
 
   try {
+    console.log("Creating user...");
     const newUser = await userMethods.createUser(userDetails);
     if (newUser.errors.length > 0) {
       returnStatus = statusCodes.INVALID_STATUS;
@@ -27,6 +28,7 @@ router.post("/register", async (req, res) => {
         email: newUser.email,
       };
       returnStatus = statusCodes.CREATED;
+      console.log("Created user.");
     }
   } catch (error) {
     console.error(error.message);

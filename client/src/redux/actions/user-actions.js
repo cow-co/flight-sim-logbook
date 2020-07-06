@@ -5,6 +5,7 @@ import { setAlert } from "./common-actions";
 import { isEmpty } from "../../helpers/utils";
 
 // TODO Retrieve the errorMessages from the responses and use those instead of the default Axios stuff?
+// FIXME Fix the URLs (namely, the ports for the API calls)
 
 const login = (data) => async (dispatch) => {
   const config = {
@@ -15,7 +16,7 @@ const login = (data) => async (dispatch) => {
   };
 
   try {
-    const response = await Axios.post("http://localhost:8080/users/login", data, config);
+    const response = await Axios.post("/api/users/login", data, config);
     const errors = response.data.errorMessages;
 
     if (!isEmpty(errors)) {
@@ -40,7 +41,7 @@ const registerUser = (data) => async (dispatch) => {
   };
 
   try {
-    const response = await Axios.post("http://localhost:8080/users/register", data, config);
+    const response = await Axios.post("/api/users/register", data, config);
     const errors = response.data.errorMessages;
 
     if (!isEmpty(errors)) {
@@ -67,7 +68,7 @@ const logout = (data) => async (dispatch) => {
   };
 
   try {
-    const response = await Axios.post("http://localhost:8080/users/register", data, config);
+    const response = await Axios.post("/api/users/register", data, config);
     const errors = response.data.errorMessages;
 
     if (!isEmpty(errors)) {

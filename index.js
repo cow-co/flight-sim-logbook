@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === "production") {
 app.use("/api-docs/users", swaggerUI.serve, swaggerUI.setup(swaggerDocUsers));
 app.use("/api/users", users);
 
-const port = process.env.PORT || 5500;
+const port = process.env.PORT || 5000;
 let server = app.listen(port, async () => {
   console.log(`server running on port ${port}`);
 });

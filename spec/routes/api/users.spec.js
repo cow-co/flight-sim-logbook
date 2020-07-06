@@ -19,13 +19,13 @@ describe("User endpoint tests", () => {
 
   describe("user-creation", () => {
     it("should create a user", async () => {
-      const res = await request(server).post("/api/users/create").send(baseUser);
+      const res = await request(server).post("/api/users/register").send(baseUser);
       expect(res.statusCode).to.equal(201);
       expect(res.body.user).to.haveOwnProperty("name", "name");
     });
 
     it("should fail to create a user with non-matching passwords", async () => {
-      const res = await request(server).post("/api/users/create").send({
+      const res = await request(server).post("/api/users/register").send({
         name: "name",
         email: "email@email.com",
         password: "password12345",
@@ -38,7 +38,7 @@ describe("User endpoint tests", () => {
 
   describe("login", () => {
     it("should log the user in", async () => {
-      await request(server).post("/api/users/create").send(baseUser);
+      await request(server).post("/api/users/register").send(baseUser);
       await utils.verifyUser(baseUser.name);
 
       const res = await request(server).post("/api/users/login").send({
@@ -49,7 +49,7 @@ describe("User endpoint tests", () => {
     });
 
     it("should fail to log in with incorrect password", async () => {
-      await request(server).post("/api/users/create").send(baseUser);
+      await request(server).post("/api/users/register").send(baseUser);
       await utils.verifyUser(baseUser.name);
 
       const res = await request(server)
@@ -64,7 +64,7 @@ describe("User endpoint tests", () => {
   });
 
   it("should fail to log in with incorrect username", async () => {
-    await request(server).post("/api/users/create").send(baseUser);
+    await request(server).post("/api/users/register").send(baseUser);
     await utils.verifyUser(baseUser.name);
 
     const res = await request(server)
@@ -79,7 +79,7 @@ describe("User endpoint tests", () => {
 
   describe("logout", () => {
     it("should log the user out", async () => {
-      await request(server).post("/api/users/create").send(baseUser);
+      await request(server).post("/api/users/register").send(baseUser);
       await utils.verifyUser(baseUser.name);
 
       const loginRes = await request(server).post("/api/users/login").send({
@@ -92,7 +92,7 @@ describe("User endpoint tests", () => {
     });
 
     it("should fail to log out without a token", async () => {
-      await request(server).post("/api/users/create").send(baseUser);
+      await request(server).post("/api/users/register").send(baseUser);
       await utils.verifyUser(baseUser.name);
 
       const res = await request(server).get("/api/users/logout");
@@ -103,7 +103,7 @@ describe("User endpoint tests", () => {
 
   describe("change-password", () => {
     it("should change the user's password", async () => {
-      await request(server).post("/api/users/create").send(baseUser);
+      await request(server).post("/api/users/register").send(baseUser);
       await utils.verifyUser(baseUser.name);
       const loginRes = await request(server).post("/api/users/login").send({
         name: baseUser.name,
@@ -119,7 +119,7 @@ describe("User endpoint tests", () => {
     });
 
     it("should fail to change password with non-matching confirmation", async () => {
-      await request(server).post("/api/users/create").send(baseUser);
+      await request(server).post("/api/users/register").send(baseUser);
       await utils.verifyUser(baseUser.name);
       const loginRes = await request(server).post("/api/users/login").send({
         name: baseUser.name,
@@ -138,7 +138,7 @@ describe("User endpoint tests", () => {
 
   describe("reset-password", () => {
     it("should reset the user's password", async () => {
-      await request(server).post("/api/users/create").send(baseUser);
+      await request(server).post("/api/users/register").send(baseUser);
       await utils.verifyUser(baseUser.name);
       const token = await utils.setupPasswordReset(baseUser.name);
 
@@ -152,7 +152,7 @@ describe("User endpoint tests", () => {
     });
 
     it("should fail to reset password with non-matching confirmation", async () => {
-      await request(server).post("/api/users/create").send(baseUser);
+      await request(server).post("/api/users/register").send(baseUser);
       await utils.verifyUser(baseUser.name);
       const token = await utils.setupPasswordReset(baseUser.name);
 
@@ -167,7 +167,7 @@ describe("User endpoint tests", () => {
     });
 
     it("should fail to reset password with invalid reset token", async () => {
-      await request(server).post("/api/users/create").send(baseUser);
+      await request(server).post("/api/users/register").send(baseUser);
       await utils.verifyUser(baseUser.name);
       const token = await utils.setupPasswordReset(baseUser.name);
 
@@ -186,7 +186,7 @@ describe("User endpoint tests", () => {
 
   describe("user deletion", () => {
     it("should delete the user", async () => {
-      await request(server).post("/api/users/create").send(baseUser);
+      await request(server).post("/api/users/register").send(baseUser);
       await utils.verifyUser(baseUser.name);
       const loginRes = await request(server).post("/api/users/login").send({
         name: baseUser.name,
@@ -199,7 +199,7 @@ describe("User endpoint tests", () => {
     });
 
     it("should fail to delete a non-logged-in user", async () => {
-      await request(server).post("/api/users/create").send(baseUser);
+      await request(server).post("/api/users/register").send(baseUser);
       await utils.verifyUser(baseUser.name);
       const loginRes = await request(server).post("/api/users/login").send({
         name: baseUser.name,
