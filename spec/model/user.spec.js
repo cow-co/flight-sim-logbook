@@ -6,7 +6,7 @@ const userMethods = require("../../services/users");
 describe("User model tests", () => {
   it("Should be invalid without a name", async () => {
     const invalidUser = {
-      name: null,
+      username: null,
       email: "someone@something.com",
     };
 
@@ -16,13 +16,13 @@ describe("User model tests", () => {
       const validated = await userModel.validate();
       fail();
     } catch (err) {
-      expect(err.errors.name).to.exist;
+      expect(err.errors.username).to.exist;
     }
   });
 
   it("Should be invalid with an empty name", async () => {
     const invalidUser = {
-      name: "",
+      username: "",
       email: "someone@something.com",
     };
 
@@ -32,13 +32,13 @@ describe("User model tests", () => {
       const validated = await userModel.validate();
       fail();
     } catch (err) {
-      expect(err.errors.name).to.exist;
+      expect(err.errors.username).to.exist;
     }
   });
 
   it("Should be invalid without an email", async () => {
     const invalidUser = {
-      name: "someone",
+      username: "someone",
       email: null,
     };
 
@@ -54,7 +54,7 @@ describe("User model tests", () => {
 
   it("Should be invalid with an invalid email", async () => {
     const invalidUser = {
-      name: "someone",
+      username: "someone",
       email: "someonesomething.com",
     };
 
@@ -70,7 +70,7 @@ describe("User model tests", () => {
 
   it("Should be invalid with an empty email", async () => {
     const invalidUser = {
-      name: "someone",
+      username: "someone",
       email: "",
     };
 
@@ -86,7 +86,7 @@ describe("User model tests", () => {
 
   it("Should be valid with everything populated", async () => {
     const validUser = {
-      name: "someone",
+      username: "someone",
       email: "someone@something.com",
     };
 

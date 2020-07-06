@@ -35,7 +35,7 @@ const isVerified = async (req, res, next) => {
     if (res.locals.user !== undefined) {
       user = res.locals.user;
     } else {
-      username = req.body.name;
+      username = req.body.username;
       user = await getUserByName(username);
     }
 

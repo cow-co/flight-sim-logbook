@@ -18,7 +18,7 @@ paths:
             schema:
               type: object
               properties:
-                name:
+                username:
                   type: string
                   description: The username
                 email:
@@ -32,17 +32,17 @@ paths:
                   description: Confirmation of the password
         required: true
       responses:
-        '201':    # status code
+        "201": # status code
           description: Basic details of the created user.
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
-                properties: 
+                properties:
                   user:
                     type: object
                     properties:
-                      name:
+                      username:
                         type: string
                         description: The user's name
                       email:
@@ -52,17 +52,17 @@ paths:
                     type: array
                     items:
                       type: string
-        '400':    # status code
+        "400": # status code
           description: Invalid request (mismatched password confirmation, user already exists, etc.)
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
-                properties: 
+                properties:
                   user:
                     type: object
                     properties:
-                      name:
+                      username:
                         type: string
                         description: The user's name
                       email:
@@ -72,17 +72,17 @@ paths:
                     type: array
                     items:
                       type: string
-        '500':    # status code
+        "500": # status code
           description: An unexpected server-side error
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
-                properties: 
+                properties:
                   user:
                     type: object
                     properties:
-                      name:
+                      username:
                         type: string
                         description: The user's name
                       email:
@@ -104,7 +104,7 @@ paths:
             schema:
               type: object
               properties:
-                name:
+                username:
                   type: string
                   description: The username
                 password:
@@ -112,32 +112,32 @@ paths:
                   description: The password for the user
         required: true
       responses:
-        '200':    # status code
+        "200": # status code
           description: Login token
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
-                properties: 
+                properties:
                   jwt:
                     type: string
                     description: The login token, to be used as a Bearer Authorization token in subsequent requests.
-        '401':    # status code
+        "401": # status code
           description: Invalid credentials (user email not verified, incorrect password, etc.)
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
-                properties: 
+                properties:
                   errors:
                     type: array
                     items:
                       type: string
-        '500':    # status code
+        "500": # status code
           description: An unexpected server-side error
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 properties:
                   errors:
@@ -152,32 +152,32 @@ paths:
       security:
         - BearerAuth: []
       responses:
-        '200':    # status code
+        "200": # status code
           description: Successful logout
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
-                properties: 
+                properties:
                   message:
                     type: string
                     description: A basic response message, indicating success.
-        '401':    # status code
+        "401": # status code
           description: Authentication failed
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 properties:
                   errors:
                     type: array
                     items:
                       type: string
-        '500':    # status code
+        "500": # status code
           description: An unexpected server-side error
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 properties:
                   errors:
@@ -199,7 +199,7 @@ paths:
                 user:
                   type: object
                   properties:
-                    name:
+                    username:
                       type: string
                       description: The username
                     email:
@@ -207,23 +207,23 @@ paths:
                       description: The user's email address
         required: true
       responses:
-        '200':    # status code
+        "200": # status code
           description: Login token
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
-                properties: 
+                properties:
                   message:
                     type: string
                     description: A generic success message
-        '400':    # status code
+        "400": # status code
           description: User does not exist
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
-                properties: 
+                properties:
                   errors:
                     type: array
                     items:
@@ -247,30 +247,30 @@ paths:
           schema:
             type: string
       responses:
-        '302':    # status code
+        "302": # status code
           description: Redirect to login
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
-                properties: 
+                properties:
                   message:
                     type: string
                     description: A generic success message
-        '400':    # status code
+        "400": # status code
           description: Incorrect token
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
-                properties: 
+                properties:
                   errors:
                     type: array
                     items:
                       type: string
   /users/change-password:
     post:
-      summary: Updates a user's password 
+      summary: Updates a user's password
       tags:
         - Users
       security:
@@ -290,44 +290,44 @@ paths:
                   description: Must match the password parameter
         required: true
       responses:
-        '302':    # status code
+        "302": # status code
           description: Redirect to login
-        '400':    # status code
+        "400": # status code
           description: Invalid/non-matching passwords
           content:
             application/json:
-              schema: 
-                type: object
-                properties: 
-                  errors:
-                    type: array
-                    items:
-                      type: string
-        '401':    # status code
-          description: Authentication failed
-          content:
-            application/json:
-              schema: 
+              schema:
                 type: object
                 properties:
                   errors:
                     type: array
                     items:
                       type: string
-        '500':    # status code
+        "401": # status code
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        "500": # status code
           description: Unexpected server-side error
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
-                properties: 
+                properties:
                   errors:
                     type: array
                     items:
                       type: string
   /users/request-reset-password:
     post:
-      summary: Sends a password-reset email 
+      summary: Sends a password-reset email
       tags:
         - Users
       requestBody:
@@ -341,41 +341,41 @@ paths:
                   type: string
                   description: The user's email address
       responses:
-        '200':    # status code
+        "200": # status code
           description: Redirect to login
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
-                properties: 
+                properties:
                   message:
                     type: string
                     description: Generic success message
-        '400':    # status code
+        "400": # status code
           description: User with given email does not exist
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
-                properties: 
+                properties:
                   errors:
                     type: array
                     items:
                       type: string
-        '500':    # status code
+        "500": # status code
           description: Unexpected server-side error
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
-                properties: 
+                properties:
                   errors:
                     type: array
                     items:
                       type: string
   /users/reset-password:
     post:
-      summary: Updates a user's password 
+      summary: Updates a user's password
       tags:
         - Users
       requestBody:
@@ -399,58 +399,58 @@ paths:
                   description: The reset token sent to the user's email address
         required: true
       responses:
-        '302':    # status code
+        "302": # status code
           description: Redirect to login
-        '400':    # status code
+        "400": # status code
           description: User with given email not found, or reset token does not match what is in the database
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
-                properties: 
+                properties:
                   errors:
                     type: array
                     items:
                       type: string
-        '500':    # status code
+        "500": # status code
           description: Unexpected server-side error
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
-                properties: 
+                properties:
                   errors:
                     type: array
                     items:
                       type: string
   /users/delete:
     delete:
-      summary: Deletes a user's account 
+      summary: Deletes a user's account
       tags:
         - Users
       security:
         - BearerAuth: []
       responses:
-        '302':    # status code
+        "302": # status code
           description: Redirect to index page
-        '401':    # status code
+        "401": # status code
           description: Authentication failed
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
-                properties: 
+                properties:
                   errors:
                     type: array
                     items:
                       type: string
-        '500':    # status code
+        "500": # status code
           description: Unexpected server-side error
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
-                properties: 
+                properties:
                   errors:
                     type: array
                     items:
@@ -461,4 +461,3 @@ components:
     BearerAuth:
       type: http
       scheme: bearer
-                      

@@ -20,11 +20,11 @@ router.post("/register", async (req, res) => {
       returnStatus = statusCodes.INVALID_STATUS;
       responseJSON.errors = newUser.errors;
     } else {
-      const token = await userMethods.generateEmailVerificationToken(newUser.name);
-      const url = req.protocol + "://" + req.get("Host") + `/api/users/verify/${newUser.name}/${token}`;
-      sendVerificationEmail(newUser.name, newUser.email, url);
+      const token = await userMethods.generateEmailVerificationToken(newUser.username);
+      const url = req.protocol + "://" + req.get("Host") + `/api/users/verify/${newUser.username}/${token}`;
+      sendVerificationEmail(newUser.username, newUser.email, url);
       responseJSON.user = {
-        name: newUser.name,
+        username: newUser.username,
         email: newUser.email,
       };
       returnStatus = statusCodes.CREATED;
@@ -46,7 +46,7 @@ router.post("/login", isVerified, async (req, res) => {
   let response = null;
 
   try {
-    const user = await userMethods.getUserByName(loginDetails.name);
+    const user = await userMethods.getUserByName(loginDetails.username);
     if (user) {
       valid = await userMethods.checkPassword(user, loginDetails.password);
       if (valid) {
@@ -83,10 +83,10 @@ router.get("/logout", authenticate, isVerified, async (req, res) => {
 // This is used when the user's original verification token is lost or expired (i.e. this is how they request a new one)
 router.post("/verify/send", async (req, res) => {
   const user = req.body.user;
-  const token = await userMethods.generateEmailVerificationToken(user.name);
+  const token = await userMethods.generateEmailVerificationToken(user.username);
   if (token) {
-    const url = req.protocol + "://" + req.get("Host") + `/api/users/verify/${user.name}/${token}`;
-    sendVerificationEmail(user.name, user.email, url);
+    const url = req.protocol + "://" + req.get("Host") + `/api/users/verify/${user.username}/${token}`;
+    sendVerificationEmail(user.username, user.email, url);
     return res.status(statusCodes.SUCCESS).json({ message: "Email verification sent!" });
   } else {
     return res.status(statusCodes.INVALID_STATUS).json({ errors: ["User not found"] });
@@ -112,7 +112,7 @@ router.post("/change-password", authenticate, isVerified, async (req, res) => {
   if (password === confirmation && userMethods.isValidPassword(password)) {
     try {
       await userMethods.changePassword(res.locals.user, password);
-      await userMethods.deleteJWT(res.locals.user.name);
+      await userMethods.deleteJWT(res.locals.user.username);
       return res.redirect("../login");
     } catch (error) {
       console.error(error.message);
@@ -132,9 +132,9 @@ router.post("/request-reset-password", async (req, res) => {
   try {
     const user = await userMethods.getUserByEmail(userEmail);
     if (user) {
-      const token = await userMethods.generateForgotPasswordToken(user.name);
-      const url = req.protocol + "://" + req.get("Host") + `/api/users/reset-password/${user.name}/${token}`;
-      sendResetEmail(user.name, user.email, url);
+      const token = await userMethods.generateForgotPasswordToken(user.username);
+      const url = req.protocol + "://" + req.get("Host") + `/api/users/reset-password/${user.username}/${token}`;
+      sendResetEmail(user.username, user.email, url);
       return res.status(statusCodes.SUCCESS).json({ message: "Password reset email sent!" });
     } else {
       return res.status(statusCodes.INVALID_STATUS).json({ errors: ["User not found"] });
@@ -159,10 +159,10 @@ router.post("/reset-password", async (req, res) => {
   if (password === pwConfirm && userMethods.isValidPassword(password)) {
     try {
       const user = await userMethods.getUserByEmail(email);
-      const passwordResetVerified = await userMethods.verifyForgotPassword(user.name, resetToken);
+      const passwordResetVerified = await userMethods.verifyForgotPassword(user.username, resetToken);
       if (user && passwordResetVerified) {
         await userMethods.changePassword(user, password);
-        await userMethods.deleteJWT(user.name);
+        await userMethods.deleteJWT(user.username);
 
         return res.redirect("../login");
       }
@@ -182,7 +182,7 @@ router.post("/reset-password", async (req, res) => {
 
 router.delete("/delete", authenticate, isVerified, async (req, res) => {
   try {
-    await userMethods.deleteUser(res.locals.user.name);
+    await userMethods.deleteUser(res.locals.user.username);
     return res.redirect("../../../"); // Redirect to index
   } catch (error) {
     console.error(error);
