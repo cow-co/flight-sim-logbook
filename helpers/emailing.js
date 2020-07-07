@@ -33,12 +33,14 @@ const sendVerificationEmail = (username, email, url) => {
   };
   // Don't want to send emails in a dev environment
   if (process.env.NODE_ENV === "production") {
-    console.log(`Transport: ${transport}`);
-    transport.sendMail(msg, (err, info) => {
-      if (err) {
-        console.log(err);
-      }
-    });
+    console.log(transport);
+    if (transport) {
+      transport.sendMail(msg, (err, info) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+    }
   }
 };
 
