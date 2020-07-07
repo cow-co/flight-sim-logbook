@@ -14,6 +14,9 @@ if (process.env.NODE_ENV === "production") {
       pass: EMAIL_PW,
     },
   });
+  if (!transport) {
+    console.log("Transport creation failed");
+  }
 }
 
 const sendVerificationEmail = (username, email, url) => {
@@ -26,11 +29,15 @@ const sendVerificationEmail = (username, email, url) => {
   };
   // Don't want to send emails in a dev environment
   if (process.env.NODE_ENV === "production") {
-    transport.sendMail(msg, (err, info) => {
-      if (err) {
-        console.log(err);
-      }
-    });
+    if (!transport) {
+      console.log("Transport does not exist");
+    } else {
+      transport.sendMail(msg, (err, info) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+    }
   }
 };
 
