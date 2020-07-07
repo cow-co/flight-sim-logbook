@@ -4,6 +4,7 @@ const EMAIL_UN = require("../config/keys").EMAIL_UN;
 
 // Don't want to send emails in a dev environment
 if (process.env.NODE_ENV === "production") {
+  console.log("Creating transport");
   const transport = mailer.createTransport({
     pool: true,
     host: "smtp.gmail.com",
