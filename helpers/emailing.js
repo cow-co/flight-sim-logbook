@@ -15,7 +15,7 @@ const sendVerificationEmail = async (username, email, url) => {
   }
 };
 
-const sendResetEmail = (username, email, url) => {
+const sendResetEmail = async (username, email, url) => {
   const msg = {
     to: email,
     from: "reset@flight-sim-logbook.herokuapp.com",
