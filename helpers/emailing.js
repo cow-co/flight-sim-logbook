@@ -1,11 +1,12 @@
 const mailer = require("nodemailer");
 const EMAIL_PW = require("../config/keys").EMAIL_PW;
 const EMAIL_UN = require("../config/keys").EMAIL_UN;
+let transport = null;
 
 // Don't want to send emails in a dev environment
 if (process.env.NODE_ENV === "production") {
   console.log("Creating transport");
-  const transport = mailer.createTransport({
+  transport = mailer.createTransport({
     pool: true,
     host: "smtp.gmail.com",
     port: 465,
@@ -17,6 +18,8 @@ if (process.env.NODE_ENV === "production") {
   });
   if (!transport) {
     console.log("Transport creation failed");
+  } else {
+    console.log(transport);
   }
 }
 
