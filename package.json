@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/cow-co/flight-sim-logbook#readme",
   "dependencies": {
+    "@sendgrid/mail": "^7.2.1",
     "argon2": "^0.26.2",
     "crypto-random-string": "^3.2.0",
     "express": "^4.17.1",

@@ -1,29 +1,7 @@
-const mailer = require("nodemailer");
-const EMAIL_PW = require("../config/keys").EMAIL_PW;
-const EMAIL_UN = require("../config/keys").EMAIL_UN;
-let transport = null;
+const sgMail = require("@sendgrid/mail");
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-// Don't want to send emails in a dev environment
-if (process.env.NODE_ENV === "production") {
-  console.log("Creating transport");
-  transport = mailer.createTransport({
-    pool: true,
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-      user: EMAIL_UN,
-      pass: EMAIL_PW,
-    },
-  });
-  if (!transport) {
-    console.log("Transport creation failed");
-  } else {
-    console.log(transport);
-  }
-}
-
-const sendVerificationEmail = (username, email, url) => {
+const sendVerificationEmail = async (username, email, url) => {
   const msg = {
     to: email,
     from: "verification@flight-sim-logbook.herokuapp.com",
@@ -33,14 +11,7 @@ const sendVerificationEmail = (username, email, url) => {
   };
   // Don't want to send emails in a dev environment
   if (process.env.NODE_ENV === "production") {
-    console.log(transport);
-    if (transport) {
-      transport.sendMail(msg, (err, info) => {
-        if (err) {
-          console.log(err);
-        }
-      });
-    }
+    await sgMail.send(msg);
   }
 };
 
@@ -54,11 +25,7 @@ const sendResetEmail = (username, email, url) => {
   };
   // Don't want to send emails in a dev environment
   if (process.env.NODE_ENV === "production") {
-    transport.sendMail(msg, (err, info) => {
-      if (err) {
-        console.log(err);
-      }
-    });
+    await sgMail.send(msg);
   }
 };
 
