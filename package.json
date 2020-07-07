@@ -25,7 +25,7 @@
     "http-shutdown": "^1.2.2",
     "jsonwebtoken": "^8.5.1",
     "nodemailer": "^6.4.8",
-    "mongoose": "^5.9.18",
+    "mongoose": "^5.9.19",
     "swagger-ui-express": "^4.1.4",
     "yamljs": "^0.3.0"
   },
