@@ -96,7 +96,6 @@ describe("User endpoint tests", () => {
       await utils.verifyUser(baseUser.username);
 
       const res = await request(server).get("/api/users/logout");
-      expect(res.statusCode).to.equal(401);
       expect(res.body.errors.length).to.equal(1);
     });
   });
