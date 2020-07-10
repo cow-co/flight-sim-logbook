@@ -6,6 +6,7 @@ import "./Login.css";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { isLoggedIn } from "../../helpers/utils";
 
 class Login extends React.Component {
   constructor() {
@@ -28,6 +29,9 @@ class Login extends React.Component {
   sendLogin = async (event) => {
     event.preventDefault();
     await this.props.login(this.state);
+    if (isLoggedIn) {
+      window.history.push("/");
+    }
   };
 
   render() {

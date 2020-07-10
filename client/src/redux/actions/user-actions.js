@@ -25,7 +25,6 @@ const login = (data) => async (dispatch) => {
         type: LOGIN,
         payload: response.data,
       });
-      window.history.push("/");
     }
   } catch (error) {
     dispatch(setAlert(`${error}`, "error"));
@@ -47,12 +46,11 @@ const registerUser = (data) => async (dispatch) => {
     if (!isEmpty(errors)) {
       errors.forEach((error) => dispatch(setAlert(`${error}`, "error")));
     } else {
-      dispatch(setAlert("Successfully Registered!", "success"));
+      dispatch(setAlert("Verification email sent. Be sure to check your spam folder!", "success"));
       dispatch({
         type: REGISTER,
         payload: response.data,
       });
-      window.history.push("/users/login");
     }
   } catch (error) {
     dispatch(setAlert(`${error}`, "error"));
