@@ -67,7 +67,7 @@ const logout = (data) => async (dispatch) => {
   };
 
   try {
-    const response = await Axios.post("/api/users/logout", data, config);
+    const response = await Axios.delete("/api/users/logout", data, config);
     const errors = response.data.errorMessages;
 
     if (!isEmpty(errors)) {
