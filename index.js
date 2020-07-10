@@ -23,10 +23,6 @@ if (process.env.NODE_ENV === "production") {
     .catch((err) => console.error(err));
 }
 
-app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client/build/index.html"));
-});
-
 app.use("/api-docs/users", swaggerUI.serve, swaggerUI.setup(swaggerDocUsers));
 app.use("/api/users", users);
 
@@ -46,6 +42,18 @@ const stop = () => {
     console.log("Server closed.");
   });
 };
+
+const serveProdClient = () => {
+  if (process.env.NODE_ENV === "production") {
+    app.use(express.static("client/build"));
+    app.get(/^\/(?!api).*/, (req, res) => {
+      res.sendFile(path.join(__dirname, "./client/build/index.html"));
+    });
+
+    console.log("Serving React App...");
+  }
+};
+serveProdClient();
 
 server = shutdown(server);
 module.exports = server;
