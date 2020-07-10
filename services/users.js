@@ -187,6 +187,7 @@ const verifyEmail = async (username, givenToken) => {
   } else {
     // unset the expired token
     user.verificationToken = null;
+    console.log("Expired token");
     await user.save();
   }
 

@@ -97,7 +97,7 @@ router.get("/verify/:username/:token", async (req, res) => {
   const isValid = await userMethods.verifyEmail(req.params.username, req.params.token);
 
   if (isValid) {
-    return res.redirect("/login");
+    return res.redirect("/users/login");
   } else {
     return res.status(statusCodes.INVALID_STATUS).json({ message: "Email verification failed!" });
   }
