@@ -6,9 +6,6 @@ const getUserByName = require("../services/users").getUserByName;
 const authenticate = async (req, res, next) => {
   try {
     const token = jwtDecoding.getTokenFromRequest(req);
-    console.log("====================================");
-    console.log(token);
-    console.log("====================================");
     if (token === null) {
       return res.status(statusCodes.CREDS_ERROR).json({ errors: ["Invalid Token"] });
     }
