@@ -23,6 +23,10 @@ if (process.env.NODE_ENV === "production") {
     .catch((err) => console.error(err));
 }
 
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client/build/index.html"));
+});
+
 app.use("/api-docs/users", swaggerUI.serve, swaggerUI.setup(swaggerDocUsers));
 app.use("/api/users", users);
 

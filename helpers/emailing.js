@@ -15,8 +15,6 @@ if (process.env.NODE_ENV === "production") {
   });
   if (!transport) {
     console.log("Transport creation failed");
-  } else {
-    console.log(transport);
   }
 }
 
