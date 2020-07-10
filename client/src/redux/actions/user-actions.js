@@ -66,6 +66,7 @@ const logout = () => async (dispatch) => {
   };
 
   try {
+    console.log(config);
     const response = await Axios.post("/api/users/logout", config);
     const errors = response.data.errorMessages;
 
