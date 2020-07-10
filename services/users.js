@@ -183,6 +183,8 @@ const verifyEmail = async (username, givenToken) => {
   if (timePassed < secondsExpiry * 1000) {
     if (user.verificationToken === givenToken) {
       valid = true;
+      user.isVerified = true;
+      await user.save();
     }
   } else {
     // unset the expired token
