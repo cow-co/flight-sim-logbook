@@ -64,10 +64,10 @@ const logout = () => async (dispatch) => {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   };
+  console.log(config);
 
   try {
-    console.log(config);
-    const response = await Axios.post("/api/users/logout", config);
+    const response = await Axios.post("/api/users/logout", null, config);
     const errors = response.data.errorMessages;
 
     if (!isEmpty(errors)) {
