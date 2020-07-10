@@ -7,7 +7,7 @@ const validateEmail = (email) => {
 };
 
 const userSchema = new Schema({
-  name: {
+  username: {
     type: String,
     index: true,
     unique: true,

@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 
 const getUsernameFromToken = (token) => {
   const decoded = jwt.decode(token);
-  return decoded.name;
+  return decoded.username;
 };
 
 const getTokenFromRequest = (req) => {
