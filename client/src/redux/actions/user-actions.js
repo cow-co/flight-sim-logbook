@@ -57,17 +57,16 @@ const registerUser = (data) => async (dispatch) => {
   }
 };
 
-const logout = (data) => async (dispatch) => {
+const logout = () => async (dispatch) => {
   const config = {
     ...axiosConfig(),
     headers: {
-      "Content-type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   };
 
   try {
-    const response = await Axios.delete("/api/users/logout", data, config);
+    const response = await Axios.post("/api/users/logout", config);
     const errors = response.data.errorMessages;
 
     if (!isEmpty(errors)) {
