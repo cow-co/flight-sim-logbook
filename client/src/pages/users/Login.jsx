@@ -28,7 +28,6 @@ class Login extends React.Component {
   sendLogin = async (event) => {
     event.preventDefault();
     await this.props.login(this.state);
-    this.props.history.push("/");
   };
 
   render() {
