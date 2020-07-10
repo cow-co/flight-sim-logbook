@@ -67,13 +67,13 @@ const logout = (data) => async (dispatch) => {
   };
 
   try {
-    const response = await Axios.post("/api/users/register", data, config);
+    const response = await Axios.post("/api/users/logout", data, config);
     const errors = response.data.errorMessages;
 
     if (!isEmpty(errors)) {
       errors.forEach((error) => dispatch(setAlert(`${error}`, "error")));
     } else {
-      dispatch(setAlert("Successfully Regsitered!", "success"));
+      dispatch(setAlert("Successfully Logged Out", "success"));
       dispatch({
         type: LOGOUT,
         payload: response.data,
