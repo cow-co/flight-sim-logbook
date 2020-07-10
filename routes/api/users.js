@@ -51,7 +51,7 @@ router.post("/login", isVerified, async (req, res) => {
       valid = await userMethods.checkPassword(user, loginDetails.password);
       if (valid) {
         const jwt = await userMethods.generateJWT(user);
-        response = res.redirect("/").json({ jwt });
+        response = res.json({ jwt });
       } else {
         console.log("Invalid PW");
 

@@ -25,6 +25,7 @@ const login = (data) => async (dispatch) => {
         type: LOGIN,
         payload: response.data,
       });
+      window.history.push("/");
     }
   } catch (error) {
     dispatch(setAlert(`${error}`, "error"));
@@ -51,6 +52,7 @@ const registerUser = (data) => async (dispatch) => {
         type: REGISTER,
         payload: response.data,
       });
+      window.history.push("/users/login");
     }
   } catch (error) {
     dispatch(setAlert(`${error}`, "error"));
