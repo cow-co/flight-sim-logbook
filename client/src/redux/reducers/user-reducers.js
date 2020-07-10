@@ -9,7 +9,7 @@ const usersReducer = (currentState = INITIAL_STATE, action) => {
     case REGISTER:
       return currentState;
     case LOGIN:
-      localStorage.setItem("token", action.payload.token);
+      localStorage.setItem("token", action.payload.jwt);
       currentState.username = action.payload.username;
       return currentState;
     case LOGOUT:

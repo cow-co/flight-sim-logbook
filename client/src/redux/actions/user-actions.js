@@ -5,7 +5,6 @@ import { setAlert } from "./common-actions";
 import { isEmpty } from "../../helpers/utils";
 
 // TODO Retrieve the errorMessages from the responses and use those instead of the default Axios stuff?
-// FIXME Fix the URLs (namely, the ports for the API calls)
 
 const login = (data) => async (dispatch) => {
   const config = {
