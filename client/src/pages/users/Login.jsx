@@ -31,6 +31,7 @@ class Login extends React.Component {
     await this.props.login(this.state);
     if (isLoggedIn) {
       window.history.push("/");
+      window.location.reload(false);
     }
   };
 
