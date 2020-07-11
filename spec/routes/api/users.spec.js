@@ -87,7 +87,7 @@ describe("User endpoint tests", () => {
         password: baseUser.password,
       });
       const token = loginRes.body.jwt;
-      const res = await request(server).get("/api/users/logout").set("Authorization", `Bearer ${token}`);
+      const res = await request(server).post("/api/users/logout").set("Authorization", `Bearer ${token}`);
       expect(res.statusCode).to.equal(200);
     });
 
@@ -95,7 +95,7 @@ describe("User endpoint tests", () => {
       await request(server).post("/api/users/register").send(baseUser);
       await utils.verifyUser(baseUser.username);
 
-      const res = await request(server).get("/api/users/logout");
+      const res = await request(server).post("/api/users/logout");
       expect(res.statusCode).to.equal(401);
       expect(res.body.errors.length).to.equal(1);
     });

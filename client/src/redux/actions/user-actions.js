@@ -5,7 +5,6 @@ import { setAlert } from "./common-actions";
 import { isEmpty } from "../../helpers/utils";
 
 // TODO Retrieve the errorMessages from the responses and use those instead of the default Axios stuff?
-// FIXME Fix the URLs (namely, the ports for the API calls)
 
 const login = (data) => async (dispatch) => {
   const config = {
@@ -47,7 +46,7 @@ const registerUser = (data) => async (dispatch) => {
     if (!isEmpty(errors)) {
       errors.forEach((error) => dispatch(setAlert(`${error}`, "error")));
     } else {
-      dispatch(setAlert("Successfully Registered!", "success"));
+      dispatch(setAlert("Verification email sent. Be sure to check your spam folder!", "success"));
       dispatch({
         type: REGISTER,
         payload: response.data,
@@ -58,23 +57,23 @@ const registerUser = (data) => async (dispatch) => {
   }
 };
 
-const logout = (data) => async (dispatch) => {
+const logout = () => async (dispatch) => {
   const config = {
     ...axiosConfig(),
     headers: {
-      "Content-type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   };
+  console.log(config);
 
   try {
-    const response = await Axios.post("/api/users/register", data, config);
+    const response = await Axios.post("/api/users/logout", null, config);
     const errors = response.data.errorMessages;
 
     if (!isEmpty(errors)) {
       errors.forEach((error) => dispatch(setAlert(`${error}`, "error")));
     } else {
-      dispatch(setAlert("Successfully Regsitered!", "success"));
+      dispatch(setAlert("Successfully Logged Out", "success"));
       dispatch({
         type: LOGOUT,
         payload: response.data,

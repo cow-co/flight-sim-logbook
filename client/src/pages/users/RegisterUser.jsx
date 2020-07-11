@@ -50,7 +50,6 @@ class RegisterUser extends React.Component {
         passwordConfirmation: this.state.passwordConfirmation,
       };
       await this.props.registerUser(data);
-      this.props.history.push("/users/login");
     }
   };
 

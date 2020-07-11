@@ -69,7 +69,7 @@ router.post("/login", isVerified, async (req, res) => {
   return response;
 });
 
-router.get("/logout", authenticate, isVerified, async (req, res) => {
+router.post("/logout", authenticate, isVerified, async (req, res) => {
   const username = jwtDecoding.getUsernameFromToken(jwtDecoding.getTokenFromRequest(req));
   const errors = await userMethods.deleteJWT(username);
 
