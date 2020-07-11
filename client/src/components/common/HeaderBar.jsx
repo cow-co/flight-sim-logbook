@@ -25,7 +25,7 @@ class Header extends React.Component {
     );
 
     // TODO update this as we implement more functionality
-    if (users.isLoggedIn) {
+    if (this.props.users.isLoggedIn) {
       loginDependentElements = (
         // TODO Make a separate function for logout, which calls the props.logout, and THEN does `this.props.history.push("/");`
         <Button color="inherit" onClick={this.props.logout}>
