@@ -29,6 +29,7 @@ class Login extends React.Component {
   sendLogin = async (event) => {
     event.preventDefault();
     await this.props.login(this.state);
+    console.log(this.props.users.isLoggedIn);
     if (this.props.users.isLoggedIn) {
       window.history.push("/");
     }
