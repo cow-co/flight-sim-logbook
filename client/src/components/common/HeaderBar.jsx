@@ -31,7 +31,7 @@ class Header extends React.Component {
       loginDependentElements = (
         // TODO Make a separate function for logout, which calls the props.logout, and THEN does `this.props.history.push("/");`
         <Button color="inherit" onClick={this.props.logout}>
-          Logout
+          Logout {this.props.users.username}
         </Button>
       );
     }
