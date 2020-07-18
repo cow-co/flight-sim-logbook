@@ -51,6 +51,11 @@ class Header extends React.Component {
 
 Header.propTypes = {
   logout: PropTypes.func.isRequired,
+  users: PropTypes.object.isRequired,
 };
 
-export default connect(null, { logout })(Header);
+const mapStateToProps = (state) => ({
+  users: state.users,
+});
+
+export default connect(mapStateToProps, { logout })(Header);
