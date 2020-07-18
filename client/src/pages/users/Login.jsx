@@ -30,55 +30,54 @@ class Login extends React.Component {
   sendLogin = async (event) => {
     event.preventDefault();
     await this.props.login(this.state);
+    if (isLoggedIn()) {
+      this.props.history.push("/");
+    }
   };
 
   render() {
-    if (isLoggedIn()) {
-      return <Redirect to="/" />;
-    } else {
-      return (
-        <div className="login">
-          <Typography variant="h4" className="title">
-            Login
-          </Typography>
-          <form onSubmit={this.sendLogin}>
-            <Grid
-              className="group-list-grid"
-              container
-              spacing={3}
-              direction="column"
-              alignItems="center"
-              justify="center"
-            >
-              <Grid item>
-                <TextField
-                  id="username"
-                  label="Username"
-                  value={this.state.username}
-                  onChange={this.updateField}
-                  required
-                />
-              </Grid>
-              <Grid item>
-                <TextField
-                  type="password"
-                  id="password"
-                  label="Password"
-                  value={this.state.password}
-                  onChange={this.updateField}
-                  required
-                />
-              </Grid>
-              <Grid item>
-                <Button variant="contained" size="large" color="primary" type="submit">
-                  Log In
-                </Button>
-              </Grid>
+    return (
+      <div className="login">
+        <Typography variant="h4" className="title">
+          Login
+        </Typography>
+        <form onSubmit={this.sendLogin}>
+          <Grid
+            className="group-list-grid"
+            container
+            spacing={3}
+            direction="column"
+            alignItems="center"
+            justify="center"
+          >
+            <Grid item>
+              <TextField
+                id="username"
+                label="Username"
+                value={this.state.username}
+                onChange={this.updateField}
+                required
+              />
             </Grid>
-          </form>
-        </div>
-      );
-    }
+            <Grid item>
+              <TextField
+                type="password"
+                id="password"
+                label="Password"
+                value={this.state.password}
+                onChange={this.updateField}
+                required
+              />
+            </Grid>
+            <Grid item>
+              <Button variant="contained" size="large" color="primary" type="submit">
+                Log In
+              </Button>
+            </Grid>
+          </Grid>
+        </form>
+      </div>
+    );
   }
 }
 
