@@ -13,6 +13,19 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 class Header extends React.Component {
+  constructor() {
+    super();
+    this.sendLogout = this.sendLogout.bind(this);
+  }
+
+  sendLogout = async (event) => {
+    event.preventDefault();
+    await this.props.logout();
+    if (!isLoggedIn()) {
+      this.forceUpdate();
+    }
+  };
+
   render() {
     let loginDependentElements = (
       <div>
