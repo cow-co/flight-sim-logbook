@@ -21,9 +21,7 @@ class Header extends React.Component {
   sendLogout = async (event) => {
     event.preventDefault();
     await this.props.logout();
-    if (!isLoggedIn()) {
-      this.forceUpdate();
-    }
+    this.forceUpdate();
   };
 
   render() {
