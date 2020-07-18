@@ -7,4 +7,10 @@ const isEmpty = (value) => {
   );
 };
 
-export { isEmpty };
+const isLoggedIn = () => {
+  const isLoggedIn = !isEmpty(localStorage.getItem("token"));
+  console.log(isLoggedIn);
+  return isLoggedIn;
+};
+
+export { isEmpty, isLoggedIn };

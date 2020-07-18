@@ -33,7 +33,7 @@ class Login extends React.Component {
   };
 
   render() {
-    if (this.props.users.isLoggedIn) {
+    if (isLoggedIn()) {
       return <Redirect to="/" />;
     } else {
       return (
@@ -84,11 +84,6 @@ class Login extends React.Component {
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
-  users: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  users: state.users,
-});
-
-export default connect(mapStateToProps, { login })(Login);
+export default connect(null, { login })(Login);
