@@ -13,8 +13,8 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 class Header extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.sendLogout = this.sendLogout.bind(this);
   }
 
