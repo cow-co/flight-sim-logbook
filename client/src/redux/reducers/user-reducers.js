@@ -2,6 +2,7 @@ import { REGISTER, LOGIN, LOGOUT } from "../actions/action-types";
 
 const INITIAL_STATE = {
   username: "",
+  isLoggedIn: false,
 };
 
 const usersReducer = (currentState = INITIAL_STATE, action) => {
@@ -10,12 +11,18 @@ const usersReducer = (currentState = INITIAL_STATE, action) => {
       return currentState;
     case LOGIN:
       localStorage.setItem("token", action.payload.jwt);
-      currentState.username = action.payload.username;
-      return currentState;
+      return {
+        ...currentState,
+        username: action.payload.username,
+        isLoggedIn: true,
+      };
     case LOGOUT:
       localStorage.setItem("token", "");
-      currentState.username = "";
-      return currentState;
+      return {
+        ...currentState,
+        username: "",
+        isLoggedIn: false,
+      };
     default:
       return currentState;
   }

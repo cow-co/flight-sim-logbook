@@ -64,7 +64,6 @@ const logout = () => async (dispatch) => {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   };
-  console.log(config);
 
   try {
     const response = await Axios.post("/api/users/logout", null, config);

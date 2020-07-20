@@ -3,6 +3,7 @@ import { TextField, Button, Grid } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import { login } from "../../redux/actions/user-actions";
 import "./Login.css";
+import { Redirect } from "react-router-dom";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -29,8 +30,8 @@ class Login extends React.Component {
   sendLogin = async (event) => {
     event.preventDefault();
     await this.props.login(this.state);
-    if (isLoggedIn) {
-      window.history.push("/");
+    if (isLoggedIn()) {
+      this.props.history.push("/");
     }
   };
 

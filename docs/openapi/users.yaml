@@ -122,6 +122,9 @@ paths:
                   jwt:
                     type: string
                     description: The login token, to be used as a Bearer Authorization token in subsequent requests.
+                  username:
+                    type: string
+                    description: The username, for customising pages on the client
         "401": # status code
           description: Invalid credentials (user email not verified, incorrect password, etc.)
           content:

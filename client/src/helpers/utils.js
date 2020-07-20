@@ -1,3 +1,5 @@
+const jwt = require("jsonwebtoken");
+
 const isEmpty = (value) => {
   return (
     value === undefined ||
@@ -9,8 +11,12 @@ const isEmpty = (value) => {
 
 const isLoggedIn = () => {
   const isLoggedIn = !isEmpty(localStorage.getItem("token"));
-  console.log(isLoggedIn);
   return isLoggedIn;
 };
 
-export { isEmpty, isLoggedIn };
+const getUsernameFromToken = (token) => {
+  const decoded = jwt.decode(token);
+  return decoded.username;
+};
+
+export { isEmpty, isLoggedIn, getUsernameFromToken };
