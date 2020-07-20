@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import "./HeaderBar.css";
 import { Link } from "react-router-dom";
-import { isLoggedIn } from "../../helpers/utils";
+import { isEmpty, isLoggedIn } from "../../helpers/utils";
 import { logout } from "../../redux/actions/user-actions";
 
 import { connect } from "react-redux";
@@ -16,6 +16,9 @@ class Header extends React.Component {
   constructor() {
     super();
     this.sendLogout = this.sendLogout.bind(this);
+    this.state = {
+      username: this.props.users.username,
+    };
   }
 
   sendLogout = async (event) => {
@@ -37,12 +40,12 @@ class Header extends React.Component {
     );
 
     // TODO update this as we implement more functionality
-    if (isLoggedIn()) {
+    if (!isEmpty(this.state.username)) {
       console.log("Logged in");
       loginDependentElements = (
         // TODO Make a separate function for logout, which calls the props.logout, and THEN does `this.props.history.push("/");`
         <Button color="inherit" onClick={this.props.logout}>
-          Logout {this.props.users.username}
+          Logout {this.state.username}
         </Button>
       );
     }
