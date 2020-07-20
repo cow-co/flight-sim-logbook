@@ -11,14 +11,18 @@ const usersReducer = (currentState = INITIAL_STATE, action) => {
       return currentState;
     case LOGIN:
       localStorage.setItem("token", action.payload.jwt);
-      currentState.username = action.payload.username;
-      currentState.isLoggedIn = true;
-      return currentState;
+      return {
+        ...currentState,
+        username: action.payload.username,
+        isLoggedIn: true,
+      };
     case LOGOUT:
       localStorage.setItem("token", "");
-      currentState.username = "";
-      currentState.isLoggedIn = false;
-      return currentState;
+      return {
+        ...currentState,
+        username: "",
+        isLoggedIn: false,
+      };
     default:
       return currentState;
   }

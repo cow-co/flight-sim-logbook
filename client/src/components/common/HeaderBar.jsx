@@ -38,7 +38,6 @@ class Header extends React.Component {
 
     // TODO update this as we implement more functionality
     if (this.props.users.isLoggedIn) {
-      console.log(`Is logged in? ${this.props.users.isLoggedIn}`);
       loginDependentElements = (
         <Button color="inherit" onClick={this.sendLogout}>
           Logout {this.props.users.username}

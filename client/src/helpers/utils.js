@@ -11,7 +11,6 @@ const isEmpty = (value) => {
 
 const isLoggedIn = () => {
   const isLoggedIn = !isEmpty(localStorage.getItem("token"));
-  console.log(isLoggedIn);
   return isLoggedIn;
 };
 
