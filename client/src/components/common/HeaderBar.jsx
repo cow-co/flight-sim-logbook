@@ -16,15 +16,11 @@ class Header extends React.Component {
   constructor() {
     super();
     this.sendLogout = this.sendLogout.bind(this);
-    this.state = {
-      username: this.props.users.username,
-    };
   }
 
   sendLogout = async (event) => {
     event.preventDefault();
     await this.props.logout();
-    this.forceUpdate();
   };
 
   render() {
@@ -40,12 +36,12 @@ class Header extends React.Component {
     );
 
     // TODO update this as we implement more functionality
-    if (!isEmpty(this.state.username)) {
+    if (!this.props.users.isLoggedIn) {
       console.log("Logged in");
       loginDependentElements = (
         // TODO Make a separate function for logout, which calls the props.logout, and THEN does `this.props.history.push("/");`
         <Button color="inherit" onClick={this.props.logout}>
-          Logout {this.state.username}
+          Logout {this.props.users.username}
         </Button>
       );
     }
