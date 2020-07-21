@@ -9,14 +9,9 @@ const isEmpty = (value) => {
   );
 };
 
-const isLoggedIn = () => {
-  const isLoggedIn = !isEmpty(localStorage.getItem("token"));
-  return isLoggedIn;
-};
-
 const getUsernameFromToken = (token) => {
   const decoded = jwt.decode(token);
   return decoded.username;
 };
 
-export { isEmpty, isLoggedIn, getUsernameFromToken };
+export { isEmpty, getUsernameFromToken };

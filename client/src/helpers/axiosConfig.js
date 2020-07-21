@@ -1,7 +1,7 @@
 export const axiosConfig = () => {
   const config = {
     validateStatus: (status) => {
-      return status >= 200 && status < 400;
+      return status >= 0;
     },
     timeout: 10000,
   };

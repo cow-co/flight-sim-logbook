@@ -34,7 +34,6 @@ class Header extends React.Component {
         </Button>
       </div>
     );
-    console.log(`Is logged in? ${this.props.users.isLoggedIn}`);
 
     // TODO update this as we implement more functionality
     if (this.props.users.isLoggedIn) {
