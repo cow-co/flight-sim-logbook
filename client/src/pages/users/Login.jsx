@@ -10,8 +10,8 @@ import PropTypes from "prop-types";
 import { isLoggedIn } from "../../helpers/utils";
 
 class Login extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       username: "",
       password: "",
@@ -30,7 +30,7 @@ class Login extends React.Component {
   sendLogin = async (event) => {
     event.preventDefault();
     await this.props.login(this.state);
-    if (isLoggedIn()) {
+    if (this.props.users.isLoggedIn) {
       this.props.history.push("/");
     }
   };
@@ -83,6 +83,11 @@ class Login extends React.Component {
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
+  users: PropTypes.object.isRequired,
 };
 
-export default connect(null, { login })(Login);
+const mapStateToProps = (state) => ({
+  users: state.users,
+});
+
+export default connect(mapStateToProps, { login })(Login);
