@@ -1,0 +1,466 @@
+openapi: 3.0.0
+info:
+  title: Flight-Sim-Logbook API
+  description: API definition for the flight simulation logbook web app's REST API.
+  version: 0.1.0
+servers:
+  - url: https://flight-sim-logbook.herokuapp.com/api/
+paths:
+  /users/create:
+    post:
+      summary: Creates a user account and sends a verification email.
+      tags:
+        - Users
+      requestBody:
+        description: Details of the user to create
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: The username
+                email:
+                  type: string
+                  description: The user's email address
+                password:
+                  type: string
+                  description: The desired password
+                passwordConfirmation:
+                  type: string
+                  description: Confirmation of the password
+        required: true
+      responses:
+        "201": # status code
+          description: Basic details of the created user.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      username:
+                        type: string
+                        description: The user's name
+                      email:
+                        type: string
+                        description: The user's email address
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        "400": # status code
+          description: Invalid request (mismatched password confirmation, user already exists, etc.)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      username:
+                        type: string
+                        description: The user's name
+                      email:
+                        type: string
+                        description: The user's email address
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        "500": # status code
+          description: An unexpected server-side error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      username:
+                        type: string
+                        description: The user's name
+                      email:
+                        type: string
+                        description: The user's email address
+                  errors:
+                    type: array
+                    items:
+                      type: string
+  /users/login:
+    post:
+      summary: Logs the user in
+      tags:
+        - Users
+      requestBody:
+        description: Details of the user to log in
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: The username
+                password:
+                  type: string
+                  description: The password for the user
+        required: true
+      responses:
+        "200": # status code
+          description: Login token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jwt:
+                    type: string
+                    description: The login token, to be used as a Bearer Authorization token in subsequent requests.
+                  username:
+                    type: string
+                    description: The username, for customising pages on the client
+        "401": # status code
+          description: Invalid credentials (user email not verified, incorrect password, etc.)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        "500": # status code
+          description: An unexpected server-side error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+  /users/logout:
+    get:
+      summary: Logs the user out, by deleting the saved JWT in the database
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      responses:
+        "200": # status code
+          description: Successful logout
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A basic response message, indicating success.
+        "401": # status code
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        "500": # status code
+          description: An unexpected server-side error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+  /users/verify/send:
+    post:
+      summary: Sends a verification email (e.g. if the original expired)
+      tags:
+        - Users
+      requestBody:
+        description: Details of the user whose email we want to verify
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    username:
+                      type: string
+                      description: The username
+                    email:
+                      type: string
+                      description: The user's email address
+        required: true
+      responses:
+        "200": # status code
+          description: Login token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A generic success message
+        "400": # status code
+          description: User does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+  /users/verify/{username}/{token}:
+    get:
+      summary: Checks a verification token for the given user
+      tags:
+        - Users
+      parameters:
+        - name: username
+          in: path
+          description: The user's name
+          required: true
+          schema:
+            type: string
+        - name: token
+          in: path
+          description: The user's email-verification token
+          required: true
+          schema:
+            type: string
+      responses:
+        "302": # status code
+          description: Redirect to login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A generic success message
+        "400": # status code
+          description: Incorrect token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+  /users/change-password:
+    post:
+      summary: Updates a user's password
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: The details of the new password
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  description: The chosen new password
+                passwordConfirmation:
+                  type: string
+                  description: Must match the password parameter
+        required: true
+      responses:
+        "302": # status code
+          description: Redirect to login
+        "400": # status code
+          description: Invalid/non-matching passwords
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        "401": # status code
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        "500": # status code
+          description: Unexpected server-side error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+  /users/request-reset-password:
+    post:
+      summary: Sends a password-reset email
+      tags:
+        - Users
+      requestBody:
+        description: The user's email address
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The user's email address
+      responses:
+        "200": # status code
+          description: Redirect to login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Generic success message
+        "400": # status code
+          description: User with given email does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        "500": # status code
+          description: Unexpected server-side error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+  /users/reset-password:
+    post:
+      summary: Updates a user's password
+      tags:
+        - Users
+      requestBody:
+        description: The details of the new password
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The user's email address
+                password:
+                  type: string
+                  description: The chosen new password
+                passwordConfirmation:
+                  type: string
+                  description: Must match the password parameter
+                resetToken:
+                  type: string
+                  description: The reset token sent to the user's email address
+        required: true
+      responses:
+        "302": # status code
+          description: Redirect to login
+        "400": # status code
+          description: User with given email not found, or reset token does not match what is in the database
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        "500": # status code
+          description: Unexpected server-side error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+  /users/delete:
+    delete:
+      summary: Deletes a user's account
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      responses:
+        "302": # status code
+          description: Redirect to index page
+        "401": # status code
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        "500": # status code
+          description: Unexpected server-side error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

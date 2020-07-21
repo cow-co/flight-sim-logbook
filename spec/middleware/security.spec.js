@@ -13,7 +13,7 @@ describe("Security middleware tests", () => {
   describe("Authentication tests", () => {
     it("Should authenticate correctly", async () => {
       const user = {
-        name: "name",
+        username: "name",
         email: "someone@something.com",
         passwordHash: "hash",
         isActive: true,
@@ -34,7 +34,7 @@ describe("Security middleware tests", () => {
         };
 
         await security.authenticate(request, res, () => {
-          expect(res.locals.user.name).to.equal(user.name);
+          expect(res.locals.user.username).to.equal(user.username);
         });
       } catch (err) {
         fail(err);
@@ -43,7 +43,7 @@ describe("Security middleware tests", () => {
 
     it("Should fail to authenticate with incorrect token", async () => {
       const user = {
-        name: "name",
+        username: "name",
         email: "someone@something.com",
         passwordHash: "hash",
         isActive: true,
@@ -62,7 +62,7 @@ describe("Security middleware tests", () => {
             user: null,
           },
           status: (code) => {
-            expect(code).to.equal(400);
+            expect(code).to.equal(401);
             return {
               json: (jsonCode) => {},
             };
@@ -81,7 +81,7 @@ describe("Security middleware tests", () => {
   describe("Verification tests", () => {
     it("Should check a verified email", async () => {
       const user = {
-        name: "name",
+        username: "name",
         email: "someone@something.com",
         passwordHash: "hash",
         isActive: true,
@@ -93,14 +93,14 @@ describe("Security middleware tests", () => {
         const request = {
           body: {
             user: {
-              name: user.name,
+              username: user.username,
             },
           },
         };
         let res = {
           locals: {},
           status: (code) => {
-            expect(code).to.equal(400);
+            expect(code).to.equal(401);
             return {
               json: (jsonCode) => {},
             };
@@ -117,7 +117,7 @@ describe("Security middleware tests", () => {
 
     it("Should check a non-verified email", async () => {
       const user = {
-        name: "name",
+        username: "name",
         email: "someone@something.com",
         passwordHash: "hash",
         isActive: true,
@@ -129,14 +129,14 @@ describe("Security middleware tests", () => {
         const request = {
           body: {
             user: {
-              name: user.name,
+              username: user.username,
             },
           },
         };
         let res = {
           locals: {},
           status: (code) => {
-            expect(code).to.equal(400);
+            expect(code).to.equal(401);
             return {
               json: (jsonCode) => {},
             };

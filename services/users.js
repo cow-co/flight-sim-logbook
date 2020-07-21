@@ -13,7 +13,7 @@ const getUserByName = async (username) => {
   let user = null;
 
   try {
-    user = await User.findOne({ name: username });
+    user = await User.findOne({ username: username });
   } catch (error) {
     throw error;
   }
@@ -47,12 +47,12 @@ const changePassword = async (user, password) => {
 
 const createUser = async (userSetup) => {
   let newUser = {
-    name: null,
+    username: null,
     email: null,
     errors: [],
   };
 
-  let existingUser = await getUserByName(userSetup.name);
+  let existingUser = await getUserByName(userSetup.username);
   if (existingUser) {
     userExists = true;
   } else {
@@ -63,7 +63,7 @@ const createUser = async (userSetup) => {
   if (userExists) {
     newUser.errors.push("User already exists!");
   } else {
-    if (isEmptyOrNull(userSetup.name)) {
+    if (isEmptyOrNull(userSetup.username)) {
       newUser.errors.push("Please enter a username");
     }
 
@@ -81,12 +81,12 @@ const createUser = async (userSetup) => {
       if (isValidPassword(userSetup.password)) {
         const hash = await argon2.hash(userSetup.password);
         await User.create({
-          name: userSetup.name,
+          username: userSetup.username,
           email: userSetup.email,
           passwordHash: hash,
         });
 
-        newUser.name = userSetup.name;
+        newUser.username = userSetup.username;
         newUser.email = userSetup.email;
       } else {
         newUser.errors.push("Password does not satisfy requirements");
@@ -106,7 +106,7 @@ const checkPassword = async (user, givenPassword) => {
 const generateJWT = async (user) => {
   const token = jwt.sign(
     {
-      name: user.name,
+      username: user.username,
       id: user._id,
     },
     JWT_KEY,
@@ -133,7 +133,7 @@ const checkJWT = async (token) => {
 
     if (decoded) {
       // Validate that the token matches what is saved in the DB
-      const obtainedUser = await getUserByName(decoded.name);
+      const obtainedUser = await getUserByName(decoded.username);
       if (obtainedUser.jwt === token) {
         user = obtainedUser;
       }
@@ -163,11 +163,15 @@ const deleteJWT = async (username) => {
 
 const generateEmailVerificationToken = async (username) => {
   const user = await getUserByName(username);
-  const token = cryptoString({ length: 15, type: "url-safe" });
-  const dateSet = Date.now();
-  user.verificationToken = token;
-  user.verificationSet = dateSet;
-  await user.save();
+  let token = null;
+
+  if (user) {
+    token = cryptoString({ length: 15, type: "url-safe" });
+    const dateSet = Date.now();
+    user.verificationToken = token;
+    user.verificationSet = dateSet;
+    await user.save();
+  }
 
   return token;
 };
@@ -179,10 +183,13 @@ const verifyEmail = async (username, givenToken) => {
   if (timePassed < secondsExpiry * 1000) {
     if (user.verificationToken === givenToken) {
       valid = true;
+      user.isVerified = true;
+      await user.save();
     }
   } else {
     // unset the expired token
     user.verificationToken = null;
+    console.log("Expired token");
     await user.save();
   }
 
@@ -222,7 +229,7 @@ const verifyForgotPassword = async (username, token) => {
 };
 
 const deleteUser = async (username) => {
-  await User.deleteOne({ name: username }); // Usernames are (should be) unique
+  await User.deleteOne({ username: username }); // Usernames are (should be) unique
 };
 
 module.exports = {
