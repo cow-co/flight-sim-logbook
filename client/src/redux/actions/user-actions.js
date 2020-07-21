@@ -16,7 +16,7 @@ const login = (data) => async (dispatch) => {
 
   try {
     const response = await Axios.post("/api/users/login", data, config);
-    const errors = response.data.errorMessages;
+    const errors = response.data.errors;
 
     if (!isEmpty(errors)) {
       errors.forEach((error) => dispatch(setAlert(`${error}`, "error")));
@@ -41,7 +41,7 @@ const registerUser = (data) => async (dispatch) => {
 
   try {
     const response = await Axios.post("/api/users/register", data, config);
-    const errors = response.data.errorMessages;
+    const errors = response.data.errors;
 
     if (!isEmpty(errors)) {
       errors.forEach((error) => dispatch(setAlert(`${error}`, "error")));
@@ -67,7 +67,7 @@ const logout = () => async (dispatch) => {
 
   try {
     const response = await Axios.post("/api/users/logout", null, config);
-    const errors = response.data.errorMessages;
+    const errors = response.data.errors;
 
     if (!isEmpty(errors)) {
       errors.forEach((error) => dispatch(setAlert(`${error}`, "error")));

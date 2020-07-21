@@ -99,7 +99,7 @@ router.get("/verify/:username/:token", async (req, res) => {
   if (isValid) {
     return res.redirect("/users/login");
   } else {
-    return res.status(statusCodes.INVALID_STATUS).json({ message: "Email verification failed!" });
+    return res.status(statusCodes.INVALID_STATUS).json({ errors: ["Email verification failed!"] });
   }
 });
 
