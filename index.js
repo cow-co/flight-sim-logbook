@@ -6,6 +6,7 @@ const swaggerUI = require("swagger-ui-express");
 const YAML = require("yamljs");
 const swaggerDocUsers = YAML.load("docs/openapi/users.yaml");
 const path = require("path");
+const seedAircraft = require("./config/aircraft");
 
 const app = express();
 app.use(express.json());
@@ -21,6 +22,7 @@ if (process.env.NODE_ENV === "production") {
     .connect(db, { useNewUrlParser: true })
     .then(() => console.log("MongoDB connection successful"))
     .catch((err) => console.error(err));
+  seedAircraft();
 }
 
 app.use("/api-docs/users", swaggerUI.serve, swaggerUI.setup(swaggerDocUsers));
