@@ -1,4 +1,5 @@
 const Aircraft = require("../models/Aircraft");
+const { isEmptyOrNull } = require("../helpers/validation");
 
 const aircraftToSeed = [
   {
@@ -148,20 +149,11 @@ const aircraftToSeed = [
 ];
 
 const seedAircraft = async () => {
-  aircraftToSeed.forEach((aircraft) => {
-		try {
-			let existingEntity = await Aircraft.findOne({ name: aircraft.name });
-
-			if(existingEntity !== null) {
-				existingEntity = aircraft;
-				await existingEntity.save();
-			} else {
-				await Aircraft.create(aircraft);
-			}
-		} catch(err) {
-			console.warn(`Failed to seed aircraft ${aircraft.name}: ${err}`);
-		}		
-	});
+  try {
+    await Aircraft.create(aircraftToSeed);
+  } catch (err) {
+    console.warn(`Failed to seed aircraft ${aircraft.name}: ${err}`);
+  }
 };
 
 module.exports = seedAircraft;

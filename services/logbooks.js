@@ -22,33 +22,49 @@ const createLogbook = async (logbookSetup, user) => {
   };
 
   let existingLogbook = getUserLogbookForAircraft(logbookSetup.aircraftName, user);
+  let logbookExists = false;
 
-  if (existingLogbook) {
+  if (!isEmptyOrNull(existingLogbook)) {
     logbookExists = true;
   }
 
-  let chosenAircraft = findAircraftByName(logbookSetup.aircraftName);
+  let chosenAircraft = null;
+
+  if (isEmptyOrNull(logbookSetup.aircraftName)) {
+    newLogbook.errors.push("Please choose an aircraft!");
+  } else {
+    chosenAircraft = await findAircraftByName(logbookSetup.aircraftName);
+  }
 
   if (logbookExists) {
     newLogbook.errors.push("User already has a logbook for that aircraft!");
   } else {
-    if (isEmptyOrNull(logbookSetup.aircraftName)) {
-      newLogbook.errors.push("Please choose an aircraft!");
-    }
-
-    if (isEmptyOrNull(chosenAircraft)) {
+    if (!isEmptyOrNull(logbookSetup.aircraftName) && isEmptyOrNull(chosenAircraft)) {
       newLogbook.errors.push("Please select a valid aircraft!");
     }
   }
 
   if (newLogbook.errors.length === 0) {
     try {
-      const createdLogbook = await Logbook.create({
+      let createdLogbook = await Logbook.create({
         aircraft: chosenAircraft,
       });
 
-      newLogbook.logbook.aircraft = chosenAircraft.name;
-      newLogbook.logbook = createdLogbook;
+      newLogbook.logbook = {
+        aircraft: logbookSetup.aircraftName,
+        totalHours: createdLogbook.totalHours,
+        imcHours: createdLogbook.imcHours,
+        bfmHours: createdLogbook.bfmHours,
+        bvrHours: createdLogbook.bvrHours,
+        seadHours: createdLogbook.seadHours,
+        casHours: createdLogbook.casHours,
+        strikeHours: createdLogbook.strikeHours,
+        packageHours: createdLogbook.packageHours,
+        caseISorties: createdLogbook.caseISorties,
+        caseIIISorties: createdLogbook.caseIIISorties,
+        aarHours: createdLogbook.aarHours,
+      };
+      console.log(newLogbook.logbook);
     } catch (error) {
       newLogbook.errors.push(error.message);
     }
