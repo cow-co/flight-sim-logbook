@@ -3,11 +3,10 @@ node_js:
   - lts/*
   - node
 
-branches: 
+branches:
   only:
-  - master
-  - develop
+    - master
+    - develop
 
 script:
   - npm run test
-  - npm run report-coverage
