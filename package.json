@@ -4,10 +4,9 @@
   "description": "A generic logbook for combat flight sims",
   "main": "index.js",
   "scripts": {
-    "test": "nyc jasmine JASMINE_CONFIG_PATH=jasmine.json",
+    "test": "jasmine JASMINE_CONFIG_PATH=jasmine.json",
     "start": "node index.js",
-    "heroku-postbuild": "cd client && npm install && npm run build",
-    "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "repository": {
     "type": "git",
@@ -24,18 +23,16 @@
     "express": "^4.17.1",
     "http-shutdown": "^1.2.2",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.25",
-    "nodemailer": "^6.4.10",
+    "mongoose": "^5.9.26",
+    "nodemailer": "^6.4.11",
     "swagger-ui-express": "^4.1.4",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "codecov": "^3.7.1",
-    "jasmine": "^3.5.0",
+    "jasmine": "^3.6.1",
     "mocha": "^7.2.0",
-    "mongodb-memory-server": "^6.6.1",
-    "nyc": "^15.1.0",
+    "mongodb-memory-server": "^6.6.3",
     "supertest": "^4.0.2"
   }
 }
