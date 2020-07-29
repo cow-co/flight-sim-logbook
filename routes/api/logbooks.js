@@ -2,18 +2,19 @@ const express = require("express");
 const router = express.Router();
 const statusCodes = require("../../config/status_codes");
 const { authenticate, isVerified } = require("../../middleware/security");
+const logbookMethods = require("../../services/logbooks");
 
-router.post("/create", async (req, res) => {
-  const userDetails = req.body;
-  let responseJSON = { user: null, errors: [] };
+router.post("/create", authenticate, isVerified, async (req, res) => {
+  const logbookDetails = req.body;
+  let responseJSON = { logbook: null, errors: [] };
   let returnStatus = statusCodes.SUCCESS;
 
   try {
     console.log("Creating logbook...");
-    const newUser = await userMethods.createUser(userDetails);
-    if (newUser.errors.length > 0) {
+    const newLogbook = await logbookMethods.createLogbook(logbookDetails);
+    if (newLogbook.errors.length > 0) {
       returnStatus = statusCodes.INVALID_STATUS;
-      responseJSON.errors = newUser.errors;
+      responseJSON.errors = newLogbook.errors;
     } else {
       returnStatus = statusCodes.CREATED;
       console.log("Created logbook.");

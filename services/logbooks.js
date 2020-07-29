@@ -1,52 +1,61 @@
-const createLogbook = async (logbookSetup) => {
+const { findAircraftByName } = require("./aircraft");
+const { isEmptyOrNull } = require("../helpers/validation");
+const Logbook = require("../models/Logbook");
+
+const getUserLogbookForAircraft = (aircraftName, user) => {
+  let existingLogbook = null;
+
+  for (var i = 0; i < user.logbooks.length; i++) {
+    if (logbook.aircraft.name === aircraftName) {
+      existingLogbook = logbook;
+      break;
+    }
+  }
+
+  return existingLogbook;
+};
+
+const createLogbook = async (logbookSetup, user) => {
   let newLogbook = {
-    aircraft: null,
+    logbook: null,
     errors: [],
   };
 
-  let existingLogbook = await getUserByName(logbookSetup.username);
-  if (existingUser) {
-    userExists = true;
-  } else {
-    existingUser = await getUserByEmail(userSetup.email);
-    userExists = existingUser ? true : false;
+  let existingLogbook = getUserLogbookForAircraft(logbookSetup.aircraftName, user);
+
+  if (existingLogbook) {
+    logbookExists = true;
   }
 
-  if (userExists) {
-    newUser.errors.push("User already exists!");
+  let chosenAircraft = findAircraftByName(logbookSetup.aircraftName);
+
+  if (logbookExists) {
+    newLogbook.errors.push("User already has a logbook for that aircraft!");
   } else {
-    if (isEmptyOrNull(userSetup.username)) {
-      newUser.errors.push("Please enter a username");
+    if (isEmptyOrNull(logbookSetup.aircraftName)) {
+      newLogbook.errors.push("Please choose an aircraft!");
     }
 
-    if (isEmptyOrNull(userSetup.email)) {
-      newUser.errors.push("Please enter an email");
-    }
-
-    if (userSetup.password !== userSetup.passwordConfirmation) {
-      newUser.errors.push("Password confirmation does not match");
+    if (isEmptyOrNull(chosenAircraft)) {
+      newLogbook.errors.push("Please select a valid aircraft!");
     }
   }
 
-  if (newUser.errors.length === 0) {
+  if (newLogbook.errors.length === 0) {
     try {
-      if (isValidPassword(userSetup.password)) {
-        const hash = await argon2.hash(userSetup.password);
-        await User.create({
-          username: userSetup.username,
-          email: userSetup.email,
-          passwordHash: hash,
-        });
+      const createdLogbook = await Logbook.create({
+        aircraft: chosenAircraft,
+      });
 
-        newUser.username = userSetup.username;
-        newUser.email = userSetup.email;
-      } else {
-        newUser.errors.push("Password does not satisfy requirements");
-      }
+      newLogbook.logbook = createdLogbook;
     } catch (error) {
-      newUser.errors.push(error.message);
+      newLogbook.errors.push(error.message);
     }
   }
 
-  return newUser;
+  return newLogbook;
+};
+
+module.exports = {
+  createLogbook,
 };

@@ -1,0 +1,79 @@
+openapi: 3.0.0
+info:
+  title: Flight-Sim-Logbook API
+  description: API definition for the flight simulation logbook web app's REST API.
+  version: 0.1.0
+servers:
+  - url: https://flight-sim-logbook.herokuapp.com/api/
+paths:
+  /logbooks/create:
+    post:
+      summary: Creates a user account and sends a verification email.
+      tags:
+        - Logbooks
+      requestBody:
+        description: Details of the logbook to create
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                aircraftName:
+                  type: string
+                  description: The name of the aircraft
+        required: true
+      responses:
+        "201": # status code
+          description: Basic details of the created user.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  logbook:
+                    type: object
+                    properties:
+                      username:
+                        type: string
+                        description: The user's name
+                      email:
+                        type: string
+                        description: The user's email address
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        "400": # status code
+          description: Invalid request (mismatched password confirmation, user already exists, etc.)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  logbook:
+                    type: object
+                    description: This will be null
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        "500": # status code
+          description: An unexpected server-side error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  logbook:
+                    type: object
+                    description: This will be null
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

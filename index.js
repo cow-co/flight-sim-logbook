@@ -1,10 +1,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const users = require("./routes/api/users");
+const logbooks = require("./routes/api/logbooks");
 const shutdown = require("http-shutdown");
 const swaggerUI = require("swagger-ui-express");
 const YAML = require("yamljs");
 const swaggerDocUsers = YAML.load("docs/openapi/users.yaml");
+const swaggerDocLogbooks = YAML.load("docs/openapi/logbooks.yaml");
 const path = require("path");
 const seedAircraft = require("./config/aircraft");
 
@@ -26,7 +28,9 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.use("/api-docs/users", swaggerUI.serve, swaggerUI.setup(swaggerDocUsers));
+app.use("/api-docs/logbooks", swaggerUI.serve, swaggerUI.setup(swaggerDocLogbooks));
 app.use("/api/users", users);
+app.use("/api/logbooks", logbooks);
 
 const port = process.env.PORT || 5000;
 let server = app.listen(port, async () => {
