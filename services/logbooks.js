@@ -64,7 +64,6 @@ const createLogbook = async (logbookSetup, user) => {
         caseIIISorties: createdLogbook.caseIIISorties,
         aarHours: createdLogbook.aarHours,
       };
-      console.log(newLogbook.logbook);
     } catch (error) {
       newLogbook.errors.push(error.message);
     }

@@ -11,12 +11,13 @@ router.post("/create", authenticate, isVerified, async (req, res) => {
 
   try {
     console.log("Creating logbook...");
-    const newLogbook = await logbookMethods.createLogbook(logbookDetails);
+    const newLogbook = await logbookMethods.createLogbook(logbookDetails, res.locals.user);
     if (newLogbook.errors.length > 0) {
       returnStatus = statusCodes.INVALID_STATUS;
       responseJSON.errors = newLogbook.errors;
     } else {
       returnStatus = statusCodes.CREATED;
+      responseJSON.logbook = newLogbook.logbook;
       console.log("Created logbook.");
     }
   } catch (error) {
