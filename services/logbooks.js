@@ -47,6 +47,7 @@ const createLogbook = async (logbookSetup, user) => {
         aircraft: chosenAircraft,
       });
 
+      newLogbook.logbook.aircraft = chosenAircraft.name;
       newLogbook.logbook = createdLogbook;
     } catch (error) {
       newLogbook.errors.push(error.message);

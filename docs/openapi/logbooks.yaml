@@ -33,18 +33,48 @@ paths:
                   logbook:
                     type: object
                     properties:
-                      username:
+                      aircraft:
                         type: string
-                        description: The user's name
-                      email:
-                        type: string
-                        description: The user's email address
+                        description: The name of the aircraft
+                      totalHours:
+                        type: number
+                        description: The overall number of hours flown
+                      imcHours:
+                        type: number
+                        description: The number of hours in instrument meteorological conditions
+                      bfmHours:
+                        type: number
+                        description: The number of hours in basic fighter manoeuvres
+                      bvrHours:
+                        type: number
+                        description: The number of hours in beyond visual range combat
+                      seadHours:
+                        type: number
+                        description: The number of hours in the SEAD role
+                      casHours:
+                        type: number
+                        description: The number of hours in the close air support role
+                      strikeHours:
+                        type: number
+                        description: The number of hours in the precision strike role
+                      packageHours:
+                        type: number
+                        description: The number of hours working as part of a coordinated package
+                      caseISorties:
+                        type: number
+                        description: The number of Case I carrier sorties
+                      caseIIISorties:
+                        type: number
+                        description: The number of Case III carrier sorties
+                      aarHours:
+                        type: number
+                        description: The number of hours doing air-to-air refueling
                   errors:
                     type: array
                     items:
                       type: string
         "400": # status code
-          description: Invalid request (mismatched password confirmation, user already exists, etc.)
+          description: Invalid request (user alread has a logbook for the given aircraft, aircraft name is invalid, etc.)
           content:
             application/json:
               schema:
