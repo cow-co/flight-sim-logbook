@@ -72,6 +72,32 @@ const createLogbook = async (logbookSetup, user) => {
   return newLogbook;
 };
 
+const deleteLogbook = async (aircraftName, user) => {
+  let existingLogbook = getUserLogbookForAircraft(aircraftName, user);
+  let logbookExists = false;
+  let response = { message: "", errors: [] };
+
+  if (!isEmptyOrNull(existingLogbook)) {
+    logbookExists = true;
+  }
+
+  if (logbookExists) {
+    try {
+      await Logbook.deleteOne({ _id: existingLogbook._id });
+      response.message = "Successfully Deleted Logbook";
+    } catch (error) {
+      newLogbook.errors.push(error.message);
+      response.message = "Failed to Delete Logbook";
+    }
+  } else {
+    response.errors.push("User does not have a logbook for that aircraft!");
+    response.message = "Failed to Delete Logbook";
+  }
+
+  return response;
+};
+
 module.exports = {
   createLogbook,
+  deleteLogbook,
 };
