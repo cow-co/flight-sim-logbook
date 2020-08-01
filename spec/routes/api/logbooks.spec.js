@@ -63,4 +63,48 @@ describe("Logbook endpoint tests", () => {
       expect(res.body.errors.length).to.equal(1);
     });
   });
+
+  describe("logbook-deletion", () => {
+    it("should delete a logbook", async () => {
+      await request(server).post("/api/users/register").send(baseUser);
+      await utils.verifyUser(baseUser.username);
+
+      const loginRes = await request(server).post("/api/users/login").send({
+        username: baseUser.username,
+        password: baseUser.password,
+      });
+      const token = loginRes.body.jwt;
+
+      const logbookRequest = {
+        aircraftName: "F-16",
+      };
+      await request(server).post("/api/logbooks/create").set("Authorization", `Bearer ${token}`).send(logbookRequest);
+      const res = await request(server)
+        .delete("/api/logbooks/delete")
+        .set("Authorization", `Bearer ${token}`)
+        .send(logbookRequest);
+      expect(res.statusCode).to.equal(200);
+    });
+
+    it("should fail to delete a logbook with an empty aircraft name", async () => {
+      await request(server).post("/api/users/register").send(baseUser);
+      await utils.verifyUser(baseUser.username);
+
+      const loginRes = await request(server).post("/api/users/login").send({
+        username: baseUser.username,
+        password: baseUser.password,
+      });
+      const token = loginRes.body.jwt;
+
+      const logbookRequest = {
+        aircraftName: "F-16",
+      };
+      await request(server).post("/api/logbooks/create").set("Authorization", `Bearer ${token}`).send(logbookRequest);
+      const res = await request(server).delete("/api/logbooks/delete").set("Authorization", `Bearer ${token}`).send({
+        aircraftName: "",
+      });
+      expect(res.statusCode).to.equal(400);
+      expect(res.body.errors.length).to.equal(1);
+    });
+  });
 });

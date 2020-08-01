@@ -3,10 +3,13 @@ const Schema = mongoose.Schema;
 
 const logbookSchema = new Schema({
   aircraft: {
-    type: Schema.Types.ObjectId,
-    ref: "Aircraft",
+    type: String,
   },
   totalHours: {
+    type: Number,
+    default: 0,
+  },
+  a2aKills: {
     type: Number,
     default: 0,
   },
@@ -52,4 +55,4 @@ const logbookSchema = new Schema({
   },
 });
 
-module.exports = Logbook = mongoose.model("Logbooks", logbookSchema);
+module.exports = logbookSchema;
