@@ -6,6 +6,7 @@ const getUserLogbookForAircraft = (aircraftName, user) => {
   let existingLogbook = null;
 
   for (var i = 0; i < user.logbooks.length; i++) {
+    const logbook = user.logbooks[i];
     if (logbook.aircraft.name === aircraftName) {
       existingLogbook = logbook;
       break;
@@ -15,13 +16,14 @@ const getUserLogbookForAircraft = (aircraftName, user) => {
   return existingLogbook;
 };
 
-const createLogbook = async (logbookSetup, user) => {
+// TODO Update, since Logbook is now a subdocument of User
+const createLogbook = async (aircraftName, user) => {
   let newLogbook = {
     logbook: null,
     errors: [],
   };
 
-  let existingLogbook = getUserLogbookForAircraft(logbookSetup.aircraftName, user);
+  let existingLogbook = getUserLogbookForAircraft(aircraftName, user);
   let logbookExists = false;
 
   if (!isEmptyOrNull(existingLogbook)) {
@@ -30,41 +32,31 @@ const createLogbook = async (logbookSetup, user) => {
 
   let chosenAircraft = null;
 
-  if (isEmptyOrNull(logbookSetup.aircraftName)) {
+  if (isEmptyOrNull(aircraftName)) {
     newLogbook.errors.push("Please choose an aircraft!");
   } else {
-    chosenAircraft = await findAircraftByName(logbookSetup.aircraftName);
+    chosenAircraft = await findAircraftByName(aircraftName);
   }
 
   if (logbookExists) {
     newLogbook.errors.push("User already has a logbook for that aircraft!");
   } else {
-    if (!isEmptyOrNull(logbookSetup.aircraftName) && isEmptyOrNull(chosenAircraft)) {
+    if (!isEmptyOrNull(aircraftName) && isEmptyOrNull(chosenAircraft)) {
       newLogbook.errors.push("Please select a valid aircraft!");
     }
   }
 
   if (newLogbook.errors.length === 0) {
     try {
-      let createdLogbook = await Logbook.create({
-        aircraft: chosenAircraft,
-      });
-
-      newLogbook.logbook = {
-        aircraft: logbookSetup.aircraftName,
-        totalHours: createdLogbook.totalHours,
-        imcHours: createdLogbook.imcHours,
-        bfmHours: createdLogbook.bfmHours,
-        bvrHours: createdLogbook.bvrHours,
-        seadHours: createdLogbook.seadHours,
-        casHours: createdLogbook.casHours,
-        strikeHours: createdLogbook.strikeHours,
-        packageHours: createdLogbook.packageHours,
-        caseISorties: createdLogbook.caseISorties,
-        caseIIISorties: createdLogbook.caseIIISorties,
-        aarHours: createdLogbook.aarHours,
+      const createdLogbook = {
+        aircraft: aircraftName,
       };
+
+      user.logbooks.push(createdLogbook);
+      await user.save();
+      newLogbook.logbook = createdLogbook;
     } catch (error) {
+      console.warn(error);
       newLogbook.errors.push(error.message);
     }
   }

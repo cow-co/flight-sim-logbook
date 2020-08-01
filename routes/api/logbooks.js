@@ -11,7 +11,7 @@ router.post("/create", authenticate, isVerified, async (req, res) => {
 
   try {
     console.log("Creating logbook...");
-    const newLogbook = await logbookMethods.createLogbook(logbookDetails, res.locals.user);
+    const newLogbook = await logbookMethods.createLogbook(logbookDetails.aircraftName, res.locals.user);
     if (newLogbook.errors.length > 0) {
       returnStatus = statusCodes.INVALID_STATUS;
       responseJSON.errors = newLogbook.errors;
