@@ -10,7 +10,6 @@ router.post("/create", authenticate, isVerified, async (req, res) => {
   let returnStatus = statusCodes.SUCCESS;
 
   try {
-    console.log("Creating logbook...");
     const newLogbook = await logbookMethods.createLogbook(logbookDetails.aircraftName, res.locals.user);
     if (newLogbook.errors.length > 0) {
       returnStatus = statusCodes.INVALID_STATUS;
@@ -23,6 +22,32 @@ router.post("/create", authenticate, isVerified, async (req, res) => {
   } catch (error) {
     console.error(error.message);
     returnStatus = statusCodes.SERVER_ERROR;
+    responseJSON.errors.push("Server-side error");
+  }
+
+  return res.status(returnStatus).json(responseJSON);
+});
+
+router.delete("/delete", authenticate, isVerified, async (req, res) => {
+  const logbookDetails = req.body;
+  let responseJSON = { message: "", errors: [] };
+  let returnStatus = statusCodes.SUCCESS;
+
+  try {
+    const newLogbook = await logbookMethods.deleteLogbook(logbookDetails.aircraftName, res.locals.user);
+    if (newLogbook.errors.length > 0) {
+      returnStatus = statusCodes.INVALID_STATUS;
+      responseJSON.errors = newLogbook.errors;
+      responseJSON.message = "Failed to Delete Logbook";
+    } else {
+      returnStatus = statusCodes.SUCCESS;
+      responseJSON.logbook = newLogbook.logbook;
+      responseJSON.message = "Deleted Logbook";
+    }
+  } catch (error) {
+    console.error(error.message);
+    returnStatus = statusCodes.SERVER_ERROR;
+    responseJSON.message = "Failed to Delete Logbook";
     responseJSON.errors.push("Server-side error");
   }
 

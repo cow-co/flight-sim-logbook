@@ -7,7 +7,7 @@ const getUserLogbookForAircraft = (aircraftName, user) => {
 
   for (var i = 0; i < user.logbooks.length; i++) {
     const logbook = user.logbooks[i];
-    if (logbook.aircraft.name === aircraftName) {
+    if (logbook.aircraft === aircraftName) {
       existingLogbook = logbook;
       break;
     }
@@ -16,7 +16,19 @@ const getUserLogbookForAircraft = (aircraftName, user) => {
   return existingLogbook;
 };
 
-// TODO Update, since Logbook is now a subdocument of User
+const removeLogbookFromUser = async (aircraftName, user) => {
+  for (var i = 0; i < user.logbooks.length; i++) {
+    const logbook = user.logbooks[i];
+    if (logbook.aircraft === aircraftName) {
+      user.logbooks.splice(i, 1);
+      await user.save();
+      break;
+    }
+  }
+};
+
+// TODO Implement a "GET logbooks for user" endpoint
+
 const createLogbook = async (aircraftName, user) => {
   let newLogbook = {
     logbook: null,
@@ -67,7 +79,7 @@ const createLogbook = async (aircraftName, user) => {
 const deleteLogbook = async (aircraftName, user) => {
   let existingLogbook = getUserLogbookForAircraft(aircraftName, user);
   let logbookExists = false;
-  let response = { message: "", errors: [] };
+  let response = { errors: [] };
 
   if (!isEmptyOrNull(existingLogbook)) {
     logbookExists = true;
@@ -75,15 +87,12 @@ const deleteLogbook = async (aircraftName, user) => {
 
   if (logbookExists) {
     try {
-      await Logbook.deleteOne({ _id: existingLogbook._id });
-      response.message = "Successfully Deleted Logbook";
+      await removeLogbookFromUser(aircraftName, user);
     } catch (error) {
-      newLogbook.errors.push(error.message);
-      response.message = "Failed to Delete Logbook";
+      response.errors.push(error.message);
     }
   } else {
     response.errors.push("User does not have a logbook for that aircraft!");
-    response.message = "Failed to Delete Logbook";
   }
 
   return response;

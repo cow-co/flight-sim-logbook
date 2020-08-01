@@ -104,8 +104,8 @@ describe("Logbook service tests", () => {
       const createdUser = await utils.createUser(user);
 
       try {
-        const logbook = await logbookService.createLogbook(aircraftName, createdUser);
-        const response = await logbookService.createLogbook(aircraftName, createdUser);
+        await logbookService.createLogbook(aircraftName, createdUser);
+        const response = await logbookService.deleteLogbook(aircraftName, createdUser);
         expect(response.errors.length).to.equal(0);
       } catch (err) {
         fail(err);

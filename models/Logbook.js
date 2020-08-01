@@ -9,6 +9,10 @@ const logbookSchema = new Schema({
     type: Number,
     default: 0,
   },
+  a2aKills: {
+    type: Number,
+    default: 0,
+  },
   imcHours: {
     type: Number,
     default: 0,
