@@ -3,6 +3,8 @@ const router = express.Router();
 const statusCodes = require("../../config/status_codes");
 const { authenticate, isVerified } = require("../../middleware/security");
 const logbookMethods = require("../../services/logbooks");
+const userMethods = require("../../services/users");
+const { isEmptyOrNull } = require("../../helpers/validation");
 
 router.post("/create", authenticate, isVerified, async (req, res) => {
   const logbookDetails = req.body;
@@ -49,6 +51,29 @@ router.delete("/delete", authenticate, isVerified, async (req, res) => {
     returnStatus = statusCodes.SERVER_ERROR;
     responseJSON.message = "Failed to Delete Logbook";
     responseJSON.errors.push("Server-side error");
+  }
+
+  return res.status(returnStatus).json(responseJSON);
+});
+
+router.get("/:username", async (req, res) => {
+  let responseJSON = { logbooks: [], errors: [] };
+  let returnStatus = statusCodes.SUCCESS;
+  const username = req.params.username;
+  const user = await userMethods.getUserByName(username);
+
+  if (isEmptyOrNull(user)) {
+    returnStatus = statusCodes.INVALID_STATUS;
+    responseJSON.errors.push("User does not exist!");
+  } else {
+    try {
+      responseJSON = await logbookMethods.getAllLogbooks(user);
+    } catch (error) {
+      console.error(error.message);
+      returnStatus = statusCodes.SERVER_ERROR;
+      responseJSON.message = "Failed to get logbooks for user";
+      responseJSON.errors.push("Server-side error");
+    }
   }
 
   return res.status(returnStatus).json(responseJSON);
