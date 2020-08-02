@@ -98,7 +98,21 @@ const deleteLogbook = async (aircraftName, user) => {
   return response;
 };
 
+const getAllLogbooks = async (user) => {
+  let response = { logbooks: [] };
+  user.logbooks.forEach((logbook) => {
+    response.logbooks.push({
+      aircraft: logbook.aircraft,
+      totalHours: logbook.totalHours,
+      a2aKills: logbook.a2aKills,
+    });
+  });
+
+  return response;
+};
+
 module.exports = {
   createLogbook,
   deleteLogbook,
+  getAllLogbooks,
 };
