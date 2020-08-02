@@ -111,8 +111,16 @@ const getAllLogbooks = async (user) => {
   return response;
 };
 
+const getLogbook = (aircraftName, user) => {
+  let response = { logbook: null };
+  response.logbook = getUserLogbookForAircraft(aircraftName, user);
+
+  return response;
+};
+
 module.exports = {
   createLogbook,
   deleteLogbook,
   getAllLogbooks,
+  getLogbook,
 };

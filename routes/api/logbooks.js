@@ -79,4 +79,32 @@ router.get("/:username", async (req, res) => {
   return res.status(returnStatus).json(responseJSON);
 });
 
+router.get("/:username/:aircraftName", async (req, res) => {
+  let responseJSON = { logbook: null, errors: [] };
+  let returnStatus = statusCodes.SUCCESS;
+  const username = req.params.username;
+  const aircraftName = req.params.aircraftName;
+  const user = await userMethods.getUserByName(username);
+
+  if (isEmptyOrNull(user)) {
+    returnStatus = statusCodes.INVALID_STATUS;
+    responseJSON.errors.push("User does not exist!");
+  } else {
+    try {
+      responseJSON.logbook = logbookMethods.getLogbook(aircraftName, user).logbook;
+      if (isEmptyOrNull(responseJSON.logbook)) {
+        returnStatus = statusCodes.INVALID_STATUS;
+        responseJSON.errors.push("User does not have a logbook for that aircraft!");
+      }
+    } catch (error) {
+      console.error(error.message);
+      returnStatus = statusCodes.SERVER_ERROR;
+      responseJSON.message = "Failed to get logbook";
+      responseJSON.errors.push("Server-side error");
+    }
+  }
+
+  return res.status(returnStatus).json(responseJSON);
+});
+
 module.exports = router;
