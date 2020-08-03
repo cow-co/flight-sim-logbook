@@ -27,7 +27,31 @@ const removeLogbookFromUser = async (aircraftName, user) => {
   }
 };
 
-// TODO Implement a "GET logbooks for user" endpoint
+const stripDownLogbook = async (logbook) => {
+  const aircraft = await findAircraftByName(logbook.aircraft);
+  const logbookData = logbook.toObject();
+  let modified = {
+    ...logbookData,
+  };
+  // console.log(modified);
+
+  if (!aircraft.bvrCapable) {
+    delete modified.bvrSorties;
+  }
+
+  if (!aircraft.carrierOpsCapable) {
+    delete modified.caseISorties;
+    delete modified.caseIIISorties;
+  }
+
+  if (!aircraft.agCapable) {
+    delete modified.seadSorties;
+    delete modified.casSorties;
+    delete modified.strikeSorties;
+  }
+
+  return modified;
+};
 
 const createLogbook = async (aircraftName, user) => {
   let newLogbook = {
@@ -111,10 +135,12 @@ const getAllLogbooks = async (user) => {
   return response;
 };
 
-// TODO will want to avoid returning A2G- and Carrier Ops-related fields in the logbook if the aircraft does not support those things
-const getLogbook = (aircraftName, user) => {
+const getLogbook = async (aircraftName, user) => {
   let response = { logbook: null };
-  response.logbook = getUserLogbookForAircraft(aircraftName, user);
+  const ogLogbook = getUserLogbookForAircraft(aircraftName, user);
+  if (!isEmptyOrNull(ogLogbook)) {
+    response.logbook = await stripDownLogbook(ogLogbook);
+  }
 
   return response;
 };
@@ -122,6 +148,7 @@ const getLogbook = (aircraftName, user) => {
 const addMission = async (missionDetails, user) => {
   let response = { logbook: null, errors: [] };
   let logbook = getUserLogbookForAircraft(missionDetails.aircraft, user);
+  const aircraft = await findAircraftByName(missionDetails.aircraft);
 
   if (!isEmptyOrNull(logbook)) {
     logbook.totalHours += missionDetails.duration;
@@ -135,19 +162,19 @@ const addMission = async (missionDetails, user) => {
       logbook.bfmSorties++;
     }
 
-    if (missionDetails.bvr) {
+    if (missionDetails.bvr && aircraft.bvrCapable) {
       logbook.bvrSorties++;
     }
 
-    if (missionDetails.sead) {
+    if (missionDetails.sead && aircraft.agCapable) {
       logbook.seadSorties++;
     }
 
-    if (missionDetails.cas) {
+    if (missionDetails.cas && aircraft.agCapable) {
       logbook.casSorties++;
     }
 
-    if (missionDetails.strike) {
+    if (missionDetails.strike && aircraft.agCapable) {
       logbook.strikeSorties++;
     }
 
@@ -155,11 +182,11 @@ const addMission = async (missionDetails, user) => {
       logbook.packageSorties++;
     }
 
-    if (missionDetails.caseI) {
+    if (missionDetails.caseI && aircraft.carrierOpsCapable) {
       logbook.caseISorties++;
     }
 
-    if (missionDetails.caseIII) {
+    if (missionDetails.caseIII && aircraft.carrierOpsCapable) {
       logbook.caseIIISorties++;
     }
 
@@ -167,7 +194,7 @@ const addMission = async (missionDetails, user) => {
       logbook.aarSorties++;
     }
 
-    response.logbook = logbook;
+    response.logbook = await stripDownLogbook(logbook);
 
     try {
       await user.save();
