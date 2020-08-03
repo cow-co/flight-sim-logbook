@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Logbook = require("./Logbook");
 const Schema = mongoose.Schema;
 
 const validateEmail = (email) => {
@@ -39,6 +40,7 @@ const userSchema = new Schema({
   verificationSet: Number,
   resetPasswordToken: String,
   resetTokenSet: Number,
+  logbooks: [Logbook],
 });
 
 module.exports = User = mongoose.model("Users", userSchema);

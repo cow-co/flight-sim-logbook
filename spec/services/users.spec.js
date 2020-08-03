@@ -170,7 +170,7 @@ describe("User service tests", () => {
     });
 
     it("Should create a user", async () => {
-      const invalidUser = {
+      const validUser = {
         username: "name",
         email: "someone@something.com",
         password: "password12345",
@@ -178,7 +178,7 @@ describe("User service tests", () => {
       };
 
       try {
-        const user = await userService.createUser(invalidUser);
+        const user = await userService.createUser(validUser);
         expect(user.username).to.equal("name");
       } catch (err) {
         fail(err);
