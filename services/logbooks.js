@@ -29,9 +29,11 @@ const removeLogbookFromUser = async (aircraftName, user) => {
 
 const stripDownLogbook = async (logbook) => {
   const aircraft = await findAircraftByName(logbook.aircraft);
+  const logbookData = logbook.toObject();
   let modified = {
-    ...logbook,
+    ...logbookData,
   };
+  // console.log(modified);
 
   if (!aircraft.bvrCapable) {
     delete modified.bvrSorties;
@@ -135,11 +137,15 @@ const getAllLogbooks = async (user) => {
 
 const getLogbook = async (aircraftName, user) => {
   let response = { logbook: null };
-  response.logbook = await stripDownLogbook(getUserLogbookForAircraft(aircraftName, user));
+  const ogLogbook = getUserLogbookForAircraft(aircraftName, user);
+  if (!isEmptyOrNull(ogLogbook)) {
+    response.logbook = await stripDownLogbook(ogLogbook);
+  }
 
   return response;
 };
 
+// FIXME Make this throw out irrelevant fields
 const addMission = async (missionDetails, user) => {
   let response = { logbook: null, errors: [] };
   let logbook = getUserLogbookForAircraft(missionDetails.aircraft, user);

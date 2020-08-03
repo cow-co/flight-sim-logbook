@@ -182,7 +182,7 @@ describe("Logbook service tests", () => {
         };
         const response = await logbookService.addMission(mission, createdUser);
         const updatedUser = await userService.getUserByName(user.username);
-        const updatedLogbook = logbookService.getLogbook(aircraftName, updatedUser);
+        const updatedLogbook = await logbookService.getLogbook(aircraftName, updatedUser);
         expect(response.logbook).to.not.equal(null);
         expect(updatedLogbook.logbook.totalHours).to.equal(3.3);
       } catch (err) {

@@ -90,7 +90,8 @@ router.get("/:username/:aircraftName", async (req, res) => {
     responseJSON.errors.push("User does not exist!");
   } else {
     try {
-      responseJSON.logbook = logbookMethods.getLogbook(aircraftName, user).logbook;
+      const result = await logbookMethods.getLogbook(aircraftName, user);
+      responseJSON.logbook = result.logbook;
       if (isEmptyOrNull(responseJSON.logbook)) {
         returnStatus = statusCodes.INVALID_STATUS;
         responseJSON.errors.push("User does not have a logbook for that aircraft!");
