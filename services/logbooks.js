@@ -111,9 +111,73 @@ const getAllLogbooks = async (user) => {
   return response;
 };
 
+// TODO will want to avoid returning A2G- and Carrier Ops-related fields in the logbook if the aircraft does not support those things
 const getLogbook = (aircraftName, user) => {
   let response = { logbook: null };
   response.logbook = getUserLogbookForAircraft(aircraftName, user);
+
+  return response;
+};
+
+const addMission = async (missionDetails, user) => {
+  let response = { logbook: null, errors: [] };
+  let logbook = getUserLogbookForAircraft(missionDetails.aircraft, user);
+
+  if (!isEmptyOrNull(logbook)) {
+    logbook.totalHours += missionDetails.duration;
+    logbook.a2aKills += missionDetails.a2aKills;
+
+    if (missionDetails.imc) {
+      logbook.imcSorties++;
+    }
+
+    if (missionDetails.bfm) {
+      logbook.bfmSorties++;
+    }
+
+    if (missionDetails.bvr) {
+      logbook.bvrSorties++;
+    }
+
+    if (missionDetails.sead) {
+      logbook.seadSorties++;
+    }
+
+    if (missionDetails.cas) {
+      logbook.casSorties++;
+    }
+
+    if (missionDetails.strike) {
+      logbook.strikeSorties++;
+    }
+
+    if (missionDetails.package) {
+      logbook.packageSorties++;
+    }
+
+    if (missionDetails.caseI) {
+      logbook.caseISorties++;
+    }
+
+    if (missionDetails.caseIII) {
+      logbook.caseIIISorties++;
+    }
+
+    if (missionDetails.aar) {
+      logbook.aarSorties++;
+    }
+
+    response.logbook = logbook;
+
+    try {
+      await user.save();
+    } catch (err) {
+      console.warn("Failed to update logbook in DB");
+      response.errors.push("Failed to update logbook");
+    }
+  } else {
+    response.errors.push("You must create a logbook for that aircraft first!");
+  }
 
   return response;
 };
@@ -123,4 +187,5 @@ module.exports = {
   deleteLogbook,
   getAllLogbooks,
   getLogbook,
+  addMission,
 };

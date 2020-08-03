@@ -13,31 +13,31 @@ const logbookSchema = new Schema({
     type: Number,
     default: 0,
   },
-  imcHours: {
+  imcSorties: {
     type: Number,
     default: 0,
   },
-  bfmHours: {
+  bfmSorties: {
     type: Number,
     default: 0,
   },
-  bvrHours: {
+  bvrSorties: {
     type: Number,
     default: 0,
   },
-  seadHours: {
+  seadSorties: {
     type: Number,
     default: 0,
   },
-  casHours: {
+  casSorties: {
     type: Number,
     default: 0,
   },
-  strikeHours: {
+  strikeSorties: {
     type: Number,
     default: 0,
   },
-  packageHours: {
+  packageSorties: {
     type: Number,
     default: 0,
   },
@@ -49,7 +49,7 @@ const logbookSchema = new Schema({
     type: Number,
     default: 0,
   },
-  aarHours: {
+  aarSorties: {
     type: Number,
     default: 0,
   },
