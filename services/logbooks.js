@@ -145,10 +145,10 @@ const getLogbook = async (aircraftName, user) => {
   return response;
 };
 
-// FIXME Make this throw out irrelevant fields
 const addMission = async (missionDetails, user) => {
   let response = { logbook: null, errors: [] };
   let logbook = getUserLogbookForAircraft(missionDetails.aircraft, user);
+  const aircraft = await findAircraftByName(missionDetails.aircraft);
 
   if (!isEmptyOrNull(logbook)) {
     logbook.totalHours += missionDetails.duration;
@@ -162,19 +162,19 @@ const addMission = async (missionDetails, user) => {
       logbook.bfmSorties++;
     }
 
-    if (missionDetails.bvr) {
+    if (missionDetails.bvr && aircraft.bvrCapable) {
       logbook.bvrSorties++;
     }
 
-    if (missionDetails.sead) {
+    if (missionDetails.sead && aircraft.agCapable) {
       logbook.seadSorties++;
     }
 
-    if (missionDetails.cas) {
+    if (missionDetails.cas && aircraft.agCapable) {
       logbook.casSorties++;
     }
 
-    if (missionDetails.strike) {
+    if (missionDetails.strike && aircraft.agCapable) {
       logbook.strikeSorties++;
     }
 
@@ -182,11 +182,11 @@ const addMission = async (missionDetails, user) => {
       logbook.packageSorties++;
     }
 
-    if (missionDetails.caseI) {
+    if (missionDetails.caseI && aircraft.carrierOpsCapable) {
       logbook.caseISorties++;
     }
 
-    if (missionDetails.caseIII) {
+    if (missionDetails.caseIII && aircraft.carrierOpsCapable) {
       logbook.caseIIISorties++;
     }
 
@@ -194,7 +194,7 @@ const addMission = async (missionDetails, user) => {
       logbook.aarSorties++;
     }
 
-    response.logbook = logbook;
+    response.logbook = await stripDownLogbook(logbook);
 
     try {
       await user.save();
