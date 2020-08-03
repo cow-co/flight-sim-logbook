@@ -167,7 +167,7 @@ const addMission = async (missionDetails, user) => {
       logbook.aarSorties++;
     }
 
-    await logbook.save();
+    await user.save();
     response.logbook = logbook;
   }
 
