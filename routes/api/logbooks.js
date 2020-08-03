@@ -19,7 +19,6 @@ router.post("/create", authenticate, isVerified, async (req, res) => {
     } else {
       returnStatus = statusCodes.CREATED;
       responseJSON.logbook = newLogbook.logbook;
-      console.log("Created logbook.");
     }
   } catch (error) {
     console.error(error.message);
@@ -102,6 +101,33 @@ router.get("/:username/:aircraftName", async (req, res) => {
       responseJSON.message = "Failed to get logbook";
       responseJSON.errors.push("Server-side error");
     }
+  }
+
+  return res.status(returnStatus).json(responseJSON);
+});
+
+router.post("/add-mission", authenticate, isVerified, async (req, res) => {
+  const mission = req.body;
+  let responseJSON = { logbook: null, errors: [] };
+  let returnStatus = statusCodes.SUCCESS;
+
+  try {
+    const updatedLogbook = await logbookMethods.addMission(mission, res.locals.user);
+
+    if (updatedLogbook.logbook !== null && updatedLogbook.errors.length === 0) {
+      returnStatus = statusCodes.SUCCESS;
+      responseJSON.logbook = updatedLogbook.logbook;
+    } else if (updatedLogbook.logbook !== null) {
+      returnStatus = statusCodes.SERVER_ERROR;
+      responseJSON.errors = updatedLogbook.errors;
+    } else {
+      returnStatus = statusCodes.INVALID_STATUS;
+      responseJSON.errors = updatedLogbook.errors;
+    }
+  } catch (error) {
+    console.error(error.message);
+    returnStatus = statusCodes.SERVER_ERROR;
+    responseJSON.errors.push("Server-side error");
   }
 
   return res.status(returnStatus).json(responseJSON);

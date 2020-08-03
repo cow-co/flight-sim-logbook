@@ -120,7 +120,7 @@ const getLogbook = (aircraftName, user) => {
 };
 
 const addMission = async (missionDetails, user) => {
-  let response = { logbook: null };
+  let response = { logbook: null, errors: [] };
   let logbook = getUserLogbookForAircraft(missionDetails.aircraft, user);
 
   if (!isEmptyOrNull(logbook)) {
@@ -167,8 +167,16 @@ const addMission = async (missionDetails, user) => {
       logbook.aarSorties++;
     }
 
-    await user.save();
     response.logbook = logbook;
+
+    try {
+      await user.save();
+    } catch (err) {
+      console.warn("Failed to update logbook in DB");
+      response.errors.push("Failed to update logbook");
+    }
+  } else {
+    response.errors.push("You must create a logbook for that aircraft first!");
   }
 
   return response;

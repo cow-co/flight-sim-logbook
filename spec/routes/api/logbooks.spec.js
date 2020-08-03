@@ -129,7 +129,7 @@ describe("Logbook endpoint tests", () => {
       expect(res.body.logbooks.length).to.equal(1);
     });
 
-    it("should fail to delete a logbook with an empty aircraft name", async () => {
+    it("should fail to get a logbook with an empty aircraft name", async () => {
       await request(server).post("/api/users/register").send(baseUser);
       await utils.verifyUser(baseUser.username);
 
@@ -186,6 +186,83 @@ describe("Logbook endpoint tests", () => {
       const path = `/api/logbooks/${baseUser.username}/${logbookRequest.aircraftName}a`;
       await request(server).post("/api/logbooks/create").set("Authorization", `Bearer ${token}`).send(logbookRequest);
       const res = await request(server).get(path);
+      expect(res.statusCode).to.equal(400);
+      expect(res.body.errors.length).to.equal(1);
+    });
+  });
+
+  describe("logbook-updating", () => {
+    it("should update a logbook", async () => {
+      await request(server).post("/api/users/register").send(baseUser);
+      await utils.verifyUser(baseUser.username);
+
+      const loginRes = await request(server).post("/api/users/login").send({
+        username: baseUser.username,
+        password: baseUser.password,
+      });
+      const token = loginRes.body.jwt;
+
+      const logbookRequest = {
+        aircraftName: "F-16",
+      };
+
+      const mission = {
+        aircraft: logbookRequest.aircraftName,
+        duration: 3.3,
+        a2aKills: 0,
+        imc: false,
+        bfm: false,
+        bvr: false,
+        sead: true,
+        cas: false,
+        strike: false,
+        package: true,
+        caseI: false,
+        caseIII: false,
+        aar: true,
+      };
+      await request(server).post("/api/logbooks/create").set("Authorization", `Bearer ${token}`).send(logbookRequest);
+      const res = await request(server)
+        .post("/api/logbooks/add-mission")
+        .set("Authorization", `Bearer ${token}`)
+        .send(mission);
+      expect(res.statusCode).to.equal(200);
+    });
+
+    it("should fail to update a logbook with an empty aircraft name", async () => {
+      await request(server).post("/api/users/register").send(baseUser);
+      await utils.verifyUser(baseUser.username);
+
+      const loginRes = await request(server).post("/api/users/login").send({
+        username: baseUser.username,
+        password: baseUser.password,
+      });
+      const token = loginRes.body.jwt;
+
+      const logbookRequest = {
+        aircraftName: "F-16",
+      };
+
+      const mission = {
+        aircraft: "",
+        duration: 3.3,
+        a2aKills: 0,
+        imc: false,
+        bfm: false,
+        bvr: false,
+        sead: true,
+        cas: false,
+        strike: false,
+        package: true,
+        caseI: false,
+        caseIII: false,
+        aar: true,
+      };
+      await request(server).post("/api/logbooks/create").set("Authorization", `Bearer ${token}`).send(logbookRequest);
+      const res = await request(server)
+        .post("/api/logbooks/add-mission")
+        .set("Authorization", `Bearer ${token}`)
+        .send(mission);
       expect(res.statusCode).to.equal(400);
       expect(res.body.errors.length).to.equal(1);
     });
