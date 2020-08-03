@@ -27,7 +27,29 @@ const removeLogbookFromUser = async (aircraftName, user) => {
   }
 };
 
-// TODO Implement a "GET logbooks for user" endpoint
+const stripDownLogbook = async (logbook) => {
+  const aircraft = await findAircraftByName(logbook.aircraft);
+  let modified = {
+    ...logbook,
+  };
+
+  if (!aircraft.bvrCapable) {
+    delete modified.bvrSorties;
+  }
+
+  if (!aircraft.carrierOpsCapable) {
+    delete modified.caseISorties;
+    delete modified.caseIIISorties;
+  }
+
+  if (!aircraft.agCapable) {
+    delete modified.seadSorties;
+    delete modified.casSorties;
+    delete modified.strikeSorties;
+  }
+
+  return modified;
+};
 
 const createLogbook = async (aircraftName, user) => {
   let newLogbook = {
@@ -111,10 +133,9 @@ const getAllLogbooks = async (user) => {
   return response;
 };
 
-// TODO will want to avoid returning A2G- and Carrier Ops-related fields in the logbook if the aircraft does not support those things
-const getLogbook = (aircraftName, user) => {
+const getLogbook = async (aircraftName, user) => {
   let response = { logbook: null };
-  response.logbook = getUserLogbookForAircraft(aircraftName, user);
+  response.logbook = await stripDownLogbook(getUserLogbookForAircraft(aircraftName, user));
 
   return response;
 };
