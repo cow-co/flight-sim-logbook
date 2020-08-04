@@ -1,4 +1,5 @@
-import { REGISTER, LOGIN, LOGOUT } from "../actions/action-types";
+import { REGISTER, LOGIN, CHECK_LOGIN_STATUS, LOGOUT } from "../actions/action-types";
+import { isEmpty, getUsernameFromToken } from "../../helpers/utils";
 
 const INITIAL_STATE = {
   username: "",
@@ -16,6 +17,21 @@ const usersReducer = (currentState = INITIAL_STATE, action) => {
         username: action.payload.username,
         isLoggedIn: true,
       };
+    case CHECK_LOGIN_STATUS:
+      const jwt = localStorage.getItem("jwt");
+      if (isEmpty(jwt)) {
+        return {
+          ...currentState,
+          username: "",
+          isLoggedIn: false,
+        };
+      } else {
+        return {
+          ...currentState,
+          username: getUsernameFromToken(jwt),
+          isLoggedIn: true,
+        };
+      }
     case LOGOUT:
       localStorage.setItem("token", "");
       return {

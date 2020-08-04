@@ -1,10 +1,8 @@
-import { CREATE_USER, LOGIN, REGISTER, LOGOUT } from "./action-types";
+import { CREATE_USER, LOGIN, CHECK_LOGIN_STATUS, REGISTER, LOGOUT } from "./action-types";
 import Axios from "axios";
 import { axiosConfig } from "../../helpers/axiosConfig";
 import { setAlert } from "./common-actions";
 import { isEmpty } from "../../helpers/utils";
-
-// TODO Retrieve the errorMessages from the responses and use those instead of the default Axios stuff?
 
 const login = (data) => async (dispatch) => {
   const config = {
@@ -83,4 +81,11 @@ const logout = () => async (dispatch) => {
   }
 };
 
-export { login, registerUser, logout };
+const checkLoginStatus = () => async (dispatch) => {
+  dispatch({
+    type: CHECK_LOGIN_STATUS,
+    payload: null,
+  });
+};
+
+export { login, registerUser, logout, checkLoginStatus };
