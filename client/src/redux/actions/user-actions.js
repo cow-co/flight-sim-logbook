@@ -81,6 +81,14 @@ const logout = () => async (dispatch) => {
   }
 };
 
+// TODO Use this when we get 401 statuses from the API (i.e. when our login token has expired and stuff)
+const localLogout = () => async (dispatch) => {
+  dispatch({
+    type: LOGOUT,
+    payload: null,
+  });
+};
+
 const checkLoginStatus = () => async (dispatch) => {
   dispatch({
     type: CHECK_LOGIN_STATUS,
@@ -88,4 +96,4 @@ const checkLoginStatus = () => async (dispatch) => {
   });
 };
 
-export { login, registerUser, logout, checkLoginStatus };
+export { login, registerUser, logout, localLogout, checkLoginStatus };

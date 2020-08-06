@@ -48,7 +48,8 @@ function App() {
           <AlertBar />
           <Route path="/" exact component={Frontpage} />
           <Route path="/users/login" exact component={Login} />
-          <Route path="/users/register" component={RegisterUser} />
+          <Route path="/users/register" exact component={RegisterUser} />
+          <Route path="/logbooks/*/*" component={Logbook} />
         </Container>
       </BrowserRouter>
     </ThemeProvider>
