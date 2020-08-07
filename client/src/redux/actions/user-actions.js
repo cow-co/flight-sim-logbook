@@ -66,22 +66,26 @@ const logout = () => async (dispatch) => {
   try {
     const response = await Axios.post("/api/users/logout", null, config);
     const errors = response.data.errors;
+    const status = response.status;
 
-    if (!isEmpty(errors)) {
-      errors.forEach((error) => dispatch(setAlert(`${error}`, "error")));
+    if (status === 401) {
+      await localLogout();
     } else {
-      dispatch(setAlert("Successfully Logged Out", "success"));
-      dispatch({
-        type: LOGOUT,
-        payload: response.data,
-      });
+      if (!isEmpty(errors)) {
+        errors.forEach((error) => dispatch(setAlert(`${error}`, "error")));
+      } else {
+        dispatch(setAlert("Successfully Logged Out", "success"));
+        dispatch({
+          type: LOGOUT,
+          payload: response.data,
+        });
+      }
     }
   } catch (error) {
     dispatch(setAlert(`${error}`, "error"));
   }
 };
 
-// TODO Use this when we get 401 statuses from the API (i.e. when our login token has expired and stuff)
 const localLogout = () => async (dispatch) => {
   dispatch({
     type: LOGOUT,
