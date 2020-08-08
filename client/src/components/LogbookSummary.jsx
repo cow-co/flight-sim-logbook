@@ -1,11 +1,11 @@
-const { Component } = require("react");
+import React from "react";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import FlightIcon from "@material-ui/icons/Flight";
 import ListItemText from "@material-ui/core/ListItemText";
 import { Link } from "react-router-dom";
 
-class LogbookSummary extends Component {
+class LogbookSummary extends React.Component {
   constructor(props) {
     super(props);
   }

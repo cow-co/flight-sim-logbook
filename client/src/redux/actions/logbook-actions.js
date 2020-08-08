@@ -4,6 +4,7 @@ import { axiosConfig } from "../../helpers/axiosConfig";
 import { setAlert } from "./common-actions";
 import { isEmpty } from "../../helpers/utils";
 import { getUsernameFromToken } from "../../helpers/utils";
+import { localLogout } from "./user-actions";
 
 const getAllLogbooks = () => async (dispatch) => {
   const config = {

@@ -1,9 +1,12 @@
-const { Component } = require("react");
+import React from "react";
 import List from "@material-ui/core/List";
 import LogbookSummary from "../../components/LogbookSummary";
 import { getAllLogbooks } from "../../redux/actions/logbook-actions";
 
-class Logbooks extends Component {
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+
+class Logbooks extends React.Component {
   constructor(props) {
     super(props);
     this.props.getAllLogbooks();
@@ -13,7 +16,7 @@ class Logbooks extends Component {
     return (
       <List>
         {this.props.logbooks.forEach((logbook) => {
-          <LogbookSummary username={this.props.users.username} logbook={logbook} />;
+          return <LogbookSummary username={this.props.users.username} logbook={logbook} />;
         })}
       </List>
     );

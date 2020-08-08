@@ -1,6 +1,6 @@
-const { Component } = require("react");
+import React from "react";
 
-class Logbook extends Component {
+class Logbook extends React.Component {
   constructor(props) {
     super(props);
   }
