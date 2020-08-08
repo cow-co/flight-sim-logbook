@@ -6,7 +6,7 @@ import Frontpage from "./pages/Frontpage";
 import { BrowserRouter, Route } from "react-router-dom";
 import AlertBar from "./components/common/AlertBar";
 import Login from "./pages/users/Login";
-import Login from "./pages/logbooks/Logbooks";
+import Logbooks from "./pages/logbooks/Logbooks";
 import RegisterUser from "./pages/users/RegisterUser";
 
 const theme = createMuiTheme({
