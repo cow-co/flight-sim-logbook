@@ -13,13 +13,13 @@ class LogbookSummary extends Component {
   render() {
     return (
       <ListItem button>
-        <Link to={`/logbooks/${this.props.username}/${this.props.aircraftName}`}>
+        <Link to={`/logbooks/${this.props.username}/${this.props.logbook.aircraftName}`}>
           <ListItemIcon>
             <FlightIcon />
           </ListItemIcon>
           <ListItemText
-            primary={`${this.props.aircraftName}`}
-            secondary={`Hours: ${this.props.totalHours}; Kills: ${this.props.kills}`}
+            primary={`${this.props.logbook.aircraftName}`}
+            secondary={`Hours: ${this.props.logbook.totalHours}; Kills: ${this.props.logbook.a2aKills}`}
           />
         </Link>
       </ListItem>
