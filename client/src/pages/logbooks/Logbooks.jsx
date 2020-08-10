@@ -5,20 +5,51 @@ import { getAllLogbooks } from "../../redux/actions/logbook-actions";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { ListItem } from "@material-ui/core";
+import Modal from "@material-ui/core/Modal";
 
 class Logbooks extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      modalOpen: false,
+    };
     this.props.getAllLogbooks();
+    this.onAddClick = this.onAddClick.bind(this);
+    this.modalClose = this.modalClose.bind(this);
   }
+
+  // TODO Open the modal in here
+  onAddClick() {
+    this.setState({
+      modalOpen: true,
+    });
+  }
+
+  modalClose() {
+    this.setState({
+      modalOpen: false,
+    });
+  }
+
+  // TODO Method for sending off the Redux request to create a logbook
+
   render() {
-    // TODO Populate the list
+    // TODO Add a modal panel for creating a logbook
     return (
-      <List>
-        {this.props.logbooks.forEach((logbook) => {
-          return <LogbookSummary username={this.props.users.username} logbook={logbook} />;
-        })}
-      </List>
+      <div>
+        <Modal open={this.state.modalOpen} onClose={this.props.modalClose}>
+          MODAL
+        </Modal>
+        <List>
+          {this.props.logbooks.forEach((logbook) => {
+            return <LogbookSummary username={this.props.users.username} logbook={logbook} />;
+          })}
+          <ListItem button onClick={this.onAddClick}>
+            Create a Logbook
+          </ListItem>
+        </List>
+      </div>
     );
   }
 }
