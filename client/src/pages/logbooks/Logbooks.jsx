@@ -35,16 +35,22 @@ class Logbooks extends React.Component {
   // TODO Method for sending off the Redux request to create a logbook
 
   render() {
-    // TODO Add a modal panel for creating a logbook
+    // TODO Fill out modal panel for creating a logbook
+    let logbookList;
+
+    if (this.props.logbooks.length > 0) {
+      logbookList = this.props.logbooks.forEach((logbook) => {
+        return <LogbookSummary username={this.props.users.username} logbook={logbook} />;
+      });
+    }
+
     return (
       <div>
         <Modal open={this.state.modalOpen} onClose={this.props.modalClose}>
           MODAL
         </Modal>
         <List>
-          {this.props.logbooks.forEach((logbook) => {
-            return <LogbookSummary username={this.props.users.username} logbook={logbook} />;
-          })}
+          {logbookList}
           <ListItem button onClick={this.onAddClick}>
             Create a Logbook
           </ListItem>
