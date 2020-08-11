@@ -46,9 +46,6 @@ class Logbooks extends React.Component {
 
     return (
       <div>
-        <Modal open={this.state.modalOpen} onClose={this.props.modalClose}>
-          MODAL
-        </Modal>
         <List>
           {logbookList}
           <ListItem button onClick={this.onAddClick}>
