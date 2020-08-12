@@ -1,5 +1,5 @@
-import { REGISTER, LOGIN, CHECK_LOGIN_STATUS, LOGOUT } from "../actions/action-types";
-import { isEmpty, getUsernameFromToken } from "../../helpers/utils";
+import { REGISTER, LOGIN, CHECK_LOGIN_STATUS, LOGOUT } from "../../common/redux/action-types";
+import { isEmpty, getUsernameFromToken } from "../../common/helpers/utils";
 
 const INITIAL_STATE = {
   username: "",

@@ -6,8 +6,8 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import "./HeaderBar.css";
 import { Link } from "react-router-dom";
-import { isEmpty, isLoggedIn } from "../../helpers/utils";
-import { logout, checkLoginStatus } from "../../redux/actions/user-actions";
+import { isEmpty, isLoggedIn } from "../helpers/utils";
+import { logout, checkLoginStatus } from "../../users/redux/user-actions";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";

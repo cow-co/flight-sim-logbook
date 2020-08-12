@@ -1,7 +1,7 @@
 import React from "react";
 import List from "@material-ui/core/List";
-import LogbookSummary from "../../components/LogbookSummary";
-import { getAllLogbooks } from "../../redux/actions/logbook-actions";
+import LogbookSummary from "../components/LogbookSummary";
+import { getAllLogbooks } from "../redux/logbook-actions";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";

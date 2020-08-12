@@ -1,5 +1,11 @@
-import { CREATE_LOGBOOK, GET_LOGBOOKS, GET_LOGBOOK, DELETE_LOGBOOK, ADD_MISSION } from "../actions/action-types";
-import { isEmpty, getUsernameFromToken } from "../../helpers/utils";
+import {
+  CREATE_LOGBOOK,
+  GET_LOGBOOKS,
+  GET_LOGBOOK,
+  DELETE_LOGBOOK,
+  ADD_MISSION,
+} from "../../common/redux/action-types";
+import { isEmpty, getUsernameFromToken } from "../../common/helpers/utils";
 
 const INITIAL_STATE = {
   logbooks: [],
