@@ -1,4 +1,4 @@
-import { CREATE_USER, LOGIN, CHECK_LOGIN_STATUS, REGISTER, LOGOUT } from "../../common/redux/action-types";
+import { LOGIN, CHECK_LOGIN_STATUS, REGISTER, LOGOUT } from "../../common/redux/action-types";
 import Axios from "axios";
 import { axiosConfig } from "../../common/helpers/axiosConfig";
 import { setAlert } from "../../common/redux/common-actions";
