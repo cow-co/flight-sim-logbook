@@ -56,7 +56,7 @@ router.delete("/delete", authenticate, isVerified, async (req, res) => {
 });
 
 router.get("/:username", async (req, res) => {
-  let responseJSON = { logbooks: [], errors: [] };
+  let responseJSON = { logbooks: [], message: "", errors: [] };
   let returnStatus = statusCodes.SUCCESS;
   const username = req.params.username;
   const user = await userMethods.getUserByName(username);

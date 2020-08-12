@@ -6,6 +6,13 @@ const findAircraftByName = async (aircraftName) => {
   return aircraft;
 };
 
+const getAllAircraft = async () => {
+  let aircraft = [];
+  aircraft = await Aircraft.find();
+  return aircraft;
+};
+
 module.exports = {
   findAircraftByName,
+  getAllAircraft,
 };

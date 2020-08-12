@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const users = require("./routes/api/users");
 const logbooks = require("./routes/api/logbooks");
+const aircraft = require("./routes/api/aircraft");
 const shutdown = require("http-shutdown");
 const swaggerUI = require("swagger-ui-express");
 const YAML = require("yamljs");
@@ -31,6 +32,7 @@ app.use("/api-docs/users", swaggerUI.serve, swaggerUI.setup(swaggerDocUsers));
 app.use("/api-docs/logbooks", swaggerUI.serve, swaggerUI.setup(swaggerDocLogbooks));
 app.use("/api/users", users);
 app.use("/api/logbooks", logbooks);
+app.use("/api/aircraft", aircraft);
 
 const port = process.env.PORT || 5000;
 let server = app.listen(port, async () => {
