@@ -1,12 +1,11 @@
 import React from "react";
 import List from "@material-ui/core/List";
 import LogbookSummary from "../components/LogbookSummary";
+import LogbookSummary from "../components/NewLogbook";
 import { getAllLogbooks } from "../redux/logbook-actions";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { ListItem } from "@material-ui/core";
-import Modal from "@material-ui/core/Modal";
 
 class Logbooks extends React.Component {
   constructor(props) {
@@ -14,28 +13,10 @@ class Logbooks extends React.Component {
     this.state = {
       modalOpen: false,
     };
-    this.props.getAllLogbooks();
-    this.onAddClick = this.onAddClick.bind(this);
-    this.modalClose = this.modalClose.bind(this);
+    await this.props.getAllLogbooks();
   }
-
-  // TODO Open the modal in here
-  onAddClick() {
-    this.setState({
-      modalOpen: true,
-    });
-  }
-
-  modalClose() {
-    this.setState({
-      modalOpen: false,
-    });
-  }
-
-  // TODO Method for sending off the Redux request to create a logbook
 
   render() {
-    // TODO Fill out modal panel for creating a logbook
     let logbookList;
 
     if (this.props.logbooks.length > 0) {
@@ -48,9 +29,7 @@ class Logbooks extends React.Component {
       <div>
         <List>
           {logbookList}
-          <ListItem button onClick={this.onAddClick}>
-            Create a Logbook
-          </ListItem>
+          <NewLogbook />
         </List>
       </div>
     );
