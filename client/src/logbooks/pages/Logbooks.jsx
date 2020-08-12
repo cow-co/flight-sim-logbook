@@ -1,7 +1,7 @@
 import React from "react";
 import List from "@material-ui/core/List";
 import LogbookSummary from "../components/LogbookSummary";
-import LogbookSummary from "../components/NewLogbook";
+import NewLogbook from "../components/NewLogbook";
 import { getAllLogbooks } from "../redux/logbook-actions";
 
 import { connect } from "react-redux";
