@@ -9,7 +9,7 @@ const aircraftReducer = (currentState = INITIAL_STATE, action) => {
     case GET_ALL_AIRCRAFT:
       return {
         ...currentState,
-        aircraft: action.payload.aircraft,
+        aircraft: action.payload,
       };
     default:
       return currentState;
