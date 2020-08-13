@@ -5,12 +5,11 @@ const INITIAL_STATE = {
 };
 
 const aircraftReducer = (currentState = INITIAL_STATE, action) => {
-  console.log(action.payload);
   switch (action.type) {
     case GET_ALL_AIRCRAFT:
       return {
         ...currentState,
-        aircraft: action.payload,
+        aircraft: action.payload.aircraft,
       };
     default:
       return currentState;
