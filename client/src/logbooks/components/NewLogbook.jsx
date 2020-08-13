@@ -22,7 +22,7 @@ class NewLogbook extends React.Component {
 
   async componentDidMount() {
     await this.props.getAllAircraft();
-    this.setState({ ...this.state, selectedAircraft: this.props.aircraft[0] });
+    this.setState({ ...this.state, selectedAircraft: this.props.aircraft.aircraftList[0] });
   }
 
   // TODO Send off create-logbook request when plus button is clicked
