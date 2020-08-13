@@ -12,10 +12,16 @@ import PropTypes from "prop-types";
 class NewLogbook extends React.Component {
   constructor(props) {
     super(props);
-		await this.props.getAllAircraft();
-		this.state = {
-			selectedAircraft: this.props.aircraft[0],
-		};
+    this.state = {
+      selectedAircraft: {
+        name: "",
+      },
+    };
+  }
+
+  async componentDidMount() {
+    await this.props.getAllAircraft();
+    this.setState({ ...this.state, selectedAircraft: this.props.aircraft[0] });
   }
 
   // TODO Send off create-logbook request when plus button is clicked

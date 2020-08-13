@@ -10,9 +10,9 @@ import PropTypes from "prop-types";
 class Logbooks extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      modalOpen: false,
-    };
+  }
+
+  async componentDidMount() {
     await this.props.getAllLogbooks();
   }
 
