@@ -28,6 +28,7 @@ class NewLogbook extends React.Component {
   // TODO Send off create-logbook request when plus button is clicked
   render() {
     let dropdown = <Select value=""></Select>;
+    console.log(this.props.aircraft);
 
     if (!isEmpty(this.props.aircraft) && this.props.aircraft.length > 0) {
       dropdown = (
