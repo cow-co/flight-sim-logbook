@@ -7,10 +7,12 @@ const INITIAL_STATE = {
 const aircraftReducer = (currentState = INITIAL_STATE, action) => {
   switch (action.type) {
     case GET_ALL_AIRCRAFT:
-      return {
+      const newState = {
         ...currentState,
         aircraft: action.payload.aircraft,
       };
+      console.log(newState);
+      return newState;
     default:
       return currentState;
   }
