@@ -10,7 +10,7 @@ router.get("/all", async (req, res) => {
   let returnStatus = statusCodes.SUCCESS;
 
   try {
-    responseJSON = await aircraftMethods.getAllAircraft();
+    responseJSON.aircraft = await aircraftMethods.getAllAircraft();
   } catch (error) {
     console.error(error.message);
     returnStatus = statusCodes.SERVER_ERROR;
