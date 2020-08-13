@@ -5,6 +5,7 @@ import AddIcon from "@material-ui/icons/Add";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import { getAllAircraft } from "../../aircraft/redux/aircraft-actions";
+import { isEmpty } from "../../common/helpers/utils";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -26,13 +27,20 @@ class NewLogbook extends React.Component {
 
   // TODO Send off create-logbook request when plus button is clicked
   render() {
-    return (
-      <ListItem button>
+    let dropdown = <Select value=""></Select>;
+
+    if (!isEmpty(this.props.aircraft) && this.props.aircraft.length > 0) {
+      dropdown = (
         <Select value={this.state.selectedAircraft.name}>
           {this.props.aircraft.forEach((aircraft) => {
             return <MenuItem value={aircraft.name}>{aircraft.name}</MenuItem>;
           })}
         </Select>
+      );
+    }
+    return (
+      <ListItem button>
+        {dropdown}
         <ListItemIcon>
           <AddIcon />
         </ListItemIcon>
