@@ -40,7 +40,7 @@ class NewLogbook extends React.Component {
     } else {
       dropdown = <Select value=""></Select>;
     }
-    console.log(`dropdown: ${dropdown}`);
+    console.log(`dropdown: ${JSON.stringify(dropdown)}`);
     return (
       <ListItem button>
         {dropdown}
