@@ -9,25 +9,25 @@ import { isEmpty } from "../../common/helpers/utils";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import "./NewLogbook.css";
 
 class NewLogbook extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       selectedAircraft: {
-        name: "",
+        name: "Aircraft",
       },
     };
   }
 
   async componentDidMount() {
     await this.props.getAllAircraft();
-    this.setState({ ...this.state, selectedAircraft: this.props.aircraft.aircraftList[0] });
   }
 
   // TODO Send off create-logbook request when plus button is clicked
   render() {
-    var dropdown;
+    let dropdown;
 
     if (!isEmpty(this.props.aircraft.aircraftList) && this.props.aircraft.aircraftList.length > 0) {
       dropdown = (
@@ -40,7 +40,7 @@ class NewLogbook extends React.Component {
     } else {
       dropdown = <Select value=""></Select>;
     }
-    console.log(`dropdown: ${JSON.stringify(dropdown)}`);
+
     return (
       <ListItem button>
         {dropdown}
