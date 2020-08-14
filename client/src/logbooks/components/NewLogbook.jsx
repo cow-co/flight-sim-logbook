@@ -3,6 +3,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import AddIcon from "@material-ui/icons/Add";
 import Select from "@material-ui/core/Select";
+import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import { getAllAircraft } from "../../aircraft/redux/aircraft-actions";
 import { isEmpty } from "../../common/helpers/utils";
@@ -32,8 +33,12 @@ class NewLogbook extends React.Component {
     if (!isEmpty(this.props.aircraft.aircraftList) && this.props.aircraft.aircraftList.length > 0) {
       dropdown = (
         <Select value={this.state.selectedAircraft.name}>
-          {this.props.aircraft.aircraftList.forEach((aircraft) => {
-            return <MenuItem value={aircraft.name}>{aircraft.name}</MenuItem>;
+          {this.props.aircraft.aircraftList.map((aircraft, index) => {
+            return (
+              <MenuItem key={index} value={aircraft.name}>
+                {aircraft.name}
+              </MenuItem>
+            );
           })}
         </Select>
       );
@@ -43,6 +48,7 @@ class NewLogbook extends React.Component {
 
     return (
       <ListItem button>
+        <InputLabel>Aircraft</InputLabel>
         {dropdown}
         <ListItemIcon>
           <AddIcon />
