@@ -5,7 +5,7 @@ import { TextField, Button, Grid } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 
 import { connect } from "react-redux";
-import { registerUser } from "../../redux/actions/user-actions";
+import { registerUser } from "../redux/user-actions";
 import PropTypes from "prop-types";
 import "./RegisterUser.css";
 

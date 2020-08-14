@@ -1,12 +1,13 @@
 import React from "react";
 import "./App.css";
-import HeaderBar from "./components/common/HeaderBar";
+import HeaderBar from "./common/components/HeaderBar";
 import { ThemeProvider, createMuiTheme, CssBaseline, Container } from "@material-ui/core";
-import Frontpage from "./pages/Frontpage";
+import Frontpage from "./common/pages/Frontpage";
 import { BrowserRouter, Route } from "react-router-dom";
-import AlertBar from "./components/common/AlertBar";
-import Login from "./pages/users/Login";
-import RegisterUser from "./pages/users/RegisterUser";
+import AlertBar from "./common/components/AlertBar";
+import Login from "./users/pages/Login";
+import Logbooks from "./logbooks/pages/Logbooks";
+import RegisterUser from "./users/pages/RegisterUser";
 
 const theme = createMuiTheme({
   palette: {
@@ -48,7 +49,8 @@ function App() {
           <AlertBar />
           <Route path="/" exact component={Frontpage} />
           <Route path="/users/login" exact component={Login} />
-          <Route path="/users/register" component={RegisterUser} />
+          <Route path="/users/register" exact component={RegisterUser} />
+          <Route path="/logbooks/all" exact component={Logbooks} />
         </Container>
       </BrowserRouter>
     </ThemeProvider>

@@ -6,8 +6,8 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import "./HeaderBar.css";
 import { Link } from "react-router-dom";
-import { isEmpty, isLoggedIn } from "../../helpers/utils";
-import { logout } from "../../redux/actions/user-actions";
+import { isLoggedIn } from "../helpers/utils";
+import { logout, checkLoginStatus } from "../../users/redux/user-actions";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -16,6 +16,10 @@ class Header extends React.Component {
   constructor(props) {
     super(props);
     this.sendLogout = this.sendLogout.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.checkLoginStatus();
   }
 
   sendLogout = async (event) => {
@@ -38,9 +42,14 @@ class Header extends React.Component {
     // TODO update this as we implement more functionality
     if (this.props.users.isLoggedIn) {
       loginDependentElements = (
-        <Button color="inherit" onClick={this.sendLogout}>
-          Logout {this.props.users.username}
-        </Button>
+        <div>
+          <Button color="inherit" onClick={this.sendLogout}>
+            Logout {this.props.users.username}
+          </Button>
+          <Button color="inherit">
+            <Link to="/logbooks/all">Logbooks</Link>
+          </Button>
+        </div>
       );
     }
 
@@ -59,6 +68,7 @@ class Header extends React.Component {
 
 Header.propTypes = {
   logout: PropTypes.func.isRequired,
+  checkLoginStatus: PropTypes.func.isRequired,
   users: PropTypes.object.isRequired,
 };
 
@@ -66,4 +76,4 @@ const mapStateToProps = (state) => ({
   users: state.users,
 });
 
-export default connect(mapStateToProps, { logout })(Header);
+export default connect(mapStateToProps, { logout, checkLoginStatus })(Header);
