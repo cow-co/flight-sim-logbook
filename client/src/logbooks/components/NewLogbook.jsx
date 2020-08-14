@@ -30,7 +30,6 @@ class NewLogbook extends React.Component {
     var dropdown;
 
     if (!isEmpty(this.props.aircraft.aircraftList) && this.props.aircraft.aircraftList.length > 0) {
-      console.log("non-empty list");
       dropdown = (
         <Select value={this.state.selectedAircraft.name}>
           {this.props.aircraft.aircraftList.forEach((aircraft) => {
@@ -39,9 +38,9 @@ class NewLogbook extends React.Component {
         </Select>
       );
     } else {
-      console.log("Empty aircraft list");
       dropdown = <Select value=""></Select>;
     }
+    console.log(`dropdown: ${dropdown}`);
     return (
       <ListItem button>
         {dropdown}
