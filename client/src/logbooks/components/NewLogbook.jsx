@@ -7,6 +7,8 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import { getAllAircraft } from "../../aircraft/redux/aircraft-actions";
 import { isEmpty } from "../../common/helpers/utils";
+import Grid from "@material-ui/core/Grid";
+import FormControl from "@material-ui/core/FormControl";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -48,11 +50,19 @@ class NewLogbook extends React.Component {
 
     return (
       <ListItem button>
-        <InputLabel>Aircraft</InputLabel>
-        {dropdown}
-        <ListItemIcon>
-          <AddIcon />
-        </ListItemIcon>
+        <Grid container spacing={3}>
+          <Grid item xs={6}>
+            <FormControl>
+              <InputLabel>Aircraft</InputLabel>
+              {dropdown}
+            </FormControl>
+          </Grid>
+          <Grid item xs={6}>
+            <ListItemIcon>
+              <AddIcon />
+            </ListItemIcon>
+          </Grid>
+        </Grid>
       </ListItem>
     );
   }
