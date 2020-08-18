@@ -27,11 +27,10 @@ class NewLogbook extends React.Component {
 
   async componentDidMount() {
     await this.props.getAllAircraft();
-    this.setState({ selectedAircraft: this.props.aircraft.aircraftList[0] });
+    this.setState({ selectedAircraft: this.props.aircraft.aircraftList[0].name });
   }
 
   handleChange(event) {
-    console.log(event.target.value);
     this.setState({ selectedAircraft: event.target.value });
   }
 
@@ -41,7 +40,7 @@ class NewLogbook extends React.Component {
 
     if (!isEmpty(this.props.aircraft.aircraftList) && this.props.aircraft.aircraftList.length > 0) {
       dropdown = (
-        <Select value={this.state.selectedAircraft.name} onChange={this.handleChange} labelId="aircraft-label">
+        <Select value={this.state.selectedAircraft} onChange={this.handleChange} labelId="aircraft-label">
           {this.props.aircraft.aircraftList.map((aircraft, index) => {
             return (
               <MenuItem key={index} value={aircraft.name}>
@@ -53,7 +52,7 @@ class NewLogbook extends React.Component {
       );
     } else {
       dropdown = (
-        <Select value={this.state.selectedAircraft.name} onChange={this.handleChange} labelId="aircraft-label"></Select>
+        <Select value={this.state.selectedAircraft} onChange={this.handleChange} labelId="aircraft-label"></Select>
       );
     }
 
