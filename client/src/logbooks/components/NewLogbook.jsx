@@ -22,10 +22,15 @@ class NewLogbook extends React.Component {
         name: "Aircraft",
       },
     };
+    this.handleChange = this.handleChange.bind(this);
   }
 
   async componentDidMount() {
     await this.props.getAllAircraft();
+  }
+
+  handleChange(event) {
+    this.setState({ selectedAircraft: event.target.value });
   }
 
   // TODO Send off create-logbook request when plus button is clicked
@@ -34,7 +39,7 @@ class NewLogbook extends React.Component {
 
     if (!isEmpty(this.props.aircraft.aircraftList) && this.props.aircraft.aircraftList.length > 0) {
       dropdown = (
-        <Select value={this.state.selectedAircraft.name}>
+        <Select value={this.state.selectedAircraft.name} onChange={this.handleChange} labelId="aircraft-label">
           {this.props.aircraft.aircraftList.map((aircraft, index) => {
             return (
               <MenuItem key={index} value={aircraft.name}>
@@ -53,7 +58,7 @@ class NewLogbook extends React.Component {
         <Grid container spacing={3}>
           <Grid item xs={6}>
             <FormControl>
-              <InputLabel>Aircraft</InputLabel>
+              <InputLabel id="aircraft-label">Aircraft</InputLabel>
               {dropdown}
             </FormControl>
           </Grid>
