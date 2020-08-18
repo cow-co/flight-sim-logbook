@@ -27,6 +27,7 @@ class NewLogbook extends React.Component {
 
   async componentDidMount() {
     await this.props.getAllAircraft();
+    this.setState({ selectedAircraft: this.props.aircraft.aircraftList[0] });
   }
 
   handleChange(event) {
@@ -50,7 +51,9 @@ class NewLogbook extends React.Component {
         </Select>
       );
     } else {
-      dropdown = <Select value=""></Select>;
+      dropdown = (
+        <Select value={this.state.selectedAircraft.name} onChange={this.handleChange} labelId="aircraft-label"></Select>
+      );
     }
 
     return (
