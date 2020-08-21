@@ -67,10 +67,8 @@ class NewLogbook extends React.Component {
             </FormControl>
           </Grid>
           <Grid item xs={6}>
-            <Button>
-              <ListItemIcon>
-                <AddIcon />
-              </ListItemIcon>
+            <Button color="primary" variant="contained" startIcon={<AddIcon />}>
+              Create
             </Button>
           </Grid>
         </Grid>

@@ -2,3 +2,8 @@
   background: rgb(30, 30, 30);
   margin-top: 15px;
 }
+
+.title {
+  flex-grow: 1;
+  text-align: center;
+}
