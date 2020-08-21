@@ -18,6 +18,7 @@ router.post("/create", authenticate, isVerified, async (req, res) => {
       responseJSON.errors = newLogbook.errors;
     } else {
       returnStatus = statusCodes.CREATED;
+      // TODO Return the new logbook in the same format (cleansed to remove irrelevant fields) as from GET-logbooks
       responseJSON.logbook = newLogbook.logbook;
     }
   } catch (error) {

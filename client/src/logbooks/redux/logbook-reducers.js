@@ -1,4 +1,4 @@
-import { GET_LOGBOOKS } from "../../common/redux/action-types";
+import { GET_LOGBOOKS, CREATE_LOGBOOK } from "../../common/redux/action-types";
 
 const INITIAL_STATE = {
   logbooks: [],
@@ -11,6 +11,11 @@ const logbooksReducer = (currentState = INITIAL_STATE, action) => {
       return {
         ...currentState,
         logbooks: action.payload.logbooks,
+      };
+    case CREATE_LOGBOOK:
+      return {
+        ...currentState,
+        logbooks: currentState.logbooks.push(action.payload.logbook),
       };
     default:
       return currentState;
