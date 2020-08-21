@@ -7,10 +7,13 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import { getAllAircraft } from "../../aircraft/redux/aircraft-actions";
 import { isEmpty } from "../../common/helpers/utils";
+import Grid from "@material-ui/core/Grid";
+import FormControl from "@material-ui/core/FormControl";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import "./NewLogbook.css";
+import { Button } from "@material-ui/core";
 
 class NewLogbook extends React.Component {
   constructor(props) {
@@ -20,10 +23,16 @@ class NewLogbook extends React.Component {
         name: "Aircraft",
       },
     };
+    this.handleChange = this.handleChange.bind(this);
   }
 
   async componentDidMount() {
     await this.props.getAllAircraft();
+    this.setState({ selectedAircraft: this.props.aircraft.aircraftList[0].name });
+  }
+
+  handleChange(event) {
+    this.setState({ selectedAircraft: event.target.value });
   }
 
   // TODO Send off create-logbook request when plus button is clicked
@@ -32,7 +41,7 @@ class NewLogbook extends React.Component {
 
     if (!isEmpty(this.props.aircraft.aircraftList) && this.props.aircraft.aircraftList.length > 0) {
       dropdown = (
-        <Select value={this.state.selectedAircraft.name}>
+        <Select value={this.state.selectedAircraft} onChange={this.handleChange} labelId="aircraft-label">
           {this.props.aircraft.aircraftList.map((aircraft, index) => {
             return (
               <MenuItem key={index} value={aircraft.name}>
@@ -43,16 +52,26 @@ class NewLogbook extends React.Component {
         </Select>
       );
     } else {
-      dropdown = <Select value=""></Select>;
+      dropdown = (
+        <Select value={this.state.selectedAircraft} onChange={this.handleChange} labelId="aircraft-label"></Select>
+      );
     }
 
     return (
-      <ListItem button>
-        <InputLabel>Aircraft</InputLabel>
-        {dropdown}
-        <ListItemIcon>
-          <AddIcon />
-        </ListItemIcon>
+      <ListItem>
+        <Grid container spacing={3}>
+          <Grid item xs={6}>
+            <FormControl>
+              <InputLabel id="aircraft-label">Aircraft</InputLabel>
+              {dropdown}
+            </FormControl>
+          </Grid>
+          <Grid item xs={6}>
+            <Button color="primary" variant="contained" startIcon={<AddIcon />}>
+              Create
+            </Button>
+          </Grid>
+        </Grid>
       </ListItem>
     );
   }
