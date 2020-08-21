@@ -13,6 +13,7 @@ import FormControl from "@material-ui/core/FormControl";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import "./NewLogbook.css";
+import { Button } from "@material-ui/core";
 
 class NewLogbook extends React.Component {
   constructor(props) {
@@ -57,7 +58,7 @@ class NewLogbook extends React.Component {
     }
 
     return (
-      <ListItem button>
+      <ListItem>
         <Grid container spacing={3}>
           <Grid item xs={6}>
             <FormControl>
@@ -66,9 +67,11 @@ class NewLogbook extends React.Component {
             </FormControl>
           </Grid>
           <Grid item xs={6}>
-            <ListItemIcon>
-              <AddIcon />
-            </ListItemIcon>
+            <Button>
+              <ListItemIcon>
+                <AddIcon />
+              </ListItemIcon>
+            </Button>
           </Grid>
         </Grid>
       </ListItem>

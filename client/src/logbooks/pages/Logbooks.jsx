@@ -3,9 +3,12 @@ import List from "@material-ui/core/List";
 import LogbookSummary from "../components/LogbookSummary";
 import NewLogbook from "../components/NewLogbook";
 import { getAllLogbooks } from "../redux/logbook-actions";
+import Typography from "@material-ui/core/Typography";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+
+import "./Logbooks.css";
 
 class Logbooks extends React.Component {
   constructor(props) {
@@ -27,6 +30,9 @@ class Logbooks extends React.Component {
 
     return (
       <div>
+        <Typography variant="h4" className="title">
+          Logbooks
+        </Typography>
         <List>
           {logbookList}
           <NewLogbook />
