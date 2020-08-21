@@ -122,17 +122,21 @@ const deleteLogbook = async (aircraftName, user) => {
   return response;
 };
 
-const getAllLogbooks = async (user) => {
+const getAllLogbooks = (user) => {
   let response = { logbooks: [] };
   user.logbooks.forEach((logbook) => {
-    response.logbooks.push({
-      aircraft: logbook.aircraft,
-      totalHours: logbook.totalHours,
-      a2aKills: logbook.a2aKills,
-    });
+    response.logbooks.push(summariseLogbook(logbook));
   });
 
   return response;
+};
+
+const summariseLogbook = (logbook) => {
+  return {
+    aircraft: logbook.aircraft,
+    totalHours: logbook.totalHours,
+    a2aKills: logbook.a2aKills,
+  };
 };
 
 const getLogbook = async (aircraftName, user) => {
@@ -213,6 +217,7 @@ module.exports = {
   createLogbook,
   deleteLogbook,
   getAllLogbooks,
+  summariseLogbook,
   getLogbook,
   addMission,
 };

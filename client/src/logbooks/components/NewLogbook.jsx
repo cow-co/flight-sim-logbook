@@ -6,6 +6,7 @@ import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import { getAllAircraft } from "../../aircraft/redux/aircraft-actions";
+import { createLogbook } from "../redux/logbook-actions";
 import { isEmpty } from "../../common/helpers/utils";
 import Grid from "@material-ui/core/Grid";
 import FormControl from "@material-ui/core/FormControl";
@@ -67,7 +68,7 @@ class NewLogbook extends React.Component {
             </FormControl>
           </Grid>
           <Grid item xs={6}>
-            <Button color="primary" variant="contained" startIcon={<AddIcon />}>
+            <Button color="primary" variant="contained" startIcon={<AddIcon />} onClick={await createLogbook({aircraftName:this.state.selectedAircraft})}>
               Create
             </Button>
           </Grid>
@@ -79,6 +80,7 @@ class NewLogbook extends React.Component {
 
 NewLogbook.propTypes = {
   getAllAircraft: PropTypes.func.isRequired,
+  createLogbook: PropTypes.func.isRequired,
   aircraft: PropTypes.object.isRequired,
 };
 
@@ -86,4 +88,4 @@ const mapStateToProps = (state) => ({
   aircraft: state.aircraft,
 });
 
-export default connect(mapStateToProps, { getAllAircraft })(NewLogbook);
+export default connect(mapStateToProps, { getAllAircraft, createLogbook })(NewLogbook);
