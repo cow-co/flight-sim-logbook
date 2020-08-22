@@ -1,9 +1,8 @@
 import React from "react";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import FlightIcon from "@material-ui/icons/Flight";
 import ListItemText from "@material-ui/core/ListItemText";
 import { Link } from "react-router-dom";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 
 class LogbookSummary extends React.Component {
   constructor(props) {
@@ -14,13 +13,24 @@ class LogbookSummary extends React.Component {
     return (
       <ListItem button>
         <Link to={`/logbooks/${this.props.username}/${this.props.logbook.aircraftName}`}>
-          <ListItemIcon>
-            <FlightIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary={`${this.props.logbook.aircraftName}`}
-            secondary={`Hours: ${this.props.logbook.totalHours}; Kills: ${this.props.logbook.a2aKills}`}
-          />
+          <Grid container spacing={3}>
+            <Grid item xs={6}>
+              <ListItemText
+                primary={`${this.props.logbook.aircraft}`}
+                secondary={`Hours: ${this.props.logbook.totalHours}; Kills: ${this.props.logbook.a2aKills}`}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <Button
+                color="primary"
+                variant="contained"
+                startIcon={<DeleteForeverIcon />}
+                onClick={this.sendDeleteRequest}
+              >
+                Create
+              </Button>
+            </Grid>
+          </Grid>
         </Link>
       </ListItem>
     );

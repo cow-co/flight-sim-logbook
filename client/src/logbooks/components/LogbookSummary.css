@@ -1,0 +1,17 @@
+label.MuiFormControlLabel-root {
+  margin-top: 20px;
+  margin-left: 0px;
+}
+
+div.MuiFormControl-root {
+  margin: 10px;
+  min-width: 120px;
+  vertical-align: baseline;
+}
+
+.MuiGrid-grid-xs-6 {
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
