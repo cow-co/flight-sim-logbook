@@ -18,7 +18,7 @@ router.post("/create", authenticate, isVerified, async (req, res) => {
       responseJSON.errors = newLogbook.errors;
     } else {
       returnStatus = statusCodes.CREATED;
-      responseJSON.logbook = newLogbook.logbook;
+      responseJSON.logbook = logbookMethods.summariseLogbook(newLogbook.logbook);
     }
   } catch (error) {
     console.error(error.message);

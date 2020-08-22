@@ -21,9 +21,10 @@ class Logbooks extends React.Component {
 
   render() {
     let logbookList;
+    console.debug(this.props.logbooks);
 
     if (this.props.logbooks.length > 0) {
-      logbookList = this.props.logbooks.forEach((logbook) => {
+      logbookList = this.props.logbooks.map((logbook) => {
         return <LogbookSummary username={this.props.users.username} logbook={logbook} />;
       });
     }
@@ -49,7 +50,7 @@ Logbooks.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  logbooks: state.logbooks,
+  logbooks: state.logbooks.logbooks,
   users: state.users,
 });
 

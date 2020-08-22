@@ -1,14 +1,15 @@
 import React from "react";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import AddIcon from "@material-ui/icons/Add";
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import { getAllAircraft } from "../../aircraft/redux/aircraft-actions";
+import { createLogbook } from "../redux/logbook-actions";
 import { isEmpty } from "../../common/helpers/utils";
 import Grid from "@material-ui/core/Grid";
 import FormControl from "@material-ui/core/FormControl";
+import ListItemText from "@material-ui/core/ListItemText";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -24,6 +25,7 @@ class NewLogbook extends React.Component {
       },
     };
     this.handleChange = this.handleChange.bind(this);
+    this.sendCreateRequest = this.sendCreateRequest.bind(this);
   }
 
   async componentDidMount() {
@@ -35,7 +37,12 @@ class NewLogbook extends React.Component {
     this.setState({ selectedAircraft: event.target.value });
   }
 
-  // TODO Send off create-logbook request when plus button is clicked
+  sendCreateRequest = async (event) => {
+    event.preventDefault();
+    console.debug(`Sending create request for ${this.state.selectedAircraft}`);
+    await this.props.createLogbook({ aircraftName: this.state.selectedAircraft });
+  };
+
   render() {
     let dropdown;
 
@@ -60,14 +67,17 @@ class NewLogbook extends React.Component {
     return (
       <ListItem>
         <Grid container spacing={3}>
-          <Grid item xs={6}>
+          <Grid item xs={4}>
+            <ListItemText primary="New Logbook:" />
+          </Grid>
+          <Grid item xs={4}>
             <FormControl>
               <InputLabel id="aircraft-label">Aircraft</InputLabel>
               {dropdown}
             </FormControl>
           </Grid>
-          <Grid item xs={6}>
-            <Button color="primary" variant="contained" startIcon={<AddIcon />}>
+          <Grid item xs={4}>
+            <Button color="primary" variant="contained" startIcon={<AddIcon />} onClick={this.sendCreateRequest}>
               Create
             </Button>
           </Grid>
@@ -79,6 +89,7 @@ class NewLogbook extends React.Component {
 
 NewLogbook.propTypes = {
   getAllAircraft: PropTypes.func.isRequired,
+  createLogbook: PropTypes.func.isRequired,
   aircraft: PropTypes.object.isRequired,
 };
 
@@ -86,4 +97,4 @@ const mapStateToProps = (state) => ({
   aircraft: state.aircraft,
 });
 
-export default connect(mapStateToProps, { getAllAircraft })(NewLogbook);
+export default connect(mapStateToProps, { getAllAircraft, createLogbook })(NewLogbook);
