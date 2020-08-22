@@ -90,7 +90,11 @@ const createLogbook = async (aircraftName, user) => {
 
       user.logbooks.push(createdLogbook);
       await user.save();
-      newLogbook.logbook = createdLogbook;
+      newLogbook.logbook = {
+        aircraft: createdLogbook.aircraft,
+        totalHours: 0,
+        a2aKills: 0,
+      };
     } catch (error) {
       console.warn(error);
       newLogbook.errors.push(error.message);

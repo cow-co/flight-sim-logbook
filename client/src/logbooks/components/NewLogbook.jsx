@@ -42,7 +42,6 @@ class NewLogbook extends React.Component {
     await this.props.createLogbook({ aircraftName: this.state.selectedAircraft });
   };
 
-  // TODO Send off create-logbook request when plus button is clicked
   render() {
     let dropdown;
 
