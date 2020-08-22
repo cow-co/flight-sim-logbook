@@ -30,7 +30,7 @@ class LogbookSummary extends React.Component {
               startIcon={<PageviewIcon />}
               to={`/logbooks/${this.props.username}/${this.props.logbook.aircraft}`}
             >
-              Create
+              View
             </Button>
           </Grid>
           <Grid item xs={4}>
@@ -40,7 +40,7 @@ class LogbookSummary extends React.Component {
               startIcon={<DeleteForeverIcon />}
               onClick={this.sendDeleteRequest}
             >
-              Create
+              Delete
             </Button>
           </Grid>
         </Grid>

@@ -66,13 +66,16 @@ class NewLogbook extends React.Component {
     return (
       <ListItem>
         <Grid container spacing={3}>
-          <Grid item xs={6}>
+          <Grid item xs={4}>
+            <ListItemText primary="New Logbook:" />
+          </Grid>
+          <Grid item xs={4}>
             <FormControl>
               <InputLabel id="aircraft-label">Aircraft</InputLabel>
               {dropdown}
             </FormControl>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={4}>
             <Button color="primary" variant="contained" startIcon={<AddIcon />} onClick={this.sendCreateRequest}>
               Create
             </Button>
