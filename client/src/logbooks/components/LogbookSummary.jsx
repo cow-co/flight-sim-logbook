@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import Grid from "@material-ui/core/Grid";
 import { Button } from "@material-ui/core";
+import "./LogbookSummary.css";
 
 class LogbookSummary extends React.Component {
   constructor(props) {
