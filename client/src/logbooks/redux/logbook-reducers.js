@@ -13,9 +13,11 @@ const logbooksReducer = (currentState = INITIAL_STATE, action) => {
         logbooks: action.payload.logbooks,
       };
     case CREATE_LOGBOOK:
+      let newLogbooksList = currentState.logbooks;
+      newLogbooksList.push(action.payload.logbook);
       return {
         ...currentState,
-        logbooks: currentState.logbooks.push(action.payload.logbook),
+        logbooks: newLogbooksList,
       };
     default:
       return currentState;

@@ -23,7 +23,7 @@ class Logbooks extends React.Component {
     let logbookList;
 
     if (this.props.logbooks.length > 0) {
-      logbookList = this.props.logbooks.forEach((logbook) => {
+      logbookList = this.props.logbooks.map((logbook) => {
         return <LogbookSummary username={this.props.users.username} logbook={logbook} />;
       });
     }
