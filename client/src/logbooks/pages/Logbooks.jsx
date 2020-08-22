@@ -49,7 +49,7 @@ Logbooks.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  logbooks: state.logbooks,
+  logbooks: state.logbooks.logbooks,
   users: state.users,
 });
 
