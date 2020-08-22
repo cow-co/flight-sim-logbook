@@ -1,6 +1,5 @@
 import React from "react";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import AddIcon from "@material-ui/icons/Add";
 import Select from "@material-ui/core/Select";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -38,6 +37,7 @@ class NewLogbook extends React.Component {
   }
 
   async sendCreateRequest(aircraftName) {
+    console.log(`Sending create request for ${aircraftName}`);
     await this.props.createLogbook({ aircraftName: aircraftName });
   }
 
