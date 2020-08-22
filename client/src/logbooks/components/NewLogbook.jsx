@@ -25,6 +25,7 @@ class NewLogbook extends React.Component {
       },
     };
     this.handleChange = this.handleChange.bind(this);
+    this.sendCreateRequest = this.sendCreateRequest.bind(this);
   }
 
   async componentDidMount() {
@@ -34,6 +35,10 @@ class NewLogbook extends React.Component {
 
   handleChange(event) {
     this.setState({ selectedAircraft: event.target.value });
+  }
+
+  async sendCreateRequest(aircraftName) {
+    await this.props.createLogbook({ aircraftName: aircraftName });
   }
 
   // TODO Send off create-logbook request when plus button is clicked
@@ -68,7 +73,12 @@ class NewLogbook extends React.Component {
             </FormControl>
           </Grid>
           <Grid item xs={6}>
-            <Button color="primary" variant="contained" startIcon={<AddIcon />} onClick={await createLogbook({aircraftName:this.state.selectedAircraft})}>
+            <Button
+              color="primary"
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={this.sendCreateRequest(this.state.selectedAircraft)}
+            >
               Create
             </Button>
           </Grid>
