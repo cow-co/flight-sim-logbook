@@ -21,10 +21,11 @@ class Logbooks extends React.Component {
 
   render() {
     let logbookList;
-    console.debug(this.props.logbooks);
 
     if (this.props.logbooks.length > 0) {
+      console.debug(this.props.logbooks);
       logbookList = this.props.logbooks.map((logbook) => {
+        console.log(logbook.aircraft);
         return <LogbookSummary username={this.props.users.username} logbook={logbook} />;
       });
     }
