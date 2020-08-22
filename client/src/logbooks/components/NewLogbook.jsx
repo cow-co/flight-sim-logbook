@@ -9,6 +9,7 @@ import { createLogbook } from "../redux/logbook-actions";
 import { isEmpty } from "../../common/helpers/utils";
 import Grid from "@material-ui/core/Grid";
 import FormControl from "@material-ui/core/FormControl";
+import ListItemText from "@material-ui/core/ListItemText";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
