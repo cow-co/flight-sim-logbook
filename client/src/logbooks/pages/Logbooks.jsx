@@ -21,7 +21,6 @@ class Logbooks extends React.Component {
 
   render() {
     let logbookList;
-    console.debug(this.props.logbooks);
 
     if (this.props.logbooks.length > 0) {
       logbookList = this.props.logbooks.map((logbook) => {

@@ -8,10 +8,3 @@ div.MuiFormControl-root {
   min-width: 120px;
   vertical-align: baseline;
 }
-
-.MuiGrid-grid-xs-6 {
-  justify-content: center;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
