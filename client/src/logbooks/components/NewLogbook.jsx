@@ -38,7 +38,7 @@ class NewLogbook extends React.Component {
 
   sendCreateRequest = async (event) => {
     event.preventDefault();
-    console.log(`Sending create request for ${aircraftName}`);
+    console.debug(`Sending create request for ${this.state.selectedAircraft}`);
     await this.props.createLogbook({ aircraftName: this.state.selectedAircraft });
   };
 
