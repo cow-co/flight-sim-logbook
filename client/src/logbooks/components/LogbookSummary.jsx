@@ -3,7 +3,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import { Link } from "react-router-dom";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-import PageViewIcon from "@material-ui/icons/PageView";
+import PageviewIcon from "@material-ui/icons/Pageview";
 import Grid from "@material-ui/core/Grid";
 import { Button } from "@material-ui/core";
 import "./LogbookSummary.css";
@@ -27,7 +27,7 @@ class LogbookSummary extends React.Component {
             <Button
               color="primary"
               variant="contained"
-              startIcon={<PageViewIcon />}
+              startIcon={<PageviewIcon />}
               to={`/logbooks/${this.props.username}/${this.props.logbook.aircraft}`}
             >
               Create
