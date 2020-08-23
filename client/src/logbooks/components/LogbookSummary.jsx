@@ -25,6 +25,7 @@ class LogbookSummary extends React.Component {
           </Grid>
           <Grid item xs={4}>
             <Button
+              component={Link}
               color="primary"
               variant="contained"
               startIcon={<PageviewIcon />}
