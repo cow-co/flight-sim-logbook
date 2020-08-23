@@ -153,10 +153,10 @@ const getLogbook = async (aircraftName, user) => {
   return response;
 };
 
-const addMission = async (missionDetails, user) => {
+const addMission = async (aircraft, missionDetails, user) => {
   let response = { logbook: null, errors: [] };
-  let logbook = getUserLogbookForAircraft(missionDetails.aircraft, user);
-  const aircraft = await findAircraftByName(missionDetails.aircraft);
+  let logbook = getUserLogbookForAircraft(aircraft, user);
+  const aircraftDetails = await findAircraftByName(aircraft);
 
   if (!isEmptyOrNull(logbook)) {
     logbook.totalHours += missionDetails.duration;
@@ -170,19 +170,19 @@ const addMission = async (missionDetails, user) => {
       logbook.bfmSorties++;
     }
 
-    if (missionDetails.bvr && aircraft.bvrCapable) {
+    if (missionDetails.bvr && aircraftDetails.bvrCapable) {
       logbook.bvrSorties++;
     }
 
-    if (missionDetails.sead && aircraft.agCapable) {
+    if (missionDetails.sead && aircraftDetails.agCapable) {
       logbook.seadSorties++;
     }
 
-    if (missionDetails.cas && aircraft.agCapable) {
+    if (missionDetails.cas && aircraftDetails.agCapable) {
       logbook.casSorties++;
     }
 
-    if (missionDetails.strike && aircraft.agCapable) {
+    if (missionDetails.strike && aircraftDetails.agCapable) {
       logbook.strikeSorties++;
     }
 
@@ -190,11 +190,11 @@ const addMission = async (missionDetails, user) => {
       logbook.packageSorties++;
     }
 
-    if (missionDetails.caseI && aircraft.carrierOpsCapable) {
+    if (missionDetails.caseI && aircraftDetails.carrierOpsCapable) {
       logbook.caseISorties++;
     }
 
-    if (missionDetails.caseIII && aircraft.carrierOpsCapable) {
+    if (missionDetails.caseIII && aircraftDetails.carrierOpsCapable) {
       logbook.caseIIISorties++;
     }
 
