@@ -9,6 +9,9 @@ import { Button } from "@material-ui/core";
 import "./LogbookSummary.css";
 import { deleteLogbook } from "../redux/logbook-actions";
 
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+
 class LogbookSummary extends React.Component {
   constructor(props) {
     super(props);
