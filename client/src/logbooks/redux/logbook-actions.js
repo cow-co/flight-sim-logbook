@@ -77,7 +77,7 @@ const deleteLogbook = (data) => async (dispatch) => {
   };
 
   try {
-    const response = await Axios.delete(`/api/logbooks/${data.aircraft}`, config);
+    const response = await Axios.delete(`/api/logbooks/${data}`, config);
     const errors = response.data.errors;
     const status = response.status;
 
@@ -89,7 +89,7 @@ const deleteLogbook = (data) => async (dispatch) => {
       } else {
         dispatch({
           type: DELETE_LOGBOOK,
-          payload: data.aircraft,
+          payload: data,
         });
       }
     }
