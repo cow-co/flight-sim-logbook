@@ -77,13 +77,13 @@ const deleteLogbook = (data) => async (dispatch) => {
   };
 
   try {
-    const response = await Axios.delete(`/api/logbooks/${data}`, config);
+    const response = await Axios.delete(`/api/logbooks/${encodeURIComponent(data)}`, config);
     const errors = response.data.errors;
     const status = response.status;
 
     if (status === 401) {
       await localLogout();
-    } else {
+    } else if (status === 200) {
       if (!isEmpty(errors)) {
         errors.forEach((error) => dispatch(setAlert(`${error}`, "error")));
       } else {
@@ -92,6 +92,8 @@ const deleteLogbook = (data) => async (dispatch) => {
           payload: data,
         });
       }
+    } else {
+      dispatch(setAlert(`${status} error when deleting logbook`, "error"));
     }
   } catch (error) {
     dispatch(setAlert(`${error}`, "error"));
