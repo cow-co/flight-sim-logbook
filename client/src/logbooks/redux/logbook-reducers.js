@@ -20,12 +20,12 @@ const logbooksReducer = (currentState = INITIAL_STATE, action) => {
         logbooks: [...newLogbooksList],
       };
     case DELETE_LOGBOOK:
-      let newLogbooksList = currentState.logbooks.filter((logbook) => {
+      let modifiedLogbooksList = currentState.logbooks.filter((logbook) => {
         logbook.aircraft !== action.payload;
       });
       return {
         ...currentState,
-        logbooks: [...newLogbooksList],
+        logbooks: [...modifiedLogbooksList],
       };
     default:
       return currentState;
