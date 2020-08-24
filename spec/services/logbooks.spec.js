@@ -130,7 +130,6 @@ describe("Logbook service tests", () => {
         const logbook = await logbookService.createLogbook(aircraftName, createdUser);
 
         const mission = {
-          aircraft: "skjdh",
           duration: 3.3,
           a2aKills: 0,
           imc: false,
@@ -144,7 +143,7 @@ describe("Logbook service tests", () => {
           caseIII: false,
           aar: true,
         };
-        const response = await logbookService.addMission(mission, createdUser);
+        const response = await logbookService.addMission(mission.aircraft, mission, createdUser);
         expect(response.logbook).to.equal(null);
       } catch (err) {
         fail(err);
@@ -166,7 +165,6 @@ describe("Logbook service tests", () => {
         await logbookService.createLogbook(aircraftName, createdUser);
 
         const mission = {
-          aircraft: aircraftName,
           duration: 3.3,
           a2aKills: 0,
           imc: false,
@@ -180,7 +178,7 @@ describe("Logbook service tests", () => {
           caseIII: false,
           aar: true,
         };
-        const response = await logbookService.addMission(mission, createdUser);
+        const response = await logbookService.addMission(aircraftName, mission, createdUser);
         const updatedUser = await userService.getUserByName(user.username);
         const updatedLogbook = await logbookService.getLogbook(aircraftName, updatedUser);
         expect(response.logbook).to.not.equal(null);

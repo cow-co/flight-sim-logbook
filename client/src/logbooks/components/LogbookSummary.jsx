@@ -7,10 +7,19 @@ import PageviewIcon from "@material-ui/icons/Pageview";
 import Grid from "@material-ui/core/Grid";
 import { Button } from "@material-ui/core";
 import "./LogbookSummary.css";
+import { deleteLogbook } from "../redux/logbook-actions";
+
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 class LogbookSummary extends React.Component {
   constructor(props) {
     super(props);
+    this.sendDeleteRequest = this.sendDeleteRequest.bind(this);
+  }
+
+  async sendDeleteRequest() {
+    await this.props.deleteLogbook(this.props.logbook.aircraft);
   }
 
   render() {
@@ -25,6 +34,7 @@ class LogbookSummary extends React.Component {
           </Grid>
           <Grid item xs={4}>
             <Button
+              component={Link}
               color="primary"
               variant="contained"
               startIcon={<PageviewIcon />}
@@ -49,4 +59,8 @@ class LogbookSummary extends React.Component {
   }
 }
 
-export default LogbookSummary;
+LogbookSummary.propTypes = {
+  deleteLogbook: PropTypes.func.isRequired,
+};
+
+export default connect(null, { deleteLogbook })(LogbookSummary);

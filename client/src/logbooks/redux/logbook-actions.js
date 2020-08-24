@@ -1,4 +1,4 @@
-import { GET_LOGBOOKS, CREATE_LOGBOOK } from "../../common/redux/action-types";
+import { GET_LOGBOOKS, CREATE_LOGBOOK, DELETE_LOGBOOK } from "../../common/redux/action-types";
 import Axios from "axios";
 import { axiosConfig } from "../../common/helpers/axiosConfig";
 import { setAlert } from "../../common/redux/common-actions";
@@ -46,7 +46,7 @@ const createLogbook = (data) => async (dispatch) => {
   };
 
   try {
-    const response = await Axios.post("/api/logbooks/create", data, config);
+    const response = await Axios.post("/api/logbooks/", data, config);
     const errors = response.data.errors;
     const status = response.status;
 
@@ -67,4 +67,37 @@ const createLogbook = (data) => async (dispatch) => {
   }
 };
 
-export { getAllLogbooks, createLogbook };
+const deleteLogbook = (data) => async (dispatch) => {
+  const config = {
+    ...axiosConfig(),
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-type": "application/json",
+    },
+  };
+
+  try {
+    const response = await Axios.delete(`/api/logbooks/${encodeURIComponent(data)}`, config);
+    const errors = response.data.errors;
+    const status = response.status;
+
+    if (status === 401) {
+      await localLogout();
+    } else if (status === 200) {
+      if (!isEmpty(errors)) {
+        errors.forEach((error) => dispatch(setAlert(`${error}`, "error")));
+      } else {
+        dispatch({
+          type: DELETE_LOGBOOK,
+          payload: data,
+        });
+      }
+    } else {
+      dispatch(setAlert(`${status} error when deleting logbook`, "error"));
+    }
+  } catch (error) {
+    dispatch(setAlert(`${error}`, "error"));
+  }
+};
+
+export { getAllLogbooks, createLogbook, deleteLogbook };
