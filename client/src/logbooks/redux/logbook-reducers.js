@@ -21,7 +21,7 @@ const logbooksReducer = (currentState = INITIAL_STATE, action) => {
       };
     case DELETE_LOGBOOK:
       let modifiedLogbooksList = currentState.logbooks.filter((logbook) => {
-        logbook.aircraft !== action.payload;
+        return logbook.aircraft !== action.payload;
       });
       return {
         ...currentState,
