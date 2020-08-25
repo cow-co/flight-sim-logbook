@@ -106,7 +106,7 @@ router.get("/:username/:aircraft", async (req, res) => {
   return res.status(returnStatus).json(responseJSON);
 });
 
-router.put("/:aircraft", authenticate, isVerified, async (req, res) => {
+router.post("/:aircraft", authenticate, isVerified, async (req, res) => {
   const mission = req.body;
   let responseJSON = { logbook: null, errors: [] };
   let returnStatus = statusCodes.SUCCESS;
