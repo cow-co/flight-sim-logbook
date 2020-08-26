@@ -8,7 +8,6 @@ import "react-svg-radar-chart/build/css/index.css";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { isLoggedIn } from "../../common/helpers/utils";
 
 class Logbook extends React.Component {
   constructor(props) {

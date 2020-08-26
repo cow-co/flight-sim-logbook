@@ -108,4 +108,4 @@ const selectLogbook = (logbook) => async (dispatch) => {
   });
 };
 
-export { getAllLogbooks, createLogbook, deleteLogbook };
+export { getAllLogbooks, createLogbook, deleteLogbook, selectLogbook };
