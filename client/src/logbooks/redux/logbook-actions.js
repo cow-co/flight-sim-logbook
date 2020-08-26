@@ -1,4 +1,4 @@
-import { GET_LOGBOOKS, CREATE_LOGBOOK, DELETE_LOGBOOK } from "../../common/redux/action-types";
+import { GET_LOGBOOKS, CREATE_LOGBOOK, DELETE_LOGBOOK, SELECT_LOGBOOK } from "../../common/redux/action-types";
 import Axios from "axios";
 import { axiosConfig } from "../../common/helpers/axiosConfig";
 import { setAlert } from "../../common/redux/common-actions";
@@ -98,6 +98,14 @@ const deleteLogbook = (data) => async (dispatch) => {
   } catch (error) {
     dispatch(setAlert(`${error}`, "error"));
   }
+};
+
+const selectLogbook = (logbook) => async (dispatch) => {
+  window.open("/logbooks/view");
+  dispatch({
+    type: SELECT_LOGBOOK,
+    payload: logbook,
+  });
 };
 
 export { getAllLogbooks, createLogbook, deleteLogbook };

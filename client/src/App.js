@@ -7,6 +7,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 import AlertBar from "./common/components/AlertBar";
 import Login from "./users/pages/Login";
 import Logbooks from "./logbooks/pages/Logbooks";
+import Logbook from "./logbooks/pages/Logbook";
 import RegisterUser from "./users/pages/RegisterUser";
 
 const theme = createMuiTheme({
@@ -51,6 +52,7 @@ function App() {
           <Route path="/users/login" exact component={Login} />
           <Route path="/users/register" exact component={RegisterUser} />
           <Route path="/logbooks/all" exact component={Logbooks} />
+          <Route path="/logbooks/view" exact component={Logbook} />
         </Container>
       </BrowserRouter>
     </ThemeProvider>

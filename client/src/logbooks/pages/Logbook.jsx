@@ -4,6 +4,10 @@ import RadarChart from "react-svg-radar-chart";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import "react-svg-radar-chart/build/css/index.css";
 
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { isLoggedIn } from "../../common/helpers/utils";
+
 class Logbook extends React.Component {
   constructor(props) {
     super(props);
@@ -36,4 +40,12 @@ class Logbook extends React.Component {
   }
 }
 
-export default Logbook;
+Logbook.propTypes = {
+  logbooks: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  loggbook: state.logbooks.selectedLogbook,
+});
+
+export default connect(mapStateToProps, { logbooks })(Logbook);
