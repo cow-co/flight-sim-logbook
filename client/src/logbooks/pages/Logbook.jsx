@@ -41,11 +41,11 @@ class Logbook extends React.Component {
 }
 
 Logbook.propTypes = {
-  logbooks: PropTypes.func.isRequired,
+  logbook: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  loggbook: state.logbooks.selectedLogbook,
+  logbook: state.logbooks.selectedLogbook,
 });
 
-export default connect(mapStateToProps, { logbooks })(Logbook);
+export default connect(mapStateToProps, null)(Logbook);
