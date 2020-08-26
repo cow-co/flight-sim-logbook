@@ -3,6 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import RadarChart from "react-svg-radar-chart";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
+import FlightIcon from "@material-ui/icons/Flight";
 import "react-svg-radar-chart/build/css/index.css";
 
 import { connect } from "react-redux";
@@ -18,7 +19,9 @@ class Logbook extends React.Component {
   // TODO Radar chart for main logbook factors
   // TODO Button to add a mission
   render() {
-    let radarData = this.props.logbook;
+    let radarData = {
+      ...this.props.logbook,
+    };
     delete radarData.totalHours;
     delete radarData.a2aKills;
 
@@ -33,9 +36,11 @@ class Logbook extends React.Component {
             <Typography variant="h6">{this.props.logbook.totalHours} Hours</Typography>
           </Grid>
           <Grid item xs={6}>
-            <RadarChart data={radarData} size={400} />
+            <FlightIcon />
+            <Typography variant="h6">{this.props.logbook.a2aKills} Kills</Typography>
           </Grid>
         </Grid>
+        <RadarChart data={radarData} size={400} />
       </div>
     );
   }
