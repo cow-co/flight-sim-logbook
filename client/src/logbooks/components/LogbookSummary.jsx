@@ -15,6 +15,7 @@ import PropTypes from "prop-types";
 class LogbookSummary extends React.Component {
   constructor(props) {
     super(props);
+    console.debug(props);
     this.sendDeleteRequest = this.sendDeleteRequest.bind(this);
     this.viewLogbook = this.viewLogbook.bind(this);
   }
@@ -25,7 +26,7 @@ class LogbookSummary extends React.Component {
 
   async viewLogbook() {
     await this.props.selectLogbook(this.props.logbook);
-    window.open("/logbooks/view");
+    this.props.history.push("/logbooks/view");
   }
 
   render() {
