@@ -24,14 +24,13 @@ class LogbookSummary extends React.Component {
   }
 
   async viewLogbook() {
-    console.debug(this.props.logbook);
     await this.props.selectLogbook(this.props.logbook);
     window.open("/logbooks/view");
   }
 
   render() {
     return (
-      <ListItem button>
+      <ListItem>
         <Grid container spacing={3}>
           <Grid item xs={4}>
             <ListItemText
@@ -40,12 +39,7 @@ class LogbookSummary extends React.Component {
             />
           </Grid>
           <Grid item xs={4}>
-            <Button
-              color="primary"
-              variant="contained"
-              startIcon={<PageviewIcon />}
-              onClick={() => this.props.viewLogbook}
-            >
+            <Button color="primary" variant="contained" startIcon={<PageviewIcon />} onClick={this.viewLogbook}>
               View
             </Button>
           </Grid>
