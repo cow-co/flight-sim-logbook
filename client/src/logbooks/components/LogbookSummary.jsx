@@ -24,7 +24,9 @@ class LogbookSummary extends React.Component {
   }
 
   async viewLogbook() {
+    console.debug(this.props.logbook);
     await this.props.selectLogbook(this.props.logbook);
+    window.open("/logbooks/view");
   }
 
   render() {

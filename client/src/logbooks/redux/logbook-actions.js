@@ -101,7 +101,6 @@ const deleteLogbook = (data) => async (dispatch) => {
 };
 
 const selectLogbook = (logbook) => async (dispatch) => {
-  window.open("/logbooks/view");
   dispatch({
     type: SELECT_LOGBOOK,
     payload: logbook,
