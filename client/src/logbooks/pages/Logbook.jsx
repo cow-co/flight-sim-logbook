@@ -41,6 +41,8 @@ class Logbook extends React.Component {
       const hours = this.props.logbook.totalHours;
       const kills = this.props.logbook.a2aKills;
 
+      console.log(radarData);
+
       return (
         <div>
           <Typography variant="h4" className="title">
