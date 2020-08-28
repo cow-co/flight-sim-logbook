@@ -39,6 +39,9 @@ class Logbook extends React.Component {
       delete radarData.a2aKills;
     }
 
+    const hours = this.props.logbook !== null ? this.props.logbook.totalHours : 0;
+    const kills = this.props.logbook !== null ? this.props.logbook.a2aKills : 0;
+
     return (
       <div>
         <Typography variant="h4" className="title">
@@ -47,11 +50,11 @@ class Logbook extends React.Component {
         <Grid container spacing={3}>
           <Grid item xs={6}>
             <AccessTimeIcon />
-            <Typography variant="h6">{this.props.logbook.totalHours || 0} Hours</Typography>
+            <Typography variant="h6">{hours} Hours</Typography>
           </Grid>
           <Grid item xs={6}>
             <FlightIcon />
-            <Typography variant="h6">{this.props.logbook.a2aKills || 0} Kills</Typography>
+            <Typography variant="h6">{kills} Kills</Typography>
           </Grid>
         </Grid>
         <RadarChart data={radarData} size={400} />
