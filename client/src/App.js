@@ -52,7 +52,7 @@ function App() {
           <Route path="/users/login" exact component={Login} />
           <Route path="/users/register" exact component={RegisterUser} />
           <Route path="/logbooks/all" exact component={Logbooks} />
-          <Route path="/logbooks/view" exact component={Logbook} />
+          <Route path="/logbooks/*/*" component={Logbook} />
         </Container>
       </BrowserRouter>
     </ThemeProvider>
