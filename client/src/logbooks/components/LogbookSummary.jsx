@@ -40,7 +40,13 @@ class LogbookSummary extends React.Component {
             />
           </Grid>
           <Grid item xs={4}>
-            <Button color="primary" variant="contained" startIcon={<PageviewIcon />} onClick={this.viewLogbook}>
+            <Button
+              color="primary"
+              variant="contained"
+              startIcon={<PageviewIcon />}
+              component={Link}
+              to={`/logbooks/${this.props.username}/${this.props.logbook.aircraft}`}
+            >
               View
             </Button>
           </Grid>
