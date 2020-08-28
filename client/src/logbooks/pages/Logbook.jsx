@@ -23,7 +23,7 @@ class Logbook extends React.Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     await selectLogbook(this.state.username, this.state.aircraft);
   }
 
@@ -65,4 +65,4 @@ const mapStateToProps = (state) => ({
   logbook: state.logbooks.selectedLogbook,
 });
 
-export default connect(mapStateToProps, {selectLogbook})(Logbook);
+export default connect(mapStateToProps, { selectLogbook })(Logbook);
