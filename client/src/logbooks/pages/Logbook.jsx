@@ -37,29 +37,37 @@ class Logbook extends React.Component {
     if (this.props.logbook !== null) {
       delete radarData.totalHours;
       delete radarData.a2aKills;
+
+      const hours = this.props.logbook.totalHours;
+      const kills = this.props.logbook.a2aKills;
+
+      return (
+        <div>
+          <Typography variant="h4" className="title">
+            {this.state.aircraft}
+          </Typography>
+          <Grid container spacing={3}>
+            <Grid item xs={6}>
+              <AccessTimeIcon />
+              <Typography variant="h6">{hours} Hours</Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <FlightIcon />
+              <Typography variant="h6">{kills} Kills</Typography>
+            </Grid>
+          </Grid>
+          <RadarChart data={radarData} caption={radarData.keys()} size={400} />
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <Typography variant="h4" className="title">
+            {this.state.aircraft}
+          </Typography>
+        </div>
+      );
     }
-
-    const hours = this.props.logbook !== null ? this.props.logbook.totalHours : 0;
-    const kills = this.props.logbook !== null ? this.props.logbook.a2aKills : 0;
-
-    return (
-      <div>
-        <Typography variant="h4" className="title">
-          {this.state.aircraft}
-        </Typography>
-        <Grid container spacing={3}>
-          <Grid item xs={6}>
-            <AccessTimeIcon />
-            <Typography variant="h6">{hours} Hours</Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <FlightIcon />
-            <Typography variant="h6">{kills} Kills</Typography>
-          </Grid>
-        </Grid>
-        <RadarChart data={radarData} caption={radarData.keys()} size={400} />
-      </div>
-    );
   }
 }
 
