@@ -1,8 +1,3 @@
-.title {
-  flex-grow: 1;
-  text-align: center;
-}
-
 .MuiGrid-grid-xs-4 {
   justify-content: center;
   display: flex;

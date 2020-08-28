@@ -3,11 +3,6 @@
   text-align: center;
 }
 
-.title {
-  flex-grow: 1;
-  text-align: center;
-}
-
 .login > form {
   display: inline-block;
   align-self: center;

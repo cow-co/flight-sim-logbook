@@ -7,7 +7,7 @@ import PageviewIcon from "@material-ui/icons/Pageview";
 import Grid from "@material-ui/core/Grid";
 import { Button } from "@material-ui/core";
 import "./LogbookSummary.css";
-import { deleteLogbook } from "../redux/logbook-actions";
+import { deleteLogbook, selectLogbook } from "../redux/logbook-actions";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -15,16 +15,23 @@ import PropTypes from "prop-types";
 class LogbookSummary extends React.Component {
   constructor(props) {
     super(props);
+    console.debug(props);
     this.sendDeleteRequest = this.sendDeleteRequest.bind(this);
+    this.viewLogbook = this.viewLogbook.bind(this);
   }
 
   async sendDeleteRequest() {
     await this.props.deleteLogbook(this.props.logbook.aircraft);
   }
 
+  async viewLogbook() {
+    await this.props.selectLogbook(this.props.logbook);
+    this.props.history.push("/logbooks/view");
+  }
+
   render() {
     return (
-      <ListItem button>
+      <ListItem>
         <Grid container spacing={3}>
           <Grid item xs={4}>
             <ListItemText
@@ -34,11 +41,13 @@ class LogbookSummary extends React.Component {
           </Grid>
           <Grid item xs={4}>
             <Button
-              component={Link}
               color="primary"
               variant="contained"
               startIcon={<PageviewIcon />}
-              to={`/logbooks/${this.props.username}/${this.props.logbook.aircraft}`}
+              component={Link}
+              to={`/logbooks/${encodeURIComponent(this.props.username)}/${encodeURIComponent(
+                this.props.logbook.aircraft
+              )}`}
             >
               View
             </Button>
@@ -61,6 +70,7 @@ class LogbookSummary extends React.Component {
 
 LogbookSummary.propTypes = {
   deleteLogbook: PropTypes.func.isRequired,
+  selectLogbook: PropTypes.func.isRequired,
 };
 
-export default connect(null, { deleteLogbook })(LogbookSummary);
+export default connect(null, { deleteLogbook, selectLogbook })(LogbookSummary);

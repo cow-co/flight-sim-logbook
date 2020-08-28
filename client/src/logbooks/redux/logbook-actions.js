@@ -1,4 +1,4 @@
-import { GET_LOGBOOKS, CREATE_LOGBOOK, DELETE_LOGBOOK } from "../../common/redux/action-types";
+import { GET_LOGBOOKS, CREATE_LOGBOOK, DELETE_LOGBOOK, SELECT_LOGBOOK } from "../../common/redux/action-types";
 import Axios from "axios";
 import { axiosConfig } from "../../common/helpers/axiosConfig";
 import { setAlert } from "../../common/redux/common-actions";
@@ -30,6 +30,31 @@ const getAllLogbooks = () => async (dispatch) => {
           payload: response.data,
         });
       }
+    }
+  } catch (error) {
+    dispatch(setAlert(`${error}`, "error"));
+  }
+};
+
+const selectLogbook = (username, aircraft) => async (dispatch) => {
+  const config = {
+    ...axiosConfig(),
+  };
+
+  try {
+    const response = await Axios.get(
+      `/api/logbooks/${encodeURIComponent(username)}/${encodeURIComponent(aircraft)}`,
+      config
+    );
+    const errors = response.data.errors;
+
+    if (!isEmpty(errors)) {
+      errors.forEach((error) => dispatch(setAlert(`${error}`, "error")));
+    } else {
+      dispatch({
+        type: SELECT_LOGBOOK,
+        payload: response.data.logbook,
+      });
     }
   } catch (error) {
     dispatch(setAlert(`${error}`, "error"));
@@ -100,4 +125,4 @@ const deleteLogbook = (data) => async (dispatch) => {
   }
 };
 
-export { getAllLogbooks, createLogbook, deleteLogbook };
+export { getAllLogbooks, createLogbook, deleteLogbook, selectLogbook };

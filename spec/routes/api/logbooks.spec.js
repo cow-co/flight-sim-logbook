@@ -219,7 +219,7 @@ describe("Logbook endpoint tests", () => {
       };
       await request(server).post("/api/logbooks/").set("Authorization", `Bearer ${token}`).send(logbookRequest);
       const res = await request(server)
-        .put(`/api/logbooks/${logbookRequest.aircraft}`)
+        .post(`/api/logbooks/${logbookRequest.aircraft}`)
         .set("Authorization", `Bearer ${token}`)
         .send(mission);
       expect(res.statusCode).to.equal(200);
@@ -255,7 +255,7 @@ describe("Logbook endpoint tests", () => {
       };
       await request(server).post("/api/logbooks/create").set("Authorization", `Bearer ${token}`).send(logbookRequest);
       const res = await request(server)
-        .put(`/api/logbooks/${logbookRequest.aircraft}`)
+        .post(`/api/logbooks/${logbookRequest.aircraft}`)
         .set("Authorization", `Bearer ${token}`)
         .send(mission);
       expect(res.statusCode).to.equal(400);
