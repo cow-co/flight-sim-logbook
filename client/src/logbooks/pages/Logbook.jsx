@@ -24,7 +24,7 @@ class Logbook extends React.Component {
   }
 
   async componentDidMount() {
-    await selectLogbook(this.state.username, this.state.aircraft);
+    await this.props.selectLogbook(this.state.username, this.state.aircraft);
   }
 
   // TODO Button to add a mission
