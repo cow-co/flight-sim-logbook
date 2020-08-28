@@ -36,6 +36,31 @@ const getAllLogbooks = () => async (dispatch) => {
   }
 };
 
+const selectLogbook = (username, aircraft) => async (dispatch) => {
+  const config = {
+    ...axiosConfig(),
+  };
+
+  try {
+    const response = await Axios.get(
+      `/api/logbooks/${encodeURIComponent(username)}/${encodeURIComponent(aircraft)}`,
+      config
+    );
+    const errors = response.data.errors;
+
+    if (!isEmpty(errors)) {
+      errors.forEach((error) => dispatch(setAlert(`${error}`, "error")));
+    } else {
+      dispatch({
+        type: SELECT_LOGBOOK,
+        payload: response.data.logbook,
+      });
+    }
+  } catch (error) {
+    dispatch(setAlert(`${error}`, "error"));
+  }
+};
+
 const createLogbook = (data) => async (dispatch) => {
   const config = {
     ...axiosConfig(),
@@ -98,13 +123,6 @@ const deleteLogbook = (data) => async (dispatch) => {
   } catch (error) {
     dispatch(setAlert(`${error}`, "error"));
   }
-};
-
-const selectLogbook = (logbook) => async (dispatch) => {
-  dispatch({
-    type: SELECT_LOGBOOK,
-    payload: logbook,
-  });
 };
 
 export { getAllLogbooks, createLogbook, deleteLogbook, selectLogbook };

@@ -8,14 +8,25 @@ import "react-svg-radar-chart/build/css/index.css";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { selectLogbook } from "../redux/logbook-actions";
 
 class Logbook extends React.Component {
   constructor(props) {
     super(props);
+    const tokenisedPath = this.props.location.pathname.split("/");
+    const aircraft = decodeURIComponent(tokenisedPath[tokenisedPath.length - 1]);
+    const username = decodeURIComponent(tokenisedPath[tokenisedPath.length - 2]);
+
+    this.state = {
+      username,
+      aircraft,
+    };
   }
 
-  // TODO Row with grid layout; showing the total hours and the kills for the aircraft
-  // TODO Radar chart for main logbook factors
+  componentDidMount() {
+    await selectLogbook(this.state.username, this.state.aircraft);
+  }
+
   // TODO Button to add a mission
   render() {
     let radarData = {
@@ -27,7 +38,7 @@ class Logbook extends React.Component {
     return (
       <div>
         <Typography variant="h4" className="title">
-          {this.props.logbook.aircraft}
+          {this.state.aircraft}
         </Typography>
         <Grid container spacing={3}>
           <Grid item xs={6}>
@@ -47,10 +58,11 @@ class Logbook extends React.Component {
 
 Logbook.propTypes = {
   logbook: PropTypes.object.isRequired,
+  selectLogbook: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   logbook: state.logbooks.selectedLogbook,
 });
 
-export default connect(mapStateToProps, null)(Logbook);
+export default connect(mapStateToProps, {selectLogbook})(Logbook);

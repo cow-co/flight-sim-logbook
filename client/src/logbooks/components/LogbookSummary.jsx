@@ -45,7 +45,9 @@ class LogbookSummary extends React.Component {
               variant="contained"
               startIcon={<PageviewIcon />}
               component={Link}
-              to={`/logbooks/${this.props.username}/${this.props.logbook.aircraft}`}
+              to={`/logbooks/${encodeURIComponent(this.props.username)}/${encodeURIComponent(
+                this.props.logbook.aircraft
+              )}`}
             >
               View
             </Button>
