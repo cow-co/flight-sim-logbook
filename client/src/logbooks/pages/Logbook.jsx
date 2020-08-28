@@ -12,6 +12,7 @@ import { selectLogbook } from "../redux/logbook-actions";
 
 class Logbook extends React.Component {
   constructor(props) {
+    console.debug(props);
     super(props);
     const tokenisedPath = this.props.location.pathname.split("/");
     const aircraft = decodeURIComponent(tokenisedPath[tokenisedPath.length - 1]);
@@ -32,8 +33,11 @@ class Logbook extends React.Component {
     let radarData = {
       ...this.props.logbook,
     };
-    delete radarData.totalHours;
-    delete radarData.a2aKills;
+
+    if (this.props.logbook !== null) {
+      delete radarData.totalHours;
+      delete radarData.a2aKills;
+    }
 
     return (
       <div>
@@ -43,11 +47,11 @@ class Logbook extends React.Component {
         <Grid container spacing={3}>
           <Grid item xs={6}>
             <AccessTimeIcon />
-            <Typography variant="h6">{this.props.logbook.totalHours} Hours</Typography>
+            <Typography variant="h6">{this.props.logbook.totalHours || 0} Hours</Typography>
           </Grid>
           <Grid item xs={6}>
             <FlightIcon />
-            <Typography variant="h6">{this.props.logbook.a2aKills} Kills</Typography>
+            <Typography variant="h6">{this.props.logbook.a2aKills || 0} Kills</Typography>
           </Grid>
         </Grid>
         <RadarChart data={radarData} size={400} />
