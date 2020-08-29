@@ -49,6 +49,19 @@ class Logbook extends React.Component {
 
       console.log(radarData);
 
+      const captions = {
+        imcSorties: "IMC",
+        bfmSorties: "BFM",
+        bvrSorties: "BVR",
+        seadSorties: "SEAD",
+        casSorties: "CAS",
+        strikeSorties: "Strike",
+        packageSorties: "Coordinated Package",
+        caseISorties: "Case I",
+        caseIIISorties: "Case III",
+        aarSorties: "AAR",
+      };
+
       return (
         <div>
           <Typography variant="h4" className="title">
@@ -64,7 +77,7 @@ class Logbook extends React.Component {
               <Typography variant="h6">{kills} Kills</Typography>
             </Grid>
           </Grid>
-          <RadarChart data={radarData} caption={Object.keys(radarData)} size={400} />
+          <RadarChart data={radarData} caption={captions} size={400} />
 
           <Button color="primary" startIcon={<AssignmentIcon />} variant="contained" onClick={this.openModal}>
             Add Mission
