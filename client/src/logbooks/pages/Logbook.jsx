@@ -36,9 +36,13 @@ class Logbook extends React.Component {
 
   // TODO Button to add a mission
   render() {
-    let radarData = {
-      ...this.props.logbook,
-    };
+    let radarData = [
+      {
+        data: {
+          ...this.props.logbook,
+        },
+      },
+    ];
 
     if (this.props.logbook !== null) {
       delete radarData.totalHours;
@@ -77,7 +81,7 @@ class Logbook extends React.Component {
               <Typography variant="h6">{kills} Kills</Typography>
             </Grid>
           </Grid>
-          <RadarChart data={radarData} caption={captions} size={400} />
+          <RadarChart data={radarData} captions={captions} size={400} />
 
           <Button color="primary" startIcon={<AssignmentIcon />} variant="contained" onClick={this.openModal}>
             Add Mission
