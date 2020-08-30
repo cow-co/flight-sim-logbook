@@ -1,11 +1,11 @@
 .radar {
-  display: flex;
-  margin: auto;
-  margin-top: 30px;
+  display: flex !important;
+  margin: auto !important;
+  margin-top: 30px !important;
 }
 
 .add-mission {
-  margin: auto;
-  display: flex;
-  margin-top: 30px;
+  margin: auto !important;
+  display: flex !important;
+  margin-top: 30px !important;
 }
