@@ -47,8 +47,6 @@ class Logbook extends React.Component {
       const hours = this.props.logbook.totalHours;
       const kills = this.props.logbook.a2aKills;
 
-      console.log(radarData);
-
       const captions = {
         imcSorties: "IMC",
         bfmSorties: "BFM",
@@ -61,6 +59,8 @@ class Logbook extends React.Component {
         caseIIISorties: "Case III",
         aarSorties: "AAR",
       };
+
+      console.log(captions);
 
       return (
         <div>
