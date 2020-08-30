@@ -82,7 +82,7 @@ class Logbook extends React.Component {
               <Typography variant="h6">{kills} Kills</Typography>
             </Grid>
           </Grid>
-          <RadarChart data={radarData} captions={captions} size={400} />
+          <RadarChart className="radar" data={radarData} captions={captions} size={400} />
 
           <Button
             color="primary"
