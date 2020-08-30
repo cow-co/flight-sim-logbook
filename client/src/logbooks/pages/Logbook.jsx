@@ -6,6 +6,7 @@ import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import FlightIcon from "@material-ui/icons/Flight";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import "react-svg-radar-chart/build/css/index.css";
+import "./Logbook.css";
 import { Button } from "@material-ui/core";
 
 import { connect } from "react-redux";
@@ -83,7 +84,13 @@ class Logbook extends React.Component {
           </Grid>
           <RadarChart data={radarData} captions={captions} size={400} />
 
-          <Button color="primary" startIcon={<AssignmentIcon />} variant="contained" onClick={this.openModal}>
+          <Button
+            color="primary"
+            className="add-mission"
+            startIcon={<AssignmentIcon />}
+            variant="contained"
+            onClick={this.openModal}
+          >
             Add Mission
           </Button>
         </div>
