@@ -35,6 +35,9 @@ class Logbook extends React.Component {
     console.log("Open Modal");
   }
 
+  // Convert the values to percentages
+  percentageTheData(data) {}
+
   // TODO Button to add a mission
   render() {
     let radarData = [
