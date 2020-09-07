@@ -160,6 +160,7 @@ const addMission = async (aircraft, missionDetails, user) => {
 
   if (!isEmptyOrNull(logbook)) {
     logbook.totalHours += missionDetails.duration;
+    logbook.totalSorties += 1;
     logbook.a2aKills += missionDetails.a2aKills;
 
     if (missionDetails.imc) {

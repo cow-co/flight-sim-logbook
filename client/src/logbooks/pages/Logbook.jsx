@@ -4,7 +4,9 @@ import Typography from "@material-ui/core/Typography";
 import RadarChart from "react-svg-radar-chart";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import FlightIcon from "@material-ui/icons/Flight";
-import "react-svg-radar-chart/build/css/index.css";
+import AssignmentIcon from "@material-ui/icons/Assignment";
+import "./Logbook.css";
+import { Button } from "@material-ui/core";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -22,26 +24,83 @@ class Logbook extends React.Component {
       username,
       aircraft,
     };
+
+    this.percentageTheData = this.percentageTheData.bind(this);
+    this.openModal = this.openModal.bind(this);
   }
 
   async componentDidMount() {
     await this.props.selectLogbook(this.state.username, this.state.aircraft);
   }
 
+  openModal() {
+    console.log("Open Modal");
+  }
+
+  // Convert the values to percentages
+  percentageTheData(data) {
+    const totalSorties = data.totalSorties;
+
+    // BVY Capable
+    if (data.bvrSorties) {
+      data.bvrSorties = (data.bvrSorties / totalSorties) * 100.0;
+    }
+
+    // Carrier capable
+    if (data.caseISorties) {
+      data.caseISorties = (data.caseISorties / totalSorties) * 100.0;
+      data.caseIIISorties = (data.caseIIISorties / totalSorties) * 100.0;
+    }
+
+    // A2G capable
+    if (data.seadSorties) {
+      data.seadSorties = (data.seadSorties / totalSorties) * 100.0;
+      data.casSorties = (data.casSorties / totalSorties) * 100.0;
+      data.strikeSorties = (data.strikeSorties / totalSorties) * 100.0;
+    }
+
+    data.imcSorties = (data.imcSorties / totalSorties) * 100.0;
+    data.bfmSorties = (data.bfmSorties / totalSorties) * 100.0;
+    data.packageSorties = (data.packageSorties / totalSorties) * 100.0;
+    data.aarSorties = (data.aarSorties / totalSorties) * 100.0;
+
+    return data;
+  }
+
   // TODO Button to add a mission
   render() {
-    let radarData = {
-      ...this.props.logbook,
-    };
-
     if (this.props.logbook !== null) {
-      delete radarData.totalHours;
-      delete radarData.a2aKills;
+      let percentageData = {
+        ...this.props.logbook,
+      };
+      percentageData = this.percentageTheData(percentageData);
+      delete percentageData.totalHours;
+      delete percentageData.a2aKills;
+      delete percentageData.totalSorties;
+
+      let radarData = [
+        {
+          data: percentageData,
+        },
+      ];
 
       const hours = this.props.logbook.totalHours;
       const kills = this.props.logbook.a2aKills;
 
-      console.log(radarData);
+      const captions = {
+        imcSorties: "IMC",
+        bfmSorties: "BFM",
+        bvrSorties: "BVR",
+        seadSorties: "SEAD",
+        casSorties: "CAS",
+        strikeSorties: "Strike",
+        packageSorties: "Coordinated Package",
+        caseISorties: "Case I",
+        caseIIISorties: "Case III",
+        aarSorties: "AAR",
+      };
+
+      console.log(captions);
 
       return (
         <div>
@@ -58,7 +117,17 @@ class Logbook extends React.Component {
               <Typography variant="h6">{kills} Kills</Typography>
             </Grid>
           </Grid>
-          <RadarChart data={radarData} caption={Object.keys(radarData)} size={400} />
+          <RadarChart className="radar" data={radarData} captions={captions} size={400} />
+
+          <Button
+            color="primary"
+            className="add-mission"
+            startIcon={<AssignmentIcon />}
+            variant="contained"
+            onClick={this.openModal}
+          >
+            Add Mission
+          </Button>
         </div>
       );
     } else {

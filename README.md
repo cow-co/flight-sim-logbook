@@ -11,5 +11,3 @@
 - [x] User login
 - [x] Logbooks tracked per user
 - [x] Logbooks contain hours flown
-- [ ] Can generate stats about a user's history
-- [ ] Can use the aforementioned stats to generate a guide for further development of skills
