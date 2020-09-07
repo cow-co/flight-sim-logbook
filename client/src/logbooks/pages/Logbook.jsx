@@ -5,14 +5,12 @@ import RadarChart from "react-svg-radar-chart";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import FlightIcon from "@material-ui/icons/Flight";
 import AssignmentIcon from "@material-ui/icons/Assignment";
-import "react-svg-radar-chart/build/css/index.css";
 import "./Logbook.css";
 import { Button } from "@material-ui/core";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { selectLogbook } from "../redux/logbook-actions";
-import aircraft from "../../../../services/aircraft";
 
 class Logbook extends React.Component {
   constructor(props) {
