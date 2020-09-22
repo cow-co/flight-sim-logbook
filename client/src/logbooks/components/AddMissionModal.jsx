@@ -1,18 +1,14 @@
 import React from "react";
 import Axios from "axios";
 import { axiosConfig } from "../../common/helpers/axiosConfig";
+import { setAlert } from "../../common/redux/common-actions";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@material-ui/icons/CheckBox";
-import Grid from "@material-ui/core/Grid";
 import { Button } from "@material-ui/core";
 
 class AddMissionModal extends React.Component {
@@ -37,6 +33,8 @@ class AddMissionModal extends React.Component {
         aar: false,
       },
     };
+    this.handleClose = this.handleClose.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   async componentDidMount() {
@@ -71,15 +69,19 @@ class AddMissionModal extends React.Component {
     });
   }
 
+  handleChange() {
+    console.log("Change");
+  }
+
   render() {
     const checkboxes = (
       <DialogContent>
         <FormControlLabel
-          control={<Checkbox checked={this.state.imc} onChange={handleChange} name="imc" />}
+          control={<Checkbox checked={this.state.imc} onChange={this.handleChange} name="imc" />}
           label="IMC"
         />
         <FormControlLabel
-          control={<Checkbox checked={this.state.bfm} onChange={handleChange} name="bfm" />}
+          control={<Checkbox checked={this.state.bfm} onChange={this.handleChange} name="bfm" />}
           label="BFM"
         />
         <FormControlLabel
@@ -87,7 +89,7 @@ class AddMissionModal extends React.Component {
             <Checkbox
               disabled={this.state.aircraftCapabilities.bvrCapable}
               checked={this.state.bvr}
-              onChange={handleChange}
+              onChange={this.handleChange}
               name="bvr"
             />
           }
@@ -98,7 +100,7 @@ class AddMissionModal extends React.Component {
             <Checkbox
               disabled={this.state.aircraftCapabilities.agCapable}
               checked={this.state.sead}
-              onChange={handleChange}
+              onChange={this.handleChange}
               name="sead"
             />
           }
@@ -107,15 +109,9 @@ class AddMissionModal extends React.Component {
       </DialogContent>
     );
     return (
-      <Dialog open={this.state.open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Add a Mission</DialogTitle>
-        <DialogContent>
-          <FormControlLabel
-            control={<Checkbox checked={state.checkedA} onChange={handleChange} name="checkedA" />}
-            label="Secondary"
-          />
-          {checkboxes}
-        </DialogContent>
+        {checkboxes}
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
