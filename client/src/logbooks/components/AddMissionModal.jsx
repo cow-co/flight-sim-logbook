@@ -65,17 +65,17 @@ class AddMissionModal extends React.Component {
   // TODO Checkboxes for the practiced skills (ones not allowed via the getAircraft response will be disabled)
 
   async handleSubmit() {
-    await submitMission(this.state.mission);
+    await logMission(this.state.mission);
     this.props.onClose();
   }
 
-  handleStringChanged(name) {
+  handleStringChanged = (name) => (event) => {
     this.setState({ ...this.state, [name]: event.target.value });
-  }
+  };
 
-  handleCheckboxChanged(name) {
+  handleCheckboxChanged = (name) => (event) => {
     this.setState({ ...this.state, [name]: event.target.checked });
-  }
+  };
 
   render() {
     const checkboxes = (

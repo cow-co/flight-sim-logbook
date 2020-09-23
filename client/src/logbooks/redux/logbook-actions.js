@@ -125,4 +125,37 @@ const deleteLogbook = (data) => async (dispatch) => {
   }
 };
 
-export { getAllLogbooks, createLogbook, deleteLogbook, selectLogbook };
+const logMission = (data) => async (dispatch) => {
+  const config = {
+    ...axiosConfig(),
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-type": "application/json",
+    },
+  };
+
+  try {
+    const response = await Axios.delete(`/api/logbooks/${encodeURIComponent(data.aircraft)}`, config);
+    const errors = response.data.errors;
+    const status = response.status;
+
+    if (status === 401) {
+      await localLogout();
+    } else if (status === 200) {
+      if (!isEmpty(errors)) {
+        errors.forEach((error) => dispatch(setAlert(`${error}`, "error")));
+      } else {
+        dispatch({
+          type: LOG_MISSION,
+          payload: data.logbook,
+        });
+      }
+    } else {
+      dispatch(setAlert(`${status} error when deleting logbook`, "error"));
+    }
+  } catch (error) {
+    dispatch(setAlert(`${error}`, "error"));
+  }
+};
+
+export { getAllLogbooks, createLogbook, deleteLogbook, selectLogbook, logMission };
