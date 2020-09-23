@@ -28,17 +28,23 @@ class Logbook extends React.Component {
     };
 
     this.percentageTheData = this.percentageTheData.bind(this);
-    this.openModal = this.openModal.bind(this);
+    this.handleFormClose = this.handleFormClose.bind(this);
+    this.handleFormOpen = this.handleFormOpen.bind(this);
   }
 
   async componentDidMount() {
     await this.props.selectLogbook(this.state.username, this.state.aircraft);
   }
 
-  openModal() {
+  handleFormOpen() {
     this.setState({
-      ...this.state,
       modalOpen: true,
+    });
+  }
+
+  handleFormClose() {
+    this.setState({
+      modalOpen: false,
     });
   }
 
