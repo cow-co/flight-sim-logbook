@@ -1,4 +1,10 @@
-import { GET_LOGBOOKS, CREATE_LOGBOOK, DELETE_LOGBOOK, SELECT_LOGBOOK } from "../../common/redux/action-types";
+import {
+  GET_LOGBOOKS,
+  CREATE_LOGBOOK,
+  DELETE_LOGBOOK,
+  SELECT_LOGBOOK,
+  LOG_MISSION,
+} from "../../common/redux/action-types";
 
 const INITIAL_STATE = {
   logbooks: [],
