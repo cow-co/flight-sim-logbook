@@ -2,6 +2,7 @@ import React from "react";
 import Axios from "axios";
 import { axiosConfig } from "../../common/helpers/axiosConfig";
 import { setAlert } from "../../common/redux/common-actions";
+import { logMission } from "../redux/logbook-actions";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -33,8 +34,7 @@ class AddMissionModal extends React.Component {
         aar: false,
       },
     };
-    this.handleClose = this.handleClose.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleStringChanged = this.handleStringChanged.bind(this);
     this.handleCheckboxChanged = this.handleCheckboxChanged.bind(this);
@@ -70,11 +70,11 @@ class AddMissionModal extends React.Component {
   }
 
   handleStringChanged = (name) => (event) => {
-    this.setState({ ...this.state, [name]: event.target.value });
+    this.setState({ ...this.state, aircraft: { [name]: event.target.value } });
   };
 
   handleCheckboxChanged = (name) => (event) => {
-    this.setState({ ...this.state, [name]: event.target.checked });
+    this.setState({ ...this.state, aircraft: { [name]: event.target.checked } });
   };
 
   render() {
@@ -177,14 +177,14 @@ class AddMissionModal extends React.Component {
       </DialogContent>
     );
     return (
-      <Dialog open={this.props.open} onClose={this.props.onClose} aria-labelledby="form-dialog-title">
+      <Dialog open={this.props.open} onClose={this.props.handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Add a Mission</DialogTitle>
         {checkboxes}
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={this.props.handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={this.props.handleClose} color="primary">
             Subscribe
           </Button>
         </DialogActions>

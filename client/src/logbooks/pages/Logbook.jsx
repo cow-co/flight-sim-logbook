@@ -126,7 +126,11 @@ class Logbook extends React.Component {
             </Grid>
           </Grid>
           <RadarChart className="radar" data={radarData} captions={captions} size={400} />
-          <AddMissionModal open={this.state.modalOpen} aircraft={this.state.aircraft} />
+          <AddMissionModal
+            open={this.state.modalOpen}
+            handleClose={this.handleFormClose}
+            aircraft={this.state.aircraft}
+          />
 
           <Button
             color="primary"
