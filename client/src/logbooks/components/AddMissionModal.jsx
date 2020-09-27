@@ -79,104 +79,109 @@ class AddMissionModal extends React.Component {
   };
 
   render() {
-    const checkboxes = (
-      <DialogContent>
-        <FormControlLabel
-          control={
-            <Checkbox checked={this.state.mission.imc} onChange={this.handleCheckboxChanged("imc")} value="imc" />
-          }
-          label="IMC"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox checked={this.state.mission.bfm} onChange={this.handleCheckboxChanged("bfm")} name="bfm" />
-          }
-          label="BFM"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              disabled={this.state.aircraftCapabilities.bvrCapable}
-              checked={this.state.mission.bvr}
-              onChange={this.handleCheckboxChanged("bvr")}
-              name="bvr"
-            />
-          }
-          label="BVR"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              disabled={this.state.aircraftCapabilities.agCapable}
-              checked={this.state.mission.sead}
-              onChange={this.handleCheckboxChanged("sead")}
-              name="sead"
-            />
-          }
-          label="SEAD"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              disabled={this.state.aircraftCapabilities.agCapable}
-              checked={this.state.mission.cas}
-              onChange={this.handleCheckboxChanged("cas")}
-              name="cas"
-            />
-          }
-          label="CAS"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              disabled={this.state.aircraftCapabilities.agCapable}
-              checked={this.state.mission.strike}
-              onChange={this.handleCheckboxChanged("strike")}
-              name="strike"
-            />
-          }
-          label="Strike"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={this.state.mission.package}
-              onChange={this.handleCheckboxChanged("package")}
-              name="package"
-            />
-          }
-          label="Coordinated Package"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              disabled={this.state.aircraftCapabilities.carrierOpsCapable}
-              checked={this.state.mission.caseI}
-              onChange={this.handleCheckboxChanged("caseI")}
-              name="caseI"
-            />
-          }
-          label="Case I"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              disabled={this.state.aircraftCapabilities.carrierOpsCapable}
-              checked={this.state.mission.caseIII}
-              onChange={this.handleCheckboxChanged("caseIII")}
-              name="caseIII"
-            />
-          }
-          label="Case III"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox checked={this.state.mission.aar} onChange={this.handleCheckboxChanged("aar")} name="aar" />
-          }
-          label="AAR"
-        />
-      </DialogContent>
-    );
+    let checkboxes = null;
+
+    if (this.state.aircraftCapabilities !== null) {
+      checkboxes = (
+        <DialogContent>
+          <FormControlLabel
+            control={
+              <Checkbox checked={this.state.mission.imc} onChange={this.handleCheckboxChanged("imc")} value="imc" />
+            }
+            label="IMC"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox checked={this.state.mission.bfm} onChange={this.handleCheckboxChanged("bfm")} name="bfm" />
+            }
+            label="BFM"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                disabled={this.state.aircraftCapabilities.bvrCapable}
+                checked={this.state.mission.bvr}
+                onChange={this.handleCheckboxChanged("bvr")}
+                name="bvr"
+              />
+            }
+            label="BVR"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                disabled={this.state.aircraftCapabilities.agCapable}
+                checked={this.state.mission.sead}
+                onChange={this.handleCheckboxChanged("sead")}
+                name="sead"
+              />
+            }
+            label="SEAD"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                disabled={this.state.aircraftCapabilities.agCapable}
+                checked={this.state.mission.cas}
+                onChange={this.handleCheckboxChanged("cas")}
+                name="cas"
+              />
+            }
+            label="CAS"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                disabled={this.state.aircraftCapabilities.agCapable}
+                checked={this.state.mission.strike}
+                onChange={this.handleCheckboxChanged("strike")}
+                name="strike"
+              />
+            }
+            label="Strike"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={this.state.mission.package}
+                onChange={this.handleCheckboxChanged("package")}
+                name="package"
+              />
+            }
+            label="Coordinated Package"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                disabled={this.state.aircraftCapabilities.carrierOpsCapable}
+                checked={this.state.mission.caseI}
+                onChange={this.handleCheckboxChanged("caseI")}
+                name="caseI"
+              />
+            }
+            label="Case I"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                disabled={this.state.aircraftCapabilities.carrierOpsCapable}
+                checked={this.state.mission.caseIII}
+                onChange={this.handleCheckboxChanged("caseIII")}
+                name="caseIII"
+              />
+            }
+            label="Case III"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox checked={this.state.mission.aar} onChange={this.handleCheckboxChanged("aar")} name="aar" />
+            }
+            label="AAR"
+          />
+        </DialogContent>
+      );
+    }
+
     return (
       <Dialog open={this.props.open} onClose={this.props.handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Add a Mission</DialogTitle>
