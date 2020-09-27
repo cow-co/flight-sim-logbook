@@ -3,6 +3,7 @@ import Axios from "axios";
 import { axiosConfig } from "../../common/helpers/axiosConfig";
 import { setAlert } from "../../common/redux/common-actions";
 import { logMission } from "../redux/logbook-actions";
+import { isEmpty } from "../../common/helpers/utils";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
