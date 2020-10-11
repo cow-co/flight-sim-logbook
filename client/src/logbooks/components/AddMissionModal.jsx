@@ -86,7 +86,7 @@ class AddMissionModal extends React.Component {
         <DialogContent>
           <FormControlLabel
             control={
-              <Checkbox checked={this.state.mission.imc} onChange={this.handleCheckboxChanged("imc")} value="imc" />
+              <Checkbox checked={this.state.mission.imc} onChange={this.handleCheckboxChanged("imc")} name="imc" />
             }
             label="IMC"
           />
