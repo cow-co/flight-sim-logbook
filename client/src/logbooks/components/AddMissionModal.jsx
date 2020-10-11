@@ -99,7 +99,7 @@ class AddMissionModal extends React.Component {
           <FormControlLabel
             control={
               <Checkbox
-                disabled={this.state.aircraftCapabilities.bvrCapable}
+                disabled={!this.state.aircraftCapabilities.bvrCapable}
                 checked={this.state.mission.bvr}
                 onChange={this.handleCheckboxChanged("bvr")}
                 name="bvr"
@@ -110,7 +110,7 @@ class AddMissionModal extends React.Component {
           <FormControlLabel
             control={
               <Checkbox
-                disabled={this.state.aircraftCapabilities.agCapable}
+                disabled={!this.state.aircraftCapabilities.agCapable}
                 checked={this.state.mission.sead}
                 onChange={this.handleCheckboxChanged("sead")}
                 name="sead"
@@ -121,7 +121,7 @@ class AddMissionModal extends React.Component {
           <FormControlLabel
             control={
               <Checkbox
-                disabled={this.state.aircraftCapabilities.agCapable}
+                disabled={!this.state.aircraftCapabilities.agCapable}
                 checked={this.state.mission.cas}
                 onChange={this.handleCheckboxChanged("cas")}
                 name="cas"
@@ -132,7 +132,7 @@ class AddMissionModal extends React.Component {
           <FormControlLabel
             control={
               <Checkbox
-                disabled={this.state.aircraftCapabilities.agCapable}
+                disabled={!this.state.aircraftCapabilities.agCapable}
                 checked={this.state.mission.strike}
                 onChange={this.handleCheckboxChanged("strike")}
                 name="strike"
@@ -153,7 +153,7 @@ class AddMissionModal extends React.Component {
           <FormControlLabel
             control={
               <Checkbox
-                disabled={this.state.aircraftCapabilities.carrierOpsCapable}
+                disabled={!this.state.aircraftCapabilities.carrierOpsCapable}
                 checked={this.state.mission.caseI}
                 onChange={this.handleCheckboxChanged("caseI")}
                 name="caseI"
@@ -164,7 +164,7 @@ class AddMissionModal extends React.Component {
           <FormControlLabel
             control={
               <Checkbox
-                disabled={this.state.aircraftCapabilities.carrierOpsCapable}
+                disabled={!this.state.aircraftCapabilities.carrierOpsCapable}
                 checked={this.state.mission.caseIII}
                 onChange={this.handleCheckboxChanged("caseIII")}
                 name="caseIII"
