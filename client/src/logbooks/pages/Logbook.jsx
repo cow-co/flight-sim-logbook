@@ -15,7 +15,6 @@ import AddMissionModal from "../components/AddMissionModal";
 
 class Logbook extends React.Component {
   constructor(props) {
-    console.debug(props);
     super(props);
     const tokenisedPath = this.props.location.pathname.split("/");
     const aircraft = decodeURIComponent(tokenisedPath[tokenisedPath.length - 1]);
