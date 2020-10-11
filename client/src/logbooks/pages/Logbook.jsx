@@ -137,7 +137,7 @@ class Logbook extends React.Component {
             className="add-mission"
             startIcon={<AssignmentIcon />}
             variant="contained"
-            onClick={this.openModal}
+            onClick={this.handleFormOpen}
           >
             Add Mission
           </Button>
