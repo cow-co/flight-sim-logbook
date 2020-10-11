@@ -63,19 +63,17 @@ class AddMissionModal extends React.Component {
     }
   }
 
-  // TODO Checkboxes for the practiced skills (ones not allowed via the getAircraft response will be disabled)
-
   async handleSubmit() {
     await logMission(this.state.mission);
     this.props.onClose();
   }
 
   handleStringChanged = (name) => (event) => {
-    this.setState({ ...this.state, aircraft: { [name]: event.target.value } });
+    this.setState({ ...this.state, mission: { [name]: event.target.value } });
   };
 
   handleCheckboxChanged = (name) => (event) => {
-    this.setState({ ...this.state, aircraft: { [name]: event.target.checked } });
+    this.setState({ ...this.state, mission: { [name]: event.target.checked } });
   };
 
   render() {
@@ -190,8 +188,8 @@ class AddMissionModal extends React.Component {
           <Button onClick={this.props.handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={this.props.handleClose} color="primary">
-            Subscribe
+          <Button onClick={this.props.handleSubmit} color="primary">
+            Submit
           </Button>
         </DialogActions>
       </Dialog>
