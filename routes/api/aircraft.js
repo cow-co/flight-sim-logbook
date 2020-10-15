@@ -20,4 +20,19 @@ router.get("/all", async (req, res) => {
   return res.status(returnStatus).json(responseJSON);
 });
 
+router.get("/:aircraftName", async (req, res) => {
+  let responseJSON = { aircraft: null, errors: [] };
+  let returnStatus = statusCodes.SUCCESS;
+
+  try {
+    responseJSON.aircraft = await aircraftMethods.findAircraftByName(req.params.aircraftName);
+  } catch (error) {
+    console.error(error.message);
+    returnStatus = statusCodes.SERVER_ERROR;
+    responseJSON.errors.push("Server-side error");
+  }
+
+  return res.status(returnStatus).json(responseJSON);
+});
+
 module.exports = router;

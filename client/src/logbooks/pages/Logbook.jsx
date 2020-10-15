@@ -11,10 +11,10 @@ import { Button } from "@material-ui/core";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { selectLogbook } from "../redux/logbook-actions";
+import AddMissionModal from "../components/AddMissionModal";
 
 class Logbook extends React.Component {
   constructor(props) {
-    console.debug(props);
     super(props);
     const tokenisedPath = this.props.location.pathname.split("/");
     const aircraft = decodeURIComponent(tokenisedPath[tokenisedPath.length - 1]);
@@ -23,25 +23,35 @@ class Logbook extends React.Component {
     this.state = {
       username,
       aircraft,
+      modalOpen: false,
     };
 
     this.percentageTheData = this.percentageTheData.bind(this);
-    this.openModal = this.openModal.bind(this);
+    this.handleFormClose = this.handleFormClose.bind(this);
+    this.handleFormOpen = this.handleFormOpen.bind(this);
   }
 
   async componentDidMount() {
     await this.props.selectLogbook(this.state.username, this.state.aircraft);
   }
 
-  openModal() {
-    console.log("Open Modal");
+  handleFormOpen() {
+    this.setState({
+      modalOpen: true,
+    });
+  }
+
+  handleFormClose() {
+    this.setState({
+      modalOpen: false,
+    });
   }
 
   // Convert the values to percentages
   percentageTheData(data) {
     const totalSorties = data.totalSorties;
 
-    // BVY Capable
+    // BVR Capable
     if (data.bvrSorties) {
       data.bvrSorties = (data.bvrSorties / totalSorties) * 100.0;
     }
@@ -67,7 +77,6 @@ class Logbook extends React.Component {
     return data;
   }
 
-  // TODO Button to add a mission
   render() {
     if (this.props.logbook !== null) {
       let percentageData = {
@@ -100,8 +109,6 @@ class Logbook extends React.Component {
         aarSorties: "AAR",
       };
 
-      console.log(captions);
-
       return (
         <div>
           <Typography variant="h4" className="title">
@@ -118,13 +125,18 @@ class Logbook extends React.Component {
             </Grid>
           </Grid>
           <RadarChart className="radar" data={radarData} captions={captions} size={400} />
+          <AddMissionModal
+            open={this.state.modalOpen}
+            handleClose={this.handleFormClose}
+            aircraft={this.state.aircraft}
+          />
 
           <Button
             color="primary"
             className="add-mission"
             startIcon={<AssignmentIcon />}
             variant="contained"
-            onClick={this.openModal}
+            onClick={this.handleFormOpen}
           >
             Add Mission
           </Button>
