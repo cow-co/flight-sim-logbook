@@ -32,14 +32,14 @@ describe("Logbook endpoint tests", () => {
       const token = loginRes.body.jwt;
 
       const logbookRequest = {
-        aircraftName: "F-16",
+        aircraft: "F-16",
       };
       const res = await request(server)
-        .post("/api/logbooks/create")
+        .post("/api/logbooks/")
         .set("Authorization", `Bearer ${token}`)
         .send(logbookRequest);
       expect(res.statusCode).to.equal(201);
-      expect(res.body.logbook).to.haveOwnProperty("aircraft", logbookRequest.aircraftName);
+      expect(res.body.logbook).to.haveOwnProperty("aircraft", logbookRequest.aircraft);
     });
 
     it("should fail to create a logbook with an invalid aircraft name", async () => {
@@ -53,10 +53,10 @@ describe("Logbook endpoint tests", () => {
       const token = loginRes.body.jwt;
 
       const logbookRequest = {
-        aircraftName: "F-19",
+        aircraft: "F-19",
       };
       const res = await request(server)
-        .post("/api/logbooks/create")
+        .post("/api/logbooks/")
         .set("Authorization", `Bearer ${token}`)
         .send(logbookRequest);
       expect(res.statusCode).to.equal(400);
@@ -76,17 +76,16 @@ describe("Logbook endpoint tests", () => {
       const token = loginRes.body.jwt;
 
       const logbookRequest = {
-        aircraftName: "F-16",
+        aircraft: "F-16",
       };
-      await request(server).post("/api/logbooks/create").set("Authorization", `Bearer ${token}`).send(logbookRequest);
+      await request(server).post("/api/logbooks/").set("Authorization", `Bearer ${token}`).send(logbookRequest);
       const res = await request(server)
-        .delete("/api/logbooks/delete")
-        .set("Authorization", `Bearer ${token}`)
-        .send(logbookRequest);
+        .delete(`/api/logbooks/${logbookRequest.aircraft}`)
+        .set("Authorization", `Bearer ${token}`);
       expect(res.statusCode).to.equal(200);
     });
 
-    it("should fail to delete a logbook with an empty aircraft name", async () => {
+    it("should fail to delete a logbook with an invalid aircraft name", async () => {
       await request(server).post("/api/users/register").send(baseUser);
       await utils.verifyUser(baseUser.username);
 
@@ -97,12 +96,10 @@ describe("Logbook endpoint tests", () => {
       const token = loginRes.body.jwt;
 
       const logbookRequest = {
-        aircraftName: "F-16",
+        aircraft: "F-16",
       };
-      await request(server).post("/api/logbooks/create").set("Authorization", `Bearer ${token}`).send(logbookRequest);
-      const res = await request(server).delete("/api/logbooks/delete").set("Authorization", `Bearer ${token}`).send({
-        aircraftName: "",
-      });
+      await request(server).post("/api/logbooks/").set("Authorization", `Bearer ${token}`).send(logbookRequest);
+      const res = await request(server).delete(`/api/logbooks/aaa`).set("Authorization", `Bearer ${token}`);
       expect(res.statusCode).to.equal(400);
       expect(res.body.errors.length).to.equal(1);
     });
@@ -120,10 +117,10 @@ describe("Logbook endpoint tests", () => {
       const token = loginRes.body.jwt;
 
       const logbookRequest = {
-        aircraftName: "F-16",
+        aircraft: "F-16",
       };
       const path = "/api/logbooks/" + baseUser.username;
-      await request(server).post("/api/logbooks/create").set("Authorization", `Bearer ${token}`).send(logbookRequest);
+      await request(server).post("/api/logbooks/").set("Authorization", `Bearer ${token}`).send(logbookRequest);
       const res = await request(server).get(path);
       expect(res.statusCode).to.equal(200);
       expect(res.body.logbooks.length).to.equal(1);
@@ -140,9 +137,9 @@ describe("Logbook endpoint tests", () => {
       const token = loginRes.body.jwt;
 
       const logbookRequest = {
-        aircraftName: "F-16",
+        aircraft: "F-16",
       };
-      await request(server).post("/api/logbooks/create").set("Authorization", `Bearer ${token}`).send(logbookRequest);
+      await request(server).post("/api/logbooks/").set("Authorization", `Bearer ${token}`).send(logbookRequest);
       const res = await request(server).get("/api/logbooks/" + baseUser.username + "a");
       expect(res.statusCode).to.equal(400);
       expect(res.body.errors.length).to.equal(1);
@@ -161,13 +158,13 @@ describe("Logbook endpoint tests", () => {
       const token = loginRes.body.jwt;
 
       const logbookRequest = {
-        aircraftName: "F-16",
+        aircraft: "F-16",
       };
-      const path = `/api/logbooks/${baseUser.username}/${logbookRequest.aircraftName}`;
-      await request(server).post("/api/logbooks/create").set("Authorization", `Bearer ${token}`).send(logbookRequest);
+      const path = `/api/logbooks/${baseUser.username}/${logbookRequest.aircraft}`;
+      await request(server).post("/api/logbooks/").set("Authorization", `Bearer ${token}`).send(logbookRequest);
       const res = await request(server).get(path);
       expect(res.statusCode).to.equal(200);
-      expect(res.body.logbook.aircraft).to.equal(logbookRequest.aircraftName);
+      expect(res.body.logbook.aircraft).to.equal(logbookRequest.aircraft);
     });
 
     it("should fail to get a logbook with an incorrect aircraft name", async () => {
@@ -181,10 +178,10 @@ describe("Logbook endpoint tests", () => {
       const token = loginRes.body.jwt;
 
       const logbookRequest = {
-        aircraftName: "F-16",
+        aircraft: "F-16",
       };
-      const path = `/api/logbooks/${baseUser.username}/${logbookRequest.aircraftName}a`;
-      await request(server).post("/api/logbooks/create").set("Authorization", `Bearer ${token}`).send(logbookRequest);
+      const path = `/api/logbooks/${baseUser.username}/${logbookRequest.aircraft}a`;
+      await request(server).post("/api/logbooks/").set("Authorization", `Bearer ${token}`).send(logbookRequest);
       const res = await request(server).get(path);
       expect(res.statusCode).to.equal(400);
       expect(res.body.errors.length).to.equal(1);
@@ -203,11 +200,10 @@ describe("Logbook endpoint tests", () => {
       const token = loginRes.body.jwt;
 
       const logbookRequest = {
-        aircraftName: "F-16",
+        aircraft: "F-16",
       };
 
       const mission = {
-        aircraft: logbookRequest.aircraftName,
         duration: 3.3,
         a2aKills: 0,
         imc: false,
@@ -221,9 +217,9 @@ describe("Logbook endpoint tests", () => {
         caseIII: false,
         aar: true,
       };
-      await request(server).post("/api/logbooks/create").set("Authorization", `Bearer ${token}`).send(logbookRequest);
+      await request(server).post("/api/logbooks/").set("Authorization", `Bearer ${token}`).send(logbookRequest);
       const res = await request(server)
-        .post("/api/logbooks/add-mission")
+        .post(`/api/logbooks/${logbookRequest.aircraft}`)
         .set("Authorization", `Bearer ${token}`)
         .send(mission);
       expect(res.statusCode).to.equal(200);
@@ -240,11 +236,10 @@ describe("Logbook endpoint tests", () => {
       const token = loginRes.body.jwt;
 
       const logbookRequest = {
-        aircraftName: "F-16",
+        aircraft: "F-16",
       };
 
       const mission = {
-        aircraft: "",
         duration: 3.3,
         a2aKills: 0,
         imc: false,
@@ -260,7 +255,7 @@ describe("Logbook endpoint tests", () => {
       };
       await request(server).post("/api/logbooks/create").set("Authorization", `Bearer ${token}`).send(logbookRequest);
       const res = await request(server)
-        .post("/api/logbooks/add-mission")
+        .post(`/api/logbooks/${logbookRequest.aircraft}`)
         .set("Authorization", `Bearer ${token}`)
         .send(mission);
       expect(res.statusCode).to.equal(400);

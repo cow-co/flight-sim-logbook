@@ -18,12 +18,12 @@
   },
   "homepage": "https://github.com/cow-co/flight-sim-logbook#readme",
   "dependencies": {
-    "argon2": "^0.26.2",
-    "crypto-random-string": "^3.2.0",
+    "argon2": "^0.27.0",
+    "crypto-random-string": "^3.3.0",
     "express": "^4.17.1",
     "http-shutdown": "^1.2.2",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.9.26",
+    "mongoose": "^5.10.7",
     "nodemailer": "^6.4.11",
     "swagger-ui-express": "^4.1.4",
     "yamljs": "^0.3.0"

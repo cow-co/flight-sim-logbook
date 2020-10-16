@@ -90,7 +90,11 @@ const createLogbook = async (aircraftName, user) => {
 
       user.logbooks.push(createdLogbook);
       await user.save();
-      newLogbook.logbook = createdLogbook;
+      newLogbook.logbook = {
+        aircraft: createdLogbook.aircraft,
+        totalHours: 0,
+        a2aKills: 0,
+      };
     } catch (error) {
       console.warn(error);
       newLogbook.errors.push(error.message);
@@ -122,17 +126,21 @@ const deleteLogbook = async (aircraftName, user) => {
   return response;
 };
 
-const getAllLogbooks = async (user) => {
+const getAllLogbooks = (user) => {
   let response = { logbooks: [] };
   user.logbooks.forEach((logbook) => {
-    response.logbooks.push({
-      aircraft: logbook.aircraft,
-      totalHours: logbook.totalHours,
-      a2aKills: logbook.a2aKills,
-    });
+    response.logbooks.push(summariseLogbook(logbook));
   });
 
   return response;
+};
+
+const summariseLogbook = (logbook) => {
+  return {
+    aircraft: logbook.aircraft,
+    totalHours: logbook.totalHours,
+    a2aKills: logbook.a2aKills,
+  };
 };
 
 const getLogbook = async (aircraftName, user) => {
@@ -145,13 +153,14 @@ const getLogbook = async (aircraftName, user) => {
   return response;
 };
 
-const addMission = async (missionDetails, user) => {
+const addMission = async (aircraft, missionDetails, user) => {
   let response = { logbook: null, errors: [] };
-  let logbook = getUserLogbookForAircraft(missionDetails.aircraft, user);
-  const aircraft = await findAircraftByName(missionDetails.aircraft);
+  let logbook = getUserLogbookForAircraft(aircraft, user);
+  const aircraftDetails = await findAircraftByName(aircraft);
 
   if (!isEmptyOrNull(logbook)) {
     logbook.totalHours += missionDetails.duration;
+    logbook.totalSorties += 1;
     logbook.a2aKills += missionDetails.a2aKills;
 
     if (missionDetails.imc) {
@@ -162,19 +171,19 @@ const addMission = async (missionDetails, user) => {
       logbook.bfmSorties++;
     }
 
-    if (missionDetails.bvr && aircraft.bvrCapable) {
+    if (missionDetails.bvr && aircraftDetails.bvrCapable) {
       logbook.bvrSorties++;
     }
 
-    if (missionDetails.sead && aircraft.agCapable) {
+    if (missionDetails.sead && aircraftDetails.agCapable) {
       logbook.seadSorties++;
     }
 
-    if (missionDetails.cas && aircraft.agCapable) {
+    if (missionDetails.cas && aircraftDetails.agCapable) {
       logbook.casSorties++;
     }
 
-    if (missionDetails.strike && aircraft.agCapable) {
+    if (missionDetails.strike && aircraftDetails.agCapable) {
       logbook.strikeSorties++;
     }
 
@@ -182,11 +191,11 @@ const addMission = async (missionDetails, user) => {
       logbook.packageSorties++;
     }
 
-    if (missionDetails.caseI && aircraft.carrierOpsCapable) {
+    if (missionDetails.caseI && aircraftDetails.carrierOpsCapable) {
       logbook.caseISorties++;
     }
 
-    if (missionDetails.caseIII && aircraft.carrierOpsCapable) {
+    if (missionDetails.caseIII && aircraftDetails.carrierOpsCapable) {
       logbook.caseIIISorties++;
     }
 
@@ -213,6 +222,7 @@ module.exports = {
   createLogbook,
   deleteLogbook,
   getAllLogbooks,
+  summariseLogbook,
   getLogbook,
   addMission,
 };

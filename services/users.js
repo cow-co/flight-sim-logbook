@@ -6,7 +6,7 @@ const JWT_KEY = require("../config/keys").JWT_KEY;
 const AUTH_EXPIRY_HOURS = require("../config/keys").AUTH_EXPIRY_HOURS;
 const { isEmptyOrNull } = require("../helpers/validation");
 
-const secondsExpiry = 60 * 60 * AUTH_EXPIRY_HOURS; // 12 hours
+const hoursExpiry = `${AUTH_EXPIRY_HOURS}h`;
 const minPassLength = 13;
 
 const getUserByName = async (username) => {
@@ -111,7 +111,7 @@ const generateJWT = async (user) => {
     },
     JWT_KEY,
     {
-      expiresIn: secondsExpiry,
+      expiresIn: hoursExpiry,
     }
   );
 
@@ -180,7 +180,7 @@ const verifyEmail = async (username, givenToken) => {
   const user = await getUserByName(username);
   const timePassed = Date.now() - user.verificationSet;
   let valid = false;
-  if (timePassed < secondsExpiry * 1000) {
+  if (timePassed < AUTH_EXPIRY_HOURS * 60 * 60 * 1000) {
     if (user.verificationToken === givenToken) {
       valid = true;
       user.isVerified = true;
@@ -215,7 +215,7 @@ const verifyForgotPassword = async (username, token) => {
   const user = await getUserByName(username);
   const timePassed = Date.now() - user.resetTokenSet;
   let valid = false;
-  if (timePassed < secondsExpiry * 1000) {
+  if (timePassed < AUTH_EXPIRY_HOURS * 60 * 60 * 1000) {
     if (user.resetPasswordToken === token) {
       valid = true;
     }
