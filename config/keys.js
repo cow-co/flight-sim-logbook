@@ -6,9 +6,9 @@ const EMAIL_PW = process.env.EMAIL_PW;
 const AUTH_EXPIRY_HOURS = 12;
 
 module.exports = {
-  mongo_uri: `mongodb://${MONGO_UN}:${MONGO_PW}@ds231529.mlab.com:31529/flight-sim-logbook`,
+  mongo_uri: `mongodb+srv://${MONGO_UN}:${MONGO_PW}@flight-sim-logbook.uy7mi.mongodb.net/flight-sim-logbook?retryWrites=true&w=majority`,
   JWT_KEY,
   EMAIL_UN,
   EMAIL_PW,
-  AUTH_EXPIRY_HOURS
+  AUTH_EXPIRY_HOURS,
 };
