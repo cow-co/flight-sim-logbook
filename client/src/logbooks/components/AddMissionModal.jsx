@@ -185,11 +185,28 @@ class AddMissionModal extends React.Component {
       );
     }
 
+    // TODO Make the duration and kills into short/small input fields; at the moment they are far too wide.
     return (
       <Dialog open={this.props.open} onClose={this.props.handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Add a Mission</DialogTitle>
-        <TextField id="duration" label="Duration" type="number" InputLabelProps={{ shrink: true }} />
-        <TextField id="a2aKills" label="A2A Kills" type="number" InputLabelProps={{ shrink: true }} />
+        <TextField
+          required
+          id="duration"
+          label="Duration"
+          type="number"
+          InputLabelProps={{ shrink: true }}
+          variant="outlined"
+          size="small"
+        />
+        <TextField
+          required
+          id="a2aKills"
+          label="A2A Kills"
+          type="number"
+          InputLabelProps={{ shrink: true }}
+          variant="outlined"
+          size="small"
+        />
         {checkboxes}
         <DialogActions>
           <Button onClick={this.props.handleClose} color="primary">
