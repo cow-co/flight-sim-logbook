@@ -11,7 +11,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import { Button } from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
 
 class AddMissionModal extends React.Component {
   constructor(props) {
@@ -188,6 +188,8 @@ class AddMissionModal extends React.Component {
     return (
       <Dialog open={this.props.open} onClose={this.props.handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Add a Mission</DialogTitle>
+        <TextField id="duration" label="Duration" type="number" InputLabelProps={{ shrink: true }} />
+        <TextField id="a2aKills" label="A2A Kills" type="number" InputLabelProps={{ shrink: true }} />
         {checkboxes}
         <DialogActions>
           <Button onClick={this.props.handleClose} color="primary">
