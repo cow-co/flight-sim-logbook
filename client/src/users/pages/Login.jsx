@@ -2,7 +2,6 @@ import React from "react";
 import { TextField, Button, Grid } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import { login } from "../redux/user-actions";
-import "./Login.css";
 import { Redirect } from "react-router-dom";
 
 import { connect } from "react-redux";

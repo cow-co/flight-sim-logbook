@@ -7,7 +7,6 @@ import Alert from "@material-ui/lab/Alert";
 import { connect } from "react-redux";
 import { registerUser } from "../redux/user-actions";
 import PropTypes from "prop-types";
-import "./RegisterUser.css";
 
 class RegisterUser extends React.Component {
   constructor() {
