@@ -46,3 +46,32 @@ a {
   text-decoration: none;
   color: white;
 }
+
+.fullPageTextField {
+  min-width: 40vw !important;
+}
+
+.modalTextField {
+  min-width: 0 !important;
+}
+
+.full-page-form {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.full-page-form > form {
+  display: inline-block;
+  align-self: center;
+}
+
+label.MuiFormControlLabel-root {
+  margin-top: 20px;
+  margin-left: 0px;
+}
+
+div.MuiFormControl-root {
+  margin: 10px;
+  min-width: 120px;
+  vertical-align: baseline;
+}

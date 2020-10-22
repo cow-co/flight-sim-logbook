@@ -185,12 +185,13 @@ class AddMissionModal extends React.Component {
       );
     }
 
-    // TODO Make the duration and kills into short/small input fields; at the moment they are far too wide.
+    // TODO Make the duration and kills shorter; at the moment they are far too wide. Gotta be done in css *apparently* because fullWidth/small are being annoying
     return (
       <Dialog open={this.props.open} onClose={this.props.handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Add a Mission</DialogTitle>
         <TextField
           required
+          className="modalTextField"
           id="duration"
           label="Duration"
           type="number"
@@ -200,6 +201,7 @@ class AddMissionModal extends React.Component {
         />
         <TextField
           required
+          className="modalTextField"
           id="a2aKills"
           label="A2A Kills"
           type="number"

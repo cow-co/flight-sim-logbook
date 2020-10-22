@@ -55,7 +55,7 @@ class RegisterUser extends React.Component {
 
   render() {
     return (
-      <div className="register-user">
+      <div className="full-page-form">
         <Typography variant="h4" className="title">
           Register an Account
         </Typography>
@@ -70,6 +70,7 @@ class RegisterUser extends React.Component {
           >
             <Grid item>
               <TextField
+                className="full-page-text-field"
                 type="email"
                 id="email"
                 label="Email"
@@ -80,6 +81,7 @@ class RegisterUser extends React.Component {
             </Grid>
             <Grid item>
               <TextField
+                className="full-page-text-field"
                 type="text"
                 id="username"
                 label="Username"
@@ -90,6 +92,7 @@ class RegisterUser extends React.Component {
             </Grid>
             <Grid item>
               <TextField
+                className="full-page-text-field"
                 type="password"
                 id="password"
                 label="Password"
@@ -100,6 +103,7 @@ class RegisterUser extends React.Component {
             </Grid>
             <Grid item>
               <TextField
+                className="full-page-text-field"
                 type="password"
                 id="passwordConfirmation"
                 label="Password Confirmation"
