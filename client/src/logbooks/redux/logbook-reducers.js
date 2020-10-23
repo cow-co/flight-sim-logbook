@@ -11,6 +11,7 @@ const INITIAL_STATE = {
   selectedLogbook: null,
 };
 
+// FIXME Reloading the page resets the "logged in" status on the client side (resets the header bar etc.)
 const logbooksReducer = (currentState = INITIAL_STATE, action) => {
   switch (action.type) {
     case GET_LOGBOOKS:

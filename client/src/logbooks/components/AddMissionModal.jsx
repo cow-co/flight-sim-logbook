@@ -79,7 +79,6 @@ class AddMissionModal extends React.Component {
     this.setState(newState);
   };
 
-  // TODO Remove logging
   render() {
     let checkboxes = null;
 
@@ -184,7 +183,6 @@ class AddMissionModal extends React.Component {
       );
     }
 
-    // TODO Make the duration and kills shorter; at the moment they are far too wide. Gotta be done in css *apparently* because fullWidth/small are being annoying
     return (
       <Dialog open={this.props.open} onClose={this.props.handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Add a Mission</DialogTitle>

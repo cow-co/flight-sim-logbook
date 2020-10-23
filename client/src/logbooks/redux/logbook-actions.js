@@ -141,7 +141,7 @@ const logMission = (data) => async (dispatch) => {
   };
 
   try {
-    const response = await Axios.delete(`/api/logbooks/${encodeURIComponent(data.aircraft)}`, config);
+    const response = await Axios.post(`/api/logbooks/${encodeURIComponent(data.aircraft)}`, data, config);
     const errors = response.data.errors;
     const status = response.status;
 
