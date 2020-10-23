@@ -211,10 +211,10 @@ class AddMissionModal extends React.Component {
         />
         {checkboxes}
         <DialogActions>
-          <Button onClick={this.props.handleClose} color="primary">
+          <Button onClick={this.props.handleClose} color="secondary" variant="contained">
             Cancel
           </Button>
-          <Button onClick={this.props.handleSubmit} color="primary">
+          <Button onClick={this.props.handleSubmit} color="primary" variant="contained">
             Submit
           </Button>
         </DialogActions>
