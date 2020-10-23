@@ -64,6 +64,9 @@ class AddMissionModal extends React.Component {
   }
 
   async handleSubmit() {
+    console.log("====================================");
+    console.log("Logging mission");
+    console.log("====================================");
     await logMission(this.state.mission);
     this.props.onClose();
   }
@@ -214,7 +217,7 @@ class AddMissionModal extends React.Component {
           <Button onClick={this.props.handleClose} color="secondary" variant="contained">
             Cancel
           </Button>
-          <Button onClick={this.props.handleSubmit} color="primary" variant="contained">
+          <Button onClick={this.handleSubmit} color="primary" variant="contained">
             Submit
           </Button>
         </DialogActions>
