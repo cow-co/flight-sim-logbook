@@ -191,7 +191,7 @@ class AddMissionModal extends React.Component {
         <DialogTitle id="form-dialog-title">Add a Mission</DialogTitle>
         <TextField
           required
-          className="modalTextField"
+          className="modal-text-field"
           id="duration"
           label="Duration"
           type="number"
@@ -201,7 +201,7 @@ class AddMissionModal extends React.Component {
         />
         <TextField
           required
-          className="modalTextField"
+          className="modal-text-field"
           id="a2aKills"
           label="A2A Kills"
           type="number"
