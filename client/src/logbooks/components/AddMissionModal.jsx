@@ -64,7 +64,7 @@ class AddMissionModal extends React.Component {
   }
 
   async handleSubmit() {
-    await logMission(this.state.mission);
+    await this.props.logMission(this.state.mission);
     this.props.handleClose();
   }
 
@@ -220,4 +220,8 @@ class AddMissionModal extends React.Component {
   }
 }
 
-export default AddMissionModal;
+LogbookSummary.propTypes = {
+  logMission: PropTypes.func.isRequired,
+};
+
+export default connect(null, { logMission })(AddMissionModal);
