@@ -64,11 +64,8 @@ class AddMissionModal extends React.Component {
   }
 
   async handleSubmit() {
-    console.log("====================================");
-    console.log("Logging mission");
-    console.log("====================================");
     await logMission(this.state.mission);
-    this.props.onClose();
+    this.props.handleClose();
   }
 
   handleStringChanged = (name) => (event) => {
@@ -77,13 +74,12 @@ class AddMissionModal extends React.Component {
 
   handleCheckboxChanged = (name) => (event) => {
     event.preventDefault();
-    console.log(`${name}: ${event.target}`);
     let newState = { ...this.state };
     newState.mission[name] = event.target.checked;
     this.setState(newState);
-    console.log(this.state);
   };
 
+  // TODO Remove logging
   render() {
     let checkboxes = null;
 
