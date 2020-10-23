@@ -198,6 +198,7 @@ class AddMissionModal extends React.Component {
           InputLabelProps={{ shrink: true }}
           variant="outlined"
           size="small"
+          onChange={this.handleStringChanged}
         />
         <TextField
           required
@@ -208,6 +209,7 @@ class AddMissionModal extends React.Component {
           InputLabelProps={{ shrink: true }}
           variant="outlined"
           size="small"
+          onChange={this.handleStringChanged}
         />
         {checkboxes}
         <DialogActions>
