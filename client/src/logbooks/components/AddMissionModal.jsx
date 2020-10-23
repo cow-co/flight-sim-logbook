@@ -13,6 +13,9 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import { Button, TextField } from "@material-ui/core";
 
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+
 class AddMissionModal extends React.Component {
   constructor(props) {
     super(props);
@@ -220,7 +223,7 @@ class AddMissionModal extends React.Component {
   }
 }
 
-LogbookSummary.propTypes = {
+AddMissionModal.propTypes = {
   logMission: PropTypes.func.isRequired,
 };
 
