@@ -197,7 +197,7 @@ class AddMissionModal extends React.Component {
           type="number"
           InputLabelProps={{ shrink: true }}
           variant="outlined"
-          fullWidth
+          size="small"
         />
         <TextField
           required
