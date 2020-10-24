@@ -73,8 +73,10 @@ class AddMissionModal extends React.Component {
   }
 
   handleStringChanged = (name) => (event) => {
-    console.log("name: " + name);
-    this.setState({ ...this.state, mission: { [name]: event.target.value } });
+    event.preventDefault();
+    let newState = { ...this.state };
+    newState.mission[name] = event.target.value;
+    this.setState(newState);
   };
 
   handleCheckboxChanged = (name) => (event) => {

@@ -141,9 +141,6 @@ const logMission = (data) => async (dispatch) => {
   };
 
   try {
-    console.log("====================================");
-    console.log("Sending request with data " + data);
-    console.log("====================================");
     const response = await Axios.post(`/api/logbooks/${encodeURIComponent(data.aircraft)}`, data, config);
     const errors = response.data.errors;
     const status = response.status;
