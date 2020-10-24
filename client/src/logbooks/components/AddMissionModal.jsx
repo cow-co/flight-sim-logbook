@@ -73,6 +73,7 @@ class AddMissionModal extends React.Component {
   }
 
   handleStringChanged = (name) => (event) => {
+    console.log("name: " + name);
     this.setState({ ...this.state, mission: { [name]: event.target.value } });
   };
 
@@ -192,6 +193,7 @@ class AddMissionModal extends React.Component {
         <DialogTitle id="form-dialog-title">Add a Mission</DialogTitle>
         <TextField
           required
+          name="duration"
           className="modal-text-field"
           id="duration"
           label="Duration"
@@ -203,6 +205,7 @@ class AddMissionModal extends React.Component {
         />
         <TextField
           required
+          name="a2aKills"
           className="modal-text-field"
           id="a2aKills"
           label="A2A Kills"
