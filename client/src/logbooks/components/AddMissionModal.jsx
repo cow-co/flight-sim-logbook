@@ -193,7 +193,6 @@ class AddMissionModal extends React.Component {
         <DialogTitle id="form-dialog-title">Add a Mission</DialogTitle>
         <TextField
           required
-          name="duration"
           className="modal-text-field"
           id="duration"
           label="Duration"
@@ -201,11 +200,10 @@ class AddMissionModal extends React.Component {
           InputLabelProps={{ shrink: true }}
           variant="outlined"
           size="small"
-          onChange={this.handleStringChanged}
+          onChange={this.handleStringChanged("duration")}
         />
         <TextField
           required
-          name="a2aKills"
           className="modal-text-field"
           id="a2aKills"
           label="A2A Kills"
@@ -213,7 +211,7 @@ class AddMissionModal extends React.Component {
           InputLabelProps={{ shrink: true }}
           variant="outlined"
           size="small"
-          onChange={this.handleStringChanged}
+          onChange={this.handleStringChanged("a2aKills")}
         />
         {checkboxes}
         <DialogActions>
