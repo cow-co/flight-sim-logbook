@@ -23,8 +23,8 @@
     "express": "^4.17.1",
     "http-shutdown": "^1.2.2",
     "jsonwebtoken": "^8.5.1",
+    "nodemailer": "^6.4.13",
     "mongoose": "^5.10.8",
-    "nodemailer": "^6.4.12",
     "swagger-ui-express": "^4.1.4",
     "yamljs": "^0.3.0"
   },
