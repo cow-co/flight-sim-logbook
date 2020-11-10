@@ -2,7 +2,6 @@ import React from "react";
 import { TextField, Button, Grid } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import { login } from "../redux/user-actions";
-import "./Login.css";
 import { Redirect } from "react-router-dom";
 
 import { connect } from "react-redux";
@@ -37,7 +36,7 @@ class Login extends React.Component {
 
   render() {
     return (
-      <div className="login">
+      <div className="full-page-form">
         <Typography variant="h4" className="title">
           Login
         </Typography>
@@ -52,6 +51,7 @@ class Login extends React.Component {
           >
             <Grid item>
               <TextField
+                className="full-page-text-field"
                 id="username"
                 label="Username"
                 value={this.state.username}
@@ -61,6 +61,7 @@ class Login extends React.Component {
             </Grid>
             <Grid item>
               <TextField
+                className="full-page-text-field"
                 type="password"
                 id="password"
                 label="Password"

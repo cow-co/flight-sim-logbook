@@ -39,7 +39,6 @@ class Header extends React.Component {
       </div>
     );
 
-    // TODO update this as we implement more functionality
     if (this.props.users.isLoggedIn) {
       loginDependentElements = (
         <div>

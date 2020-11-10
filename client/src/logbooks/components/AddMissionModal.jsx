@@ -11,7 +11,10 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import { Button } from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
+
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 class AddMissionModal extends React.Component {
   constructor(props) {
@@ -63,19 +66,24 @@ class AddMissionModal extends React.Component {
     }
   }
 
-  async handleSubmit() {
-    await logMission(this.state.mission);
-    this.props.onClose();
+  async handleSubmit(event) {
+    event.preventDefault();
+    await this.props.logMission(this.state.mission);
+    this.props.handleClose();
   }
 
   handleStringChanged = (name) => (event) => {
-    this.setState({ ...this.state, mission: { [name]: event.target.value } });
+    event.preventDefault();
+    let newState = { ...this.state };
+    newState.mission[name] = event.target.value;
+    this.setState(newState);
   };
 
   handleCheckboxChanged = (name) => (event) => {
     event.preventDefault();
-    console.log(`${name}: ${event.target}`);
-    this.setState({ ...this.state, mission: { [name]: event.target.checked } });
+    let newState = { ...this.state };
+    newState.mission[name] = event.target.checked;
+    this.setState(newState);
   };
 
   render() {
@@ -185,12 +193,34 @@ class AddMissionModal extends React.Component {
     return (
       <Dialog open={this.props.open} onClose={this.props.handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Add a Mission</DialogTitle>
+        <TextField
+          required
+          className="modal-text-field"
+          id="duration"
+          label="Duration"
+          type="number"
+          InputLabelProps={{ shrink: true }}
+          variant="outlined"
+          size="small"
+          onChange={this.handleStringChanged("duration")}
+        />
+        <TextField
+          required
+          className="modal-text-field"
+          id="a2aKills"
+          label="A2A Kills"
+          type="number"
+          InputLabelProps={{ shrink: true }}
+          variant="outlined"
+          size="small"
+          onChange={this.handleStringChanged("a2aKills")}
+        />
         {checkboxes}
         <DialogActions>
-          <Button onClick={this.props.handleClose} color="primary">
+          <Button onClick={this.props.handleClose} color="secondary" variant="contained">
             Cancel
           </Button>
-          <Button onClick={this.props.handleSubmit} color="primary">
+          <Button onClick={this.handleSubmit} color="primary" variant="contained">
             Submit
           </Button>
         </DialogActions>
@@ -199,4 +229,8 @@ class AddMissionModal extends React.Component {
   }
 }
 
-export default AddMissionModal;
+AddMissionModal.propTypes = {
+  logMission: PropTypes.func.isRequired,
+};
+
+export default connect(null, { logMission })(AddMissionModal);
