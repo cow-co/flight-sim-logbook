@@ -15,18 +15,11 @@ import PropTypes from "prop-types";
 class LogbookSummary extends React.Component {
   constructor(props) {
     super(props);
-    console.debug(props);
     this.sendDeleteRequest = this.sendDeleteRequest.bind(this);
-    this.viewLogbook = this.viewLogbook.bind(this);
   }
 
   async sendDeleteRequest() {
     await this.props.deleteLogbook(this.props.logbook.aircraft);
-  }
-
-  async viewLogbook() {
-    await this.props.selectLogbook(this.props.logbook);
-    this.props.history.push("/logbooks/view");
   }
 
   render() {
@@ -73,8 +66,4 @@ LogbookSummary.propTypes = {
   selectLogbook: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => ({
-  logbook: state.logbooks.selectedLogbook,
-});
-
-export default connect(mapStateToProps, { deleteLogbook, selectLogbook })(LogbookSummary);
+export default connect(null, { deleteLogbook, selectLogbook })(LogbookSummary);

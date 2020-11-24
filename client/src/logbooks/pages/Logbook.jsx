@@ -23,6 +23,7 @@ class Logbook extends React.Component {
     this.state = {
       username,
       aircraft,
+      logbook: this.props.logbook,
       modalOpen: false,
     };
 
@@ -78,6 +79,7 @@ class Logbook extends React.Component {
   }
 
   render() {
+    console.log(this.props.logbook);
     if (this.props.logbook !== null) {
       let percentageData = {
         ...this.props.logbook,
