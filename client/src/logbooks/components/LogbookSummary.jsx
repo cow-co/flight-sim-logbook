@@ -73,4 +73,8 @@ LogbookSummary.propTypes = {
   selectLogbook: PropTypes.func.isRequired,
 };
 
-export default connect(null, { deleteLogbook, selectLogbook })(LogbookSummary);
+const mapStateToProps = (state) => ({
+  logbook: state.logbooks.selectedLogbook,
+});
+
+export default connect(mapStateToProps, { deleteLogbook, selectLogbook })(LogbookSummary);

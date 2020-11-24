@@ -40,6 +40,7 @@ const logbooksReducer = (currentState = INITIAL_STATE, action) => {
         selectedLogbook: action.payload,
       };
     case LOG_MISSION:
+      console.log(action.payload);
       return {
         ...currentState,
         selectedLogbook: action.payload,
