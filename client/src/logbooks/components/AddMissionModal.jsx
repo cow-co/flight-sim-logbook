@@ -68,6 +68,9 @@ class AddMissionModal extends React.Component {
 
   async handleSubmit(event) {
     event.preventDefault();
+    console.log("====================================");
+    console.log(this.state.mission);
+    console.log("====================================");
     await this.props.logMission(this.state.mission);
     this.props.handleClose();
   }
