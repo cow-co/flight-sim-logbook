@@ -23,6 +23,7 @@ class Logbook extends React.Component {
     this.state = {
       username,
       aircraft,
+      logbook: this.props.logbook,
       modalOpen: false,
     };
 
