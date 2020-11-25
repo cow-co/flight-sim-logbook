@@ -40,7 +40,7 @@ class AddMissionModal extends React.Component {
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleStringChanged = this.handleStringChanged.bind(this);
+    this.handleNumberFieldChanged = this.handleNumberFieldChanged.bind(this);
     this.handleCheckboxChanged = this.handleCheckboxChanged.bind(this);
   }
 
@@ -68,17 +68,14 @@ class AddMissionModal extends React.Component {
 
   async handleSubmit(event) {
     event.preventDefault();
-    console.log("====================================");
-    console.log(this.state.mission);
-    console.log("====================================");
     await this.props.logMission(this.state.mission);
     this.props.handleClose();
   }
 
-  handleStringChanged = (name) => (event) => {
+  handleNumberFieldChanged = (name) => (event) => {
     event.preventDefault();
     let newState = { ...this.state };
-    newState.mission[name] = event.target.value;
+    newState.mission[name] = Number(event.target.value);
     this.setState(newState);
   };
 
@@ -205,7 +202,7 @@ class AddMissionModal extends React.Component {
           InputLabelProps={{ shrink: true }}
           variant="outlined"
           size="small"
-          onChange={this.handleStringChanged("duration")}
+          onChange={this.handleNumberFieldChanged("duration")}
         />
         <TextField
           required
@@ -216,7 +213,7 @@ class AddMissionModal extends React.Component {
           InputLabelProps={{ shrink: true }}
           variant="outlined"
           size="small"
-          onChange={this.handleStringChanged("a2aKills")}
+          onChange={this.handleNumberFieldChanged("a2aKills")}
         />
         {checkboxes}
         <DialogActions>

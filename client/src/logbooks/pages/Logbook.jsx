@@ -79,7 +79,6 @@ class Logbook extends React.Component {
   }
 
   render() {
-    console.log(this.props.logbook);
     if (this.props.logbook !== null) {
       let percentageData = {
         ...this.props.logbook,

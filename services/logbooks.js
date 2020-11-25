@@ -33,7 +33,6 @@ const stripDownLogbook = async (logbook) => {
   let modified = {
     ...logbookData,
   };
-  // console.log(modified);
 
   if (!aircraft.bvrCapable) {
     delete modified.bvrSorties;

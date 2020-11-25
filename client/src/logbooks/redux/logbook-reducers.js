@@ -35,13 +35,11 @@ const logbooksReducer = (currentState = INITIAL_STATE, action) => {
         logbooks: [...modifiedLogbooksList],
       };
     case SELECT_LOGBOOK:
-      console.log(currentState);
       return {
         ...currentState,
         selectedLogbook: action.payload,
       };
     case LOG_MISSION:
-      console.log(action.payload);
       return {
         ...currentState,
         selectedLogbook: action.payload,
