@@ -153,7 +153,7 @@ const logMission = (data) => async (dispatch) => {
       } else {
         dispatch({
           type: LOG_MISSION,
-          payload: data.logbook,
+          payload: response.data.logbook,
         });
       }
     } else {
