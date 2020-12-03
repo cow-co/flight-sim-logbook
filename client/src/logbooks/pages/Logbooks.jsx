@@ -13,7 +13,6 @@ import "./Logbooks.css";
 class Logbooks extends React.Component {
   constructor(props) {
     super(props);
-    console.debug(this.props);
   }
 
   async componentDidMount() {

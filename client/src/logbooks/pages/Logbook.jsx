@@ -30,6 +30,7 @@ class Logbook extends React.Component {
     this.fractionTheData = this.fractionTheData.bind(this);
     this.handleFormClose = this.handleFormClose.bind(this);
     this.handleFormOpen = this.handleFormOpen.bind(this);
+    this.createCaptions = this.createCaptions.bind(this);
   }
 
   async componentDidMount() {
@@ -78,6 +79,41 @@ class Logbook extends React.Component {
     return data;
   }
 
+  createCaptions(data) {
+    let captions = {
+      imcSorties: "IMC",
+      bfmSorties: "BFM",
+      bvrSorties: "BVR",
+      seadSorties: "SEAD",
+      casSorties: "CAS",
+      strikeSorties: "Strike",
+      packageSorties: "Coordinated Package",
+      caseISorties: "Case I",
+      caseIIISorties: "Case III",
+      aarSorties: "AAR",
+    };
+
+    // BVR Capable
+    if (!data.bvrSorties) {
+      captions.delete(bvrSorties);
+    }
+
+    // Carrier capable
+    if (!data.caseISorties) {
+      captions.delete(caseISorties);
+      captions.delete(caseIIISorties);
+    }
+
+    // A2G capable
+    if (!data.seadSorties) {
+      captions.delete(seadSorties);
+      captions.delete(casSorties);
+      captions.delete(strikeSorties);
+    }
+
+    return captions;
+  }
+
   render() {
     if (this.props.logbook !== null) {
       let fractionData = {
@@ -98,22 +134,11 @@ class Logbook extends React.Component {
         ];
       }
 
+      const captions = this.createCaptions(fractionData);
+
       const hours = this.props.logbook.totalHours;
       const kills = this.props.logbook.a2aKills;
       const sorties = this.props.logbook.totalSorties;
-
-      const captions = {
-        imcSorties: "IMC",
-        bfmSorties: "BFM",
-        bvrSorties: "BVR",
-        seadSorties: "SEAD",
-        casSorties: "CAS",
-        strikeSorties: "Strike",
-        packageSorties: "Coordinated Package",
-        caseISorties: "Case I",
-        caseIIISorties: "Case III",
-        aarSorties: "AAR",
-      };
 
       return (
         <div>
