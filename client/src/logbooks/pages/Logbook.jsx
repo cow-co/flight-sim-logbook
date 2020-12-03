@@ -88,11 +88,15 @@ class Logbook extends React.Component {
       delete fractionData.a2aKills;
       delete fractionData.totalSorties;
 
-      let radarData = [
-        {
-          data: fractionData,
-        },
-      ];
+      let radarData = null;
+
+      if (this.props.logbook.totalSorties !== 0) {
+        radarData = [
+          {
+            data: fractionData,
+          },
+        ];
+      }
 
       const hours = this.props.logbook.totalHours;
       const kills = this.props.logbook.a2aKills;
