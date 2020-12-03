@@ -18,7 +18,7 @@ const usersReducer = (currentState = INITIAL_STATE, action) => {
         isLoggedIn: true,
       };
     case CHECK_LOGIN_STATUS:
-      const jwt = localStorage.getItem("jwt");
+      const jwt = localStorage.getItem("token");
       if (isEmpty(jwt)) {
         return {
           ...currentState,
