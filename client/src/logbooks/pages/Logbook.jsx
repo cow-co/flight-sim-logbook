@@ -133,6 +133,7 @@ class Logbook extends React.Component {
           },
         ];
       }
+      console.log(radarData);
 
       const captions = this.createCaptions(fractionData);
 
@@ -159,7 +160,7 @@ class Logbook extends React.Component {
               <Typography variant="h6">{kills} Kills</Typography>
             </Grid>
           </Grid>
-          <RadarChart className="radar" data={radarData} captions={captions} size={400} />
+          <RadarChart className="radar" data={radarData} captions={captions} size={500} />
           <AddMissionModal
             open={this.state.modalOpen}
             handleClose={this.handleFormClose}
