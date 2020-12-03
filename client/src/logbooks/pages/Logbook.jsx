@@ -87,25 +87,25 @@ class Logbook extends React.Component {
       seadSorties: "SEAD",
       casSorties: "CAS",
       strikeSorties: "Strike",
-      packageSorties: "Coordinated Package",
+      packageSorties: "Multiplayer",
       caseISorties: "Case I",
       caseIIISorties: "Case III",
       aarSorties: "AAR",
     };
 
     // BVR Capable
-    if (!data.bvrSorties) {
+    if (data.bvrSorties === undefined) {
       delete captions.bvrSorties;
     }
 
     // Carrier capable
-    if (!data.caseISorties) {
+    if (data.caseISorties === undefined) {
       delete captions.caseISorties;
       delete captions.caseIIISorties;
     }
 
     // A2G capable
-    if (!data.seadSorties) {
+    if (data.seadSorties === undefined) {
       delete captions.seadSorties;
       delete captions.casSorties;
       delete captions.strikeSorties;
