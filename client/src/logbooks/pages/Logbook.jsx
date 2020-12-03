@@ -27,7 +27,7 @@ class Logbook extends React.Component {
       modalOpen: false,
     };
 
-    this.percentageTheData = this.percentageTheData.bind(this);
+    this.fractionTheData = this.fractionTheData.bind(this);
     this.handleFormClose = this.handleFormClose.bind(this);
     this.handleFormOpen = this.handleFormOpen.bind(this);
   }
@@ -48,49 +48,49 @@ class Logbook extends React.Component {
     });
   }
 
-  // Convert the values to percentages
-  percentageTheData(data) {
+  // Convert the values to fractions
+  fractionTheData(data) {
     const totalSorties = data.totalSorties;
 
     // BVR Capable
     if (data.bvrSorties) {
-      data.bvrSorties = (data.bvrSorties / totalSorties) * 100.0;
+      data.bvrSorties = data.bvrSorties / totalSorties;
     }
 
     // Carrier capable
     if (data.caseISorties) {
-      data.caseISorties = (data.caseISorties / totalSorties) * 100.0;
-      data.caseIIISorties = (data.caseIIISorties / totalSorties) * 100.0;
+      data.caseISorties = data.caseISorties / totalSorties;
+      data.caseIIISorties = data.caseIIISorties / totalSorties;
     }
 
     // A2G capable
     if (data.seadSorties) {
-      data.seadSorties = (data.seadSorties / totalSorties) * 100.0;
-      data.casSorties = (data.casSorties / totalSorties) * 100.0;
-      data.strikeSorties = (data.strikeSorties / totalSorties) * 100.0;
+      data.seadSorties = data.seadSorties / totalSorties;
+      data.casSorties = data.casSorties / totalSorties;
+      data.strikeSorties = data.strikeSorties / totalSorties;
     }
 
-    data.imcSorties = (data.imcSorties / totalSorties) * 100.0;
-    data.bfmSorties = (data.bfmSorties / totalSorties) * 100.0;
-    data.packageSorties = (data.packageSorties / totalSorties) * 100.0;
-    data.aarSorties = (data.aarSorties / totalSorties) * 100.0;
+    data.imcSorties = data.imcSorties / totalSorties;
+    data.bfmSorties = data.bfmSorties / totalSorties;
+    data.packageSorties = data.packageSorties / totalSorties;
+    data.aarSorties = data.aarSorties / totalSorties;
 
     return data;
   }
 
   render() {
     if (this.props.logbook !== null) {
-      let percentageData = {
+      let fractionData = {
         ...this.props.logbook,
       };
-      percentageData = this.percentageTheData(percentageData);
-      delete percentageData.totalHours;
-      delete percentageData.a2aKills;
-      delete percentageData.totalSorties;
+      fractionData = this.fractionTheData(fractionData);
+      delete fractionData.totalHours;
+      delete fractionData.a2aKills;
+      delete fractionData.totalSorties;
 
       let radarData = [
         {
-          data: percentageData,
+          data: fractionData,
         },
       ];
 
