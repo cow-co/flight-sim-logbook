@@ -88,7 +88,7 @@ class Logbook extends React.Component {
       delete fractionData.a2aKills;
       delete fractionData.totalSorties;
 
-      let radarData = null;
+      let radarData = [];
 
       if (this.props.logbook.totalSorties !== 0) {
         radarData = [
