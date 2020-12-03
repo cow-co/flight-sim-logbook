@@ -133,9 +133,10 @@ class Logbook extends React.Component {
           },
         ];
       }
-      console.log(radarData);
 
       const captions = this.createCaptions(fractionData);
+      console.log(fractionData);
+      console.log(radarData);
 
       const hours = this.props.logbook.totalHours;
       const kills = this.props.logbook.a2aKills;
