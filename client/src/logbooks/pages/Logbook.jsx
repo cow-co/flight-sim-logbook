@@ -135,7 +135,7 @@ class Logbook extends React.Component {
       }
 
       const captions = this.createCaptions(fractionData);
-      console.log(fractionData);
+      console.log(captions);
       console.log(radarData);
 
       const hours = this.props.logbook.totalHours;
