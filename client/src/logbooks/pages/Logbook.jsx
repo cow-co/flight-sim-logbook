@@ -96,6 +96,7 @@ class Logbook extends React.Component {
 
       const hours = this.props.logbook.totalHours;
       const kills = this.props.logbook.a2aKills;
+      const sorties = this.props.logbook.totalSorties;
 
       const captions = {
         imcSorties: "IMC",
@@ -116,11 +117,15 @@ class Logbook extends React.Component {
             {this.state.aircraft}
           </Typography>
           <Grid container spacing={3}>
-            <Grid item xs={6}>
+            <Grid item xs={4}>
               <AccessTimeIcon />
               <Typography variant="h6">{hours} Hours</Typography>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={4}>
+              <FlightIcon />
+              <Typography variant="h6">{sorties} Sorties</Typography>
+            </Grid>
+            <Grid item xs={4}>
               <FlightIcon />
               <Typography variant="h6">{kills} Kills</Typography>
             </Grid>
