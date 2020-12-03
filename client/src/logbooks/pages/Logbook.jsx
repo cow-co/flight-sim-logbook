@@ -95,20 +95,20 @@ class Logbook extends React.Component {
 
     // BVR Capable
     if (!data.bvrSorties) {
-      captions.delete(bvrSorties);
+      delete captions.bvrSorties;
     }
 
     // Carrier capable
     if (!data.caseISorties) {
-      captions.delete(caseISorties);
-      captions.delete(caseIIISorties);
+      delete captions.caseISorties;
+      delete captions.caseIIISorties;
     }
 
     // A2G capable
     if (!data.seadSorties) {
-      captions.delete(seadSorties);
-      captions.delete(casSorties);
-      captions.delete(strikeSorties);
+      delete captions.seadSorties;
+      delete captions.casSorties;
+      delete captions.strikeSorties;
     }
 
     return captions;
