@@ -4,7 +4,6 @@ import Typography from "@material-ui/core/Typography";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import FlightIcon from "@material-ui/icons/Flight";
 import AssignmentIcon from "@material-ui/icons/Assignment";
-import "./Logbook.css";
 import { Button } from "@material-ui/core";
 import Radar from "react-d3-radar";
 
