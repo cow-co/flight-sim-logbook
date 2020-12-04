@@ -1,5 +1,5 @@
 import { REGISTER, LOGIN, CHECK_LOGIN_STATUS, LOGOUT } from "../../common/redux/action-types";
-import { isEmpty, getUsernameFromToken } from "../../common/helpers/utils";
+import { isEmpty, getUsernameFromToken, isTokenExpired } from "../../common/helpers/utils";
 
 const INITIAL_STATE = {
   username: "",
@@ -19,7 +19,10 @@ const usersReducer = (currentState = INITIAL_STATE, action) => {
       };
     case CHECK_LOGIN_STATUS:
       const jwt = localStorage.getItem("token");
-      if (isEmpty(jwt)) {
+
+      // This basic, non-verified, token-expiry check is fine since the server verifies the token on all authenticated requests.
+      // This reducer is only really used in order to set the header bar content and such.
+      if (isEmpty(jwt) || isTokenExpired(jwt)) {
         return {
           ...currentState,
           username: "",

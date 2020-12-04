@@ -14,4 +14,9 @@ const getUsernameFromToken = (token) => {
   return decoded.username;
 };
 
+const isTokenExpired = (token) => {
+  const decoded = jwt.decode(token);
+  return Date.now() >= decoded.exp * 1000;
+};
+
 export { isEmpty, getUsernameFromToken };
