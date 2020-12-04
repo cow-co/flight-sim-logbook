@@ -88,18 +88,18 @@ class Logbook extends React.Component {
     ];
 
     // BVR Capable
-    if (data.bvrSorties) {
+    if (data.bvrSorties !== undefined) {
       captions.push({ key: "bvrSorties", label: "BVR" });
     }
 
     // Carrier capable
-    if (data.caseISorties) {
+    if (data.caseISorties !== undefined) {
       captions.push({ key: "caseISorties", label: "Case I" });
       captions.push({ key: "caseIIISorties", label: "Case III" });
     }
 
     // A2G capable
-    if (data.seadSorties) {
+    if (data.seadSorties !== undefined) {
       captions.push({ key: "seadSorties", label: "SEAD" });
       captions.push({ key: "casSorties", label: "CAS" });
       captions.push({ key: "strikeSorties", label: "Strike" });
@@ -145,9 +145,6 @@ class Logbook extends React.Component {
             </Grid>
           </Grid>
           <Radar
-            width={300}
-            height={300}
-            padding={70}
             domainMax={sorties}
             highlighted={null}
             data={{
