@@ -147,6 +147,7 @@ class Logbook extends React.Component {
           <Radar
             width={100}
             height={100}
+            padding={25}
             domainMax={sorties}
             highlighted={null}
             data={{
