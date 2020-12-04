@@ -118,8 +118,6 @@ class Logbook extends React.Component {
       delete data.totalSorties;
 
       const captions = this.createCaptions(data);
-      console.log(captions);
-      console.log(data);
 
       const hours = this.props.logbook.totalHours;
       const kills = this.props.logbook.a2aKills;
@@ -131,17 +129,28 @@ class Logbook extends React.Component {
             {this.state.aircraft}
           </Typography>
           <Grid container spacing={3}>
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               <AccessTimeIcon />
               <Typography variant="h6">{hours} Hours</Typography>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               <FlightIcon />
               <Typography variant="h6">{sorties} Sorties</Typography>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               <FlightIcon />
               <Typography variant="h6">{kills} Kills</Typography>
+            </Grid>
+            <Grid item xs={3}>
+              <Button
+                color="primary"
+                className="add-mission"
+                startIcon={<AssignmentIcon />}
+                variant="contained"
+                onClick={this.handleFormOpen}
+              >
+                Add Mission
+              </Button>
             </Grid>
           </Grid>
           <Radar
@@ -150,7 +159,7 @@ class Logbook extends React.Component {
             padding={70}
             domainMax={sorties}
             highlighted={null}
-            style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "60%", height: "60%" }}
+            className="radar"
             data={{
               variables: captions,
               sets: [
@@ -165,16 +174,6 @@ class Logbook extends React.Component {
             handleClose={this.handleFormClose}
             aircraft={this.state.aircraft}
           />
-
-          <Button
-            color="primary"
-            className="add-mission"
-            startIcon={<AssignmentIcon />}
-            variant="contained"
-            onClick={this.handleFormOpen}
-          >
-            Add Mission
-          </Button>
         </div>
       );
     } else {
