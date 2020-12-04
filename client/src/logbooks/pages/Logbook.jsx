@@ -111,27 +111,16 @@ class Logbook extends React.Component {
 
   render() {
     if (this.props.logbook !== null) {
-      let fractionData = {
+      let data = {
         ...this.props.logbook,
       };
-      fractionData = this.fractionTheData(fractionData);
-      delete fractionData.totalHours;
-      delete fractionData.a2aKills;
-      delete fractionData.totalSorties;
+      delete data.totalHours;
+      delete data.a2aKills;
+      delete data.totalSorties;
 
-      let radarData = [];
-
-      if (this.props.logbook.totalSorties !== 0) {
-        radarData = [
-          {
-            data: fractionData,
-          },
-        ];
-      }
-
-      const captions = this.createCaptions(fractionData);
+      const captions = this.createCaptions(data);
       console.log(captions);
-      console.log(radarData);
+      console.log(data);
 
       const hours = this.props.logbook.totalHours;
       const kills = this.props.logbook.a2aKills;
@@ -157,8 +146,8 @@ class Logbook extends React.Component {
             </Grid>
           </Grid>
           <Radar
-            width={500}
-            height={500}
+            width={300}
+            height={300}
             padding={70}
             domainMax={1}
             highlighted={null}
@@ -166,7 +155,7 @@ class Logbook extends React.Component {
               variables: captions,
               sets: [
                 {
-                  values: fractionData,
+                  values: data,
                 },
               ],
             }}
