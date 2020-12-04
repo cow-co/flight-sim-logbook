@@ -150,6 +150,7 @@ class Logbook extends React.Component {
             padding={70}
             domainMax={sorties}
             highlighted={null}
+            style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "60%", height: "60%" }}
             data={{
               variables: captions,
               sets: [
