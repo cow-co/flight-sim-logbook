@@ -1,7 +1,6 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import RadarChart from "react-svg-radar-chart";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import FlightIcon from "@material-ui/icons/Flight";
 import AssignmentIcon from "@material-ui/icons/Assignment";
@@ -149,7 +148,7 @@ class Logbook extends React.Component {
             width={300}
             height={300}
             padding={70}
-            domainMax={1}
+            domainMax={sorties}
             highlighted={null}
             data={{
               variables: captions,
