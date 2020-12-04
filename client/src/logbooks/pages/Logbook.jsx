@@ -7,6 +7,7 @@ import FlightIcon from "@material-ui/icons/Flight";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import "./Logbook.css";
 import { Button } from "@material-ui/core";
+import Radar from "react-d3-radar";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -80,35 +81,29 @@ class Logbook extends React.Component {
   }
 
   createCaptions(data) {
-    let captions = {
-      imcSorties: "IMC",
-      bfmSorties: "BFM",
-      bvrSorties: "BVR",
-      seadSorties: "SEAD",
-      casSorties: "CAS",
-      strikeSorties: "Strike",
-      packageSorties: "Multiplayer",
-      caseISorties: "Case I",
-      caseIIISorties: "Case III",
-      aarSorties: "AAR",
-    };
+    let captions = [
+      { key: "imcSorties", label: "IMC" },
+      { key: "bfmSorties", label: "BFM" },
+      { key: "packageSorties", label: "Multiplayer" },
+      { key: "aarSorties", label: "AAR" },
+    ];
 
     // BVR Capable
-    if (data.bvrSorties === undefined) {
-      delete captions.bvrSorties;
+    if (data.bvrSorties) {
+      captions.push({ key: "bvrSorties", label: "BVR" });
     }
 
     // Carrier capable
-    if (data.caseISorties === undefined) {
-      delete captions.caseISorties;
-      delete captions.caseIIISorties;
+    if (data.caseISorties) {
+      captions.push({ key: "caseISorties", label: "Case I" });
+      captions.push({ key: "caseIIISorties", label: "Case III" });
     }
 
     // A2G capable
-    if (data.seadSorties === undefined) {
-      delete captions.seadSorties;
-      delete captions.casSorties;
-      delete captions.strikeSorties;
+    if (data.seadSorties) {
+      captions.push({ key: "seadSorties", label: "SEAD" });
+      captions.push({ key: "casSorties", label: "CAS" });
+      captions.push({ key: "strikeSorties", label: "Strike" });
     }
 
     return captions;
@@ -161,7 +156,21 @@ class Logbook extends React.Component {
               <Typography variant="h6">{kills} Kills</Typography>
             </Grid>
           </Grid>
-          <RadarChart className="radar" data={radarData} captions={captions} size={500} />
+          <Radar
+            width={500}
+            height={500}
+            padding={70}
+            domainMax={1}
+            highlighted={null}
+            data={{
+              variables: captions,
+              sets: [
+                {
+                  values: fractionData,
+                },
+              ],
+            }}
+          />
           <AddMissionModal
             open={this.state.modalOpen}
             handleClose={this.handleFormClose}
