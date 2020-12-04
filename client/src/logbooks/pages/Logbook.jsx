@@ -128,7 +128,7 @@ class Logbook extends React.Component {
           <Typography variant="h4" className="title">
             {this.state.aircraft}
           </Typography>
-          <Grid container spacing={3}>
+          <Grid container>
             <Grid item xs={3}>
               <AccessTimeIcon />
               <Typography variant="h6">{hours} Hours</Typography>

@@ -75,3 +75,20 @@ div.MuiFormControl-root {
   min-width: 120px;
   vertical-align: baseline;
 }
+.add-mission {
+  margin: auto !important;
+  display: flex !important;
+}
+
+svg.radar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60%;
+  height: 60%;
+}
+
+text {
+  color: white;
+  fill: white;
+}
