@@ -19,4 +19,4 @@ const isTokenExpired = (token) => {
   return Date.now() >= decoded.exp * 1000;
 };
 
-export { isEmpty, getUsernameFromToken };
+export { isEmpty, getUsernameFromToken, isTokenExpired };
