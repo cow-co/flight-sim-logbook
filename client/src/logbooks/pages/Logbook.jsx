@@ -158,10 +158,13 @@ class Logbook extends React.Component {
               variables: captions,
               sets: [
                 {
+                  key: "data",
+                  label: this.state.aircraft,
                   values: data,
                 },
               ],
             }}
+            colors={{ data: "#d32f2f" }}
           />
           <AddMissionModal
             open={this.state.modalOpen}
