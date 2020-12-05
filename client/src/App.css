@@ -75,3 +75,9 @@ div.MuiFormControl-root {
   min-width: 120px;
   vertical-align: baseline;
 }
+
+svg.MuiSvgIcon-root > path {
+  stroke: white;
+  fill: white;
+  fill-opacity: 1;
+}
