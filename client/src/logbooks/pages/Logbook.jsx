@@ -3,7 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import "./Logbook.css";
 import { Button } from "@material-ui/core";
-import Radar from "react-d3-radar";
+import RadarWrapper from "react-d3-radar";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -147,7 +147,7 @@ class Logbook extends React.Component {
               </Button>
             </Grid>
           </Grid>
-          <Radar
+          <RadarWrapper
             width={500}
             height={500}
             padding={70}
