@@ -1,9 +1,7 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import AccessTimeIcon from "@material-ui/icons/AccessTime";
-import FlightIcon from "@material-ui/icons/Flight";
-import AssignmentIcon from "@material-ui/icons/Assignment";
+import "./Logbook.css";
 import { Button } from "@material-ui/core";
 import Radar from "react-d3-radar";
 
@@ -129,25 +127,16 @@ class Logbook extends React.Component {
           </Typography>
           <Grid container>
             <Grid item xs={3}>
-              <AccessTimeIcon />
               <Typography variant="h6">{hours} Hours</Typography>
             </Grid>
             <Grid item xs={3}>
-              <FlightIcon />
               <Typography variant="h6">{sorties} Sorties</Typography>
             </Grid>
             <Grid item xs={3}>
-              <FlightIcon />
               <Typography variant="h6">{kills} Kills</Typography>
             </Grid>
             <Grid item xs={3}>
-              <Button
-                color="primary"
-                className="add-mission"
-                startIcon={<AssignmentIcon />}
-                variant="contained"
-                onClick={this.handleFormOpen}
-              >
+              <Button color="primary" className="add-mission" variant="contained" onClick={this.handleFormOpen}>
                 Add Mission
               </Button>
             </Grid>
