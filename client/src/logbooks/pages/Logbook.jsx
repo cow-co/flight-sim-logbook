@@ -126,14 +126,20 @@ class Logbook extends React.Component {
             {this.state.aircraft}
           </Typography>
           <Grid container>
-            <Grid item xs={3}>
-              <Typography variant="h6">{hours} Hours</Typography>
+            <Grid className="cell" item xs={3}>
+              <Typography className="cell" variant="h6">
+                {hours} Hours
+              </Typography>
             </Grid>
-            <Grid item xs={3}>
-              <Typography variant="h6">{sorties} Sorties</Typography>
+            <Grid className="cell" item xs={3}>
+              <Typography className="cell" variant="h6">
+                {sorties} Sorties
+              </Typography>
             </Grid>
-            <Grid item xs={3}>
-              <Typography variant="h6">{kills} Kills</Typography>
+            <Grid className="cell" item xs={3}>
+              <Typography className="cell" variant="h6">
+                {kills} Kills
+              </Typography>
             </Grid>
             <Grid item xs={3}>
               <Button color="primary" className="add-mission" variant="contained" onClick={this.handleFormOpen}>

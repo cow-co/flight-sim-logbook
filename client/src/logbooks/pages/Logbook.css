@@ -4,14 +4,18 @@
 }
 
 svg {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 60% !important;
   height: 60% !important;
+  margin: auto !important;
+  display: flex !important;
 }
 
 text {
   color: white;
   fill: white;
+}
+
+.cell {
+  margin: auto !important;
+  display: flex !important;
 }
