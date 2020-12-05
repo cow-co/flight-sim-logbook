@@ -24,3 +24,19 @@ text {
   width: 1em !important;
   height: 1em !important;
 }
+
+circle {
+  stroke: green;
+  fill: black;
+}
+
+path {
+  stroke: green;
+  fill: black;
+  stroke-opacity: 1;
+  fill-opacity: 0.5;
+}
+
+line {
+  stroke: green;
+}
