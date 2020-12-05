@@ -152,7 +152,7 @@ const seedAircraft = async () => {
   try {
     await Aircraft.create(aircraftToSeed);
   } catch (err) {
-    console.warn(`Failed to seed aircraft ${aircraft.name}: ${err}`);
+    console.warn(`Failed to seed aircraft: ${err}`);
   }
 };
 
