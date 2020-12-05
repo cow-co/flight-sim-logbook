@@ -10,5 +10,5 @@ module.exports = {
   JWT_KEY,
   EMAIL_UN,
   EMAIL_PW,
-  AUTH_EXPIRY_HOURS
+  AUTH_EXPIRY_HOURS,
 };

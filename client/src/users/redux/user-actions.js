@@ -1,10 +1,8 @@
-import { CREATE_USER, LOGIN, REGISTER, LOGOUT } from "./action-types";
+import { LOGIN, CHECK_LOGIN_STATUS, REGISTER, LOGOUT } from "../../common/redux/action-types";
 import Axios from "axios";
-import { axiosConfig } from "../../helpers/axiosConfig";
-import { setAlert } from "./common-actions";
-import { isEmpty } from "../../helpers/utils";
-
-// TODO Retrieve the errorMessages from the responses and use those instead of the default Axios stuff?
+import { axiosConfig } from "../../common/helpers/axiosConfig";
+import { setAlert } from "../../common/redux/common-actions";
+import { isEmpty } from "../../common/helpers/utils";
 
 const login = (data) => async (dispatch) => {
   const config = {
@@ -68,19 +66,38 @@ const logout = () => async (dispatch) => {
   try {
     const response = await Axios.post("/api/users/logout", null, config);
     const errors = response.data.errors;
+    const status = response.status;
 
-    if (!isEmpty(errors)) {
-      errors.forEach((error) => dispatch(setAlert(`${error}`, "error")));
+    if (status === 401) {
+      await localLogout();
     } else {
-      dispatch(setAlert("Successfully Logged Out", "success"));
-      dispatch({
-        type: LOGOUT,
-        payload: response.data,
-      });
+      if (!isEmpty(errors)) {
+        errors.forEach((error) => dispatch(setAlert(`${error}`, "error")));
+      } else {
+        dispatch(setAlert("Successfully Logged Out", "success"));
+        dispatch({
+          type: LOGOUT,
+          payload: response.data,
+        });
+      }
     }
   } catch (error) {
     dispatch(setAlert(`${error}`, "error"));
   }
 };
 
-export { login, registerUser, logout };
+const localLogout = () => async (dispatch) => {
+  dispatch({
+    type: LOGOUT,
+    payload: null,
+  });
+};
+
+const checkLoginStatus = () => async (dispatch) => {
+  dispatch({
+    type: CHECK_LOGIN_STATUS,
+    payload: null,
+  });
+};
+
+export { login, registerUser, logout, localLogout, checkLoginStatus };

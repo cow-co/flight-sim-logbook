@@ -6,19 +6,19 @@ const logbookMethods = require("../../services/logbooks");
 const userMethods = require("../../services/users");
 const { isEmptyOrNull } = require("../../helpers/validation");
 
-router.post("/create", authenticate, isVerified, async (req, res) => {
+router.post("/", authenticate, isVerified, async (req, res) => {
   const logbookDetails = req.body;
   let responseJSON = { logbook: null, errors: [] };
   let returnStatus = statusCodes.SUCCESS;
 
   try {
-    const newLogbook = await logbookMethods.createLogbook(logbookDetails.aircraftName, res.locals.user);
+    const newLogbook = await logbookMethods.createLogbook(logbookDetails.aircraft, res.locals.user);
     if (newLogbook.errors.length > 0) {
       returnStatus = statusCodes.INVALID_STATUS;
       responseJSON.errors = newLogbook.errors;
     } else {
       returnStatus = statusCodes.CREATED;
-      responseJSON.logbook = newLogbook.logbook;
+      responseJSON.logbook = logbookMethods.summariseLogbook(newLogbook.logbook);
     }
   } catch (error) {
     console.error(error.message);
@@ -29,20 +29,19 @@ router.post("/create", authenticate, isVerified, async (req, res) => {
   return res.status(returnStatus).json(responseJSON);
 });
 
-router.delete("/delete", authenticate, isVerified, async (req, res) => {
-  const logbookDetails = req.body;
+router.delete("/:aircraft", authenticate, isVerified, async (req, res) => {
   let responseJSON = { message: "", errors: [] };
   let returnStatus = statusCodes.SUCCESS;
 
   try {
-    const newLogbook = await logbookMethods.deleteLogbook(logbookDetails.aircraftName, res.locals.user);
-    if (newLogbook.errors.length > 0) {
+    const deleted = await logbookMethods.deleteLogbook(req.params.aircraft, res.locals.user);
+    if (deleted.errors.length > 0) {
       returnStatus = statusCodes.INVALID_STATUS;
-      responseJSON.errors = newLogbook.errors;
+      responseJSON.errors = deleted.errors;
       responseJSON.message = "Failed to Delete Logbook";
     } else {
       returnStatus = statusCodes.SUCCESS;
-      responseJSON.logbook = newLogbook.logbook;
+      responseJSON.logbook = deleted.logbook;
       responseJSON.message = "Deleted Logbook";
     }
   } catch (error) {
@@ -56,7 +55,7 @@ router.delete("/delete", authenticate, isVerified, async (req, res) => {
 });
 
 router.get("/:username", async (req, res) => {
-  let responseJSON = { logbooks: [], errors: [] };
+  let responseJSON = { logbooks: [], message: "", errors: [] };
   let returnStatus = statusCodes.SUCCESS;
   const username = req.params.username;
   const user = await userMethods.getUserByName(username);
@@ -78,11 +77,11 @@ router.get("/:username", async (req, res) => {
   return res.status(returnStatus).json(responseJSON);
 });
 
-router.get("/:username/:aircraftName", async (req, res) => {
+router.get("/:username/:aircraft", async (req, res) => {
   let responseJSON = { logbook: null, errors: [] };
   let returnStatus = statusCodes.SUCCESS;
   const username = req.params.username;
-  const aircraftName = req.params.aircraftName;
+  const aircraft = req.params.aircraft;
   const user = await userMethods.getUserByName(username);
 
   if (isEmptyOrNull(user)) {
@@ -90,7 +89,7 @@ router.get("/:username/:aircraftName", async (req, res) => {
     responseJSON.errors.push("User does not exist!");
   } else {
     try {
-      const result = await logbookMethods.getLogbook(aircraftName, user);
+      const result = await logbookMethods.getLogbook(aircraft, user);
       responseJSON.logbook = result.logbook;
       if (isEmptyOrNull(responseJSON.logbook)) {
         returnStatus = statusCodes.INVALID_STATUS;
@@ -107,13 +106,13 @@ router.get("/:username/:aircraftName", async (req, res) => {
   return res.status(returnStatus).json(responseJSON);
 });
 
-router.post("/add-mission", authenticate, isVerified, async (req, res) => {
+router.post("/:aircraft", authenticate, isVerified, async (req, res) => {
   const mission = req.body;
   let responseJSON = { logbook: null, errors: [] };
   let returnStatus = statusCodes.SUCCESS;
 
   try {
-    const updatedLogbook = await logbookMethods.addMission(mission, res.locals.user);
+    const updatedLogbook = await logbookMethods.addMission(req.params.aircraft, mission, res.locals.user);
 
     if (updatedLogbook.logbook !== null && updatedLogbook.errors.length === 0) {
       returnStatus = statusCodes.SUCCESS;
