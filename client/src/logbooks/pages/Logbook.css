@@ -1,44 +1,26 @@
-svg:not(.MuiSvgIcon-root) {
-  display: flex !important;
-  margin: auto !important;
-  margin-top: 30px !important;
-}
-
 .add-mission {
   margin: auto !important;
   display: flex !important;
-  margin-top: 30px !important;
 }
 
-.shape {
-  fill-opacity: 0.3;
+svg {
+  width: 60% !important;
+  height: 60% !important;
+  margin: auto !important;
+  display: flex !important;
 }
-.shape:hover {
-  fill-opacity: 0.65;
-  z-index: 100;
+
+text {
+  color: white;
+  fill: white;
 }
-.scale {
-  fill: rgba(0, 0, 0, 0);
-  stroke: #a1d2fa;
-  stroke-width: 0.2;
+
+.cell {
+  margin: auto !important;
+  display: flex !important;
 }
-.axis {
-  stroke: #90caf9;
-  stroke-width: 0.2;
-}
-.dot {
-  fill: #fff;
-  stroke: #e7e8e7;
-  r: 5;
-  -webkit-transition: r 0.2s;
-  -o-transition: r 0.2s;
-  transition: r 0.2s;
-}
-.dot:hover {
-  stroke: #bbb;
-  r: 8;
-}
-.caption {
-  fill: #fff;
-  font-weight: 400;
+
+.MuiSvgIcon-root {
+  width: 1em !important;
+  height: 1em !important;
 }

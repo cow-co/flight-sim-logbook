@@ -156,7 +156,7 @@ class AddMissionModal extends React.Component {
                 name="package"
               />
             }
-            label="Coordinated Package"
+            label="Multiplayer Work"
           />
           <FormControlLabel
             control={
