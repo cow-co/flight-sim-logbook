@@ -7,7 +7,7 @@ let transport = null;
 if (process.env.NODE_ENV === "production") {
   console.log("Creating transport");
   transport = mailer.createTransport({
-    service: "gmail",
+    service: "hotmail",
     auth: {
       user: EMAIL_UN,
       pass: EMAIL_PW,
