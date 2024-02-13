@@ -8,6 +8,7 @@ const http = require("http");
 const { default: rateLimit } = require("express-rate-limit");
 const path = require("path");
 const sanitize = require("sanitize");
+const { levels, log } = require("./utils/logger");
 
 const logbooks = require("./api/logbooks");
 
@@ -43,7 +44,7 @@ if (process.env.NODE_ENV === "production") {
 app.use(express.static(path.join(__dirname, "build")));
 app.use("/api/logbooks", logbooks);
 
-const theme = new SwaggerTheme("v3");
+const theme = new SwaggerTheme();
 const darkStyle = theme.getBuffer("dark");
 app.use(
   "/api-docs",
