@@ -1,0 +1,10 @@
+openapi: '3.0.2'
+info:
+  title: Flight Sim Logbook
+  version: '0.0.1'
+paths:
+  /api/logbooks/:
+    get:
+      responses:
+        '200':
+          description: OK
