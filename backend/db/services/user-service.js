@@ -1,8 +1,7 @@
 const User = require("../models/User");
 const HashedPassword = require("../models/HashedPassword");
 const TokenValidity = require("../models/TokenValidity");
-
-// TODO Chuck some logging in here
+const { log, levels } = require("../../utils/logger");
 
 /**
  * Finds a user corresponding to the given ID
@@ -11,6 +10,11 @@ const TokenValidity = require("../models/TokenValidity");
  * @returns The user, if found, or null if not
  */
 const getUserById = async (id, includePasswordHash) => {
+  log(
+    "user-service/getUserById",
+    `Params: ID: ${id}, include password hash? ${includePasswordHash}`,
+    levels.DEBUG
+  );
   let user = null;
 
   if (id) {
@@ -30,6 +34,11 @@ const getUserById = async (id, includePasswordHash) => {
  * @returns The user, if found, or EMPTY_USER object if not
  */
 const getUserByName = async (name, includePasswordHash) => {
+  log(
+    "user-service/getUserByName",
+    `Params: name: ${name}, include password hash? ${includePasswordHash}`,
+    levels.DEBUG
+  );
   let user = null;
 
   if (name) {
@@ -48,6 +57,11 @@ const getUserByName = async (name, includePasswordHash) => {
  * @param {string} hashedPassword Hash of the password for the new user.
  */
 const createUser = async (username, hashedPassword) => {
+  log(
+    "user-service/createUser",
+    `Params: username: ${username}, password hash: ${hashedPassword}`,
+    levels.DEBUG
+  );
   const createdUser = await User.create({
     name: username,
   });
@@ -66,6 +80,7 @@ const createUser = async (username, hashedPassword) => {
  * @param {string} id ID of user to log out
  */
 const logUserOut = async (id) => {
+  log("user-service/logUserOut", `Params: ID: ${id}`, levels.DEBUG);
   const existingEntry = await TokenValidity.findOne({ userId: id });
   if (existingEntry) {
     existingEntry.minTokenValidity = Date.now();
@@ -85,6 +100,11 @@ const logUserOut = async (id) => {
  * @returns The timestamp before which any tokens will be considered invalid (or 0 if an entry is not found)
  */
 const getMinValidTokenTimestamp = async (id) => {
+  log(
+    "user-service/getMinValidTokenTimestamp",
+    `Params: ID: ${id}`,
+    levels.DEBUG
+  );
   let timestamp = 0;
   const tokenValidityEntry = await TokenValidity.findOne({ userId: id });
   if (tokenValidityEntry) {
