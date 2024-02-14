@@ -111,3 +111,52 @@ describe("User service tests - create", () => {
     expect(res.password).toBe("hashId");
   });
 });
+
+describe("User service tests - logout", () => {
+  test("Log out user - success - no entry existing", async () => {
+    TokenValidity.findOne.mockResolvedValue(null);
+
+    await userService.logUserOut("id");
+
+    expect(TokenValidity.create).toHaveBeenCalledTimes(1);
+  });
+
+  test("Log out user - success - entry exists", async () => {
+    let called = false;
+    TokenValidity.findOne.mockResolvedValue({
+      _id: "id",
+      userId: "id",
+      minTokenValidity: 100,
+      save: async function () {
+        called = true;
+      },
+    });
+
+    await userService.logUserOut("id");
+
+    expect(TokenValidity.create).toHaveBeenCalledTimes(0);
+    expect(called).toBeTruthy();
+  });
+});
+
+describe("User service tests - get token validity timestamp", () => {
+  test("Get min timestamp - success - no entry existing", async () => {
+    TokenValidity.findOne.mockResolvedValue(null);
+
+    const timestamp = await userService.getMinValidTokenTimestamp("id");
+
+    expect(timestamp).toBe(0);
+  });
+
+  test("Get min timestamp - success - entry exists", async () => {
+    TokenValidity.findOne.mockResolvedValue({
+      _id: "id",
+      userId: "id",
+      minTokenValidity: 100,
+    });
+
+    const timestamp = await userService.getMinValidTokenTimestamp("id");
+
+    expect(timestamp).toBe(100);
+  });
+});
