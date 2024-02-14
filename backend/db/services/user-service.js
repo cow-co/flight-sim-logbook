@@ -2,25 +2,22 @@ const User = require("../models/User");
 const HashedPassword = require("../models/HashedPassword");
 const TokenValidity = require("../models/TokenValidity");
 
-const EMPTY_USER = {
-  _id: "",
-  name: "",
-  password: null,
-};
+// TODO Chuck some logging in here
 
 /**
  * Finds a user corresponding to the given ID
  * @param {string} id The MongoDB ID of the user to find
  * @param {boolean} includePasswordHash Whether we should include the password hash in the returned object
- * @returns The user, if found, or EMPTY_USER object if not
+ * @returns The user, if found, or null if not
  */
 const getUserById = async (id, includePasswordHash) => {
-  let user = EMPTY_USER;
+  let user = null;
 
   if (id) {
-    user = includePasswordHash
-      ? await User.findById(id).populate("password")
-      : await User.findById(id);
+    user = await User.findById(id);
+    if (includePasswordHash) {
+      await user.populate("password");
+    }
   }
 
   return user;
@@ -33,12 +30,13 @@ const getUserById = async (id, includePasswordHash) => {
  * @returns The user, if found, or EMPTY_USER object if not
  */
 const getUserByName = async (name, includePasswordHash) => {
-  let user = EMPTY_USER;
+  let user = null;
 
   if (name) {
-    user = includePasswordHash
-      ? await User.findOne({ name: name }).populate("password")
-      : await User.findOne({ name: name });
+    user = await User.findOne({ name: name });
+    if (includePasswordHash) {
+      await user.populate("password");
+    }
   }
 
   return user;
@@ -96,7 +94,6 @@ const getMinValidTokenTimestamp = async (id) => {
 };
 
 module.exports = {
-  EMPTY_USER,
   getUserById,
   getUserByName,
   createUser,
