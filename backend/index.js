@@ -11,6 +11,7 @@ const sanitize = require("sanitize");
 const { levels, log } = require("./utils/logger");
 
 const logbooks = require("./api/logbooks");
+const users = require("./api/users");
 
 const swaggerDoc = YAML.load("openapi/openapi.yaml");
 
@@ -43,6 +44,7 @@ if (process.env.NODE_ENV === "production") {
 
 app.use(express.static(path.join(__dirname, "build")));
 app.use("/api/logbooks", logbooks);
+app.use("/api/users", users);
 
 const theme = new SwaggerTheme();
 const darkStyle = theme.getBuffer("dark");
