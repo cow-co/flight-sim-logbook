@@ -20,10 +20,12 @@ router.post("/register", async (req, res) => {
     levels.DEBUG
   );
 
-  let validationErrors = validation.validateUsername(username);
-  validationErrors = validationErrors.concat(
-    validation.validatePassword(password, passwordConfirmation)
+  let usernameErrors = validation.validateUsername(username);
+  let passwordErrors = validation.validatePassword(
+    password,
+    passwordConfirmation
   );
+  const validationErrors = usernameErrors.concat(passwordErrors);
 
   let status = statusCodes.OK;
   let response = {
@@ -36,8 +38,8 @@ router.post("/register", async (req, res) => {
     response.errors = validationErrors;
   } else {
     try {
-      const user = userService.getUserByName(username);
-      if (user._id) {
+      const user = await userService.getUserByName(username, false);
+      if (user && user._id) {
         status = statusCodes.BAD_REQUEST;
         response.errors.push("User with that name already exists!");
       } else {

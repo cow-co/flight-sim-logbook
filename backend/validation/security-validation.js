@@ -1,6 +1,6 @@
 /**
  * @param {string} username
- * @returns {array[string]} errors
+ * @returns {[string]} errors
  */
 const validateUsername = (username) => {
   let errors = [];
@@ -16,7 +16,7 @@ const validateUsername = (username) => {
 /**
  * @param {string} password
  * @param {string} passwordConfirmation
- * @returns {array[string]} errors
+ * @returns {[string]} errors
  */
 const validatePassword = (password, passwordConfirmation) => {
   let errors = [];
