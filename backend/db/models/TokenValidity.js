@@ -10,6 +10,7 @@ const tokenValiditySchema = new Schema({
   // Is set to the current time when logged out - effectively invalidating existing tokens
   minTokenValidity: {
     type: Number,
+    required: true,
   },
 });
 
