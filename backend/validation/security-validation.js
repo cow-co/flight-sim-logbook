@@ -1,0 +1,1 @@
+const validateUsername = (username) => {};
