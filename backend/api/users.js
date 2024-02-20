@@ -5,6 +5,8 @@ const { log, levels } = require("../utils/logger");
 const userService = require("../db/services/user-service");
 const validation = require("../validation/security-validation");
 const argon2 = require("argon2");
+const jwt = require("jsonwebtoken");
+const securityConfig = require("../config/security");
 
 router.post("/register", async (req, res) => {
   const username = req.bodyString("username");
@@ -52,6 +54,68 @@ router.post("/register", async (req, res) => {
       status = statusCodes.INTERNAL_SERVER_ERROR;
       response.errors.push("Internal Server Error");
     }
+  }
+
+  res.status(status).json(response);
+});
+
+router.post("/login", async (req, res) => {
+  const username = req.bodyString("username");
+  // Sanitising these via bodyString might clobber their values,
+  // which is bad in the case of a password. Sanitising not needed anyway, since
+  // only the hash (which is safe) will go to the DB.
+  const password = req.body.password;
+
+  log(
+    "POST /api/users/login",
+    `Logging in with username ${username}`,
+    levels.DEBUG
+  );
+
+  let status = statusCodes.OK;
+  let response = {
+    user: {
+      id: null,
+      name: null,
+    },
+    token: null,
+    errors: [],
+  };
+
+  try {
+    let verified = false;
+    const user = await userService.getUserByName(username, true);
+    if (user && user._id) {
+      verified = await argon2.verify(user.password.hashedPassword, password);
+      if (verified) {
+        response.user.id = user._id;
+        response.user.name = user.name;
+        const token = jwt.sign(
+          {
+            id: user._id,
+          },
+          securityConfig.jwtSecret,
+          {
+            expiresIn: "3h",
+          }
+        );
+        response.token = token;
+      }
+    }
+
+    if (!verified) {
+      log(
+        "POST /api/users/login",
+        `Login failed for username ${username}`,
+        levels.SECURITY
+      );
+      status = statusCodes.UNAUTHENTICATED;
+      response.errors.push("Incorrect Credentials");
+    }
+  } catch (err) {
+    log("POST /api/users/register", err, levels.WARN);
+    status = statusCodes.INTERNAL_SERVER_ERROR;
+    response.errors.push("Internal Server Error");
   }
 
   res.status(status).json(response);
