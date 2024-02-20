@@ -8,6 +8,7 @@ jest.mock("../../db/services/user-service");
 describe("Security middleware tests", () => {
   describe("Verify token", () => {
     test("Success", async () => {
+      console.log("SUCCESS");
       jwt.verify.mockReturnValue({
         userId: "id",
         iat: 100000,
@@ -18,9 +19,7 @@ describe("Security middleware tests", () => {
       await securityMiddleware.verifyToken(
         {
           headerString: function (header) {
-            console.log(header);
             if (header === "authorization") {
-              console.log("BEARING");
               return "Bearer jjjjj";
             } else {
               return null;
@@ -37,14 +36,17 @@ describe("Security middleware tests", () => {
     });
 
     test("Failure - invalid token", async () => {
-      jwt.verify.mockRejectedValue(new jwt.JsonWebTokenError("TEST"));
+      jwt.verify.mockImplementation(() => {
+        throw new jwt.JsonWebTokenError();
+      });
 
       let calledNext = false;
       let rejected = false;
+      let status = 200;
       await securityMiddleware.verifyToken(
         {
           headerString: function (header) {
-            if (header === "Authorization") {
+            if (header === "authorization") {
               return "Bearer jjjjj";
             } else {
               return null;
@@ -53,6 +55,7 @@ describe("Security middleware tests", () => {
         },
         {
           status: function (statusCode) {
+            status = statusCode;
             return {
               json: function (object) {
                 rejected = true;
@@ -67,17 +70,21 @@ describe("Security middleware tests", () => {
 
       expect(calledNext).toBeFalsy();
       expect(rejected).toBeTruthy();
+      expect(status).toBe(403);
     });
 
     test("Failure - expired token", async () => {
-      jwt.verify.mockRejectedValue(new jwt.TokenExpiredError("TEST"));
+      jwt.verify.mockImplementation(() => {
+        throw new jwt.TokenExpiredError();
+      });
 
       let calledNext = false;
       let rejected = false;
+      let status = 200;
       await securityMiddleware.verifyToken(
         {
           headerString: function (header) {
-            if (header === "Authorization") {
+            if (header === "authorization") {
               return "Bearer jjjjj";
             } else {
               return null;
@@ -86,8 +93,10 @@ describe("Security middleware tests", () => {
         },
         {
           status: function (statusCode) {
+            status = statusCode;
             return {
               json: function (object) {
+                console.log(object);
                 rejected = true;
               },
             };
@@ -100,6 +109,7 @@ describe("Security middleware tests", () => {
 
       expect(calledNext).toBeFalsy();
       expect(rejected).toBeTruthy();
+      expect(status).toBe(403);
     });
 
     test("Failure - user has logged out", async () => {
@@ -107,14 +117,15 @@ describe("Security middleware tests", () => {
         userId: "id",
         iat: 10,
       });
-      userService.getMinValidTokenTimestamp.mockResolvedValue(1000);
+      userService.getMinValidTokenTimestamp.mockResolvedValue(100000);
 
       let calledNext = false;
       let rejected = false;
+      let status = 200;
       await securityMiddleware.verifyToken(
         {
           headerString: function (header) {
-            if (header === "Authorization") {
+            if (header === "authorization") {
               return "Bearer jjjjj";
             } else {
               return null;
@@ -123,8 +134,10 @@ describe("Security middleware tests", () => {
         },
         {
           status: function (statusCode) {
+            status = statusCode;
             return {
               json: function (object) {
+                console.log(object);
                 rejected = true;
               },
             };
@@ -137,6 +150,7 @@ describe("Security middleware tests", () => {
 
       expect(calledNext).toBeFalsy();
       expect(rejected).toBeTruthy();
+      expect(status).toBe(403);
     });
   });
 });

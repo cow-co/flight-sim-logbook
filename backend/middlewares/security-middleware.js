@@ -17,6 +17,7 @@ const verifyToken = async (req, res, next) => {
   log("security-middleware/verifyToken", "Verifying Token...", levels.DEBUG);
 
   const authHeader = req.headerString("authorization");
+  console.log(authHeader);
 
   if (!authHeader) {
     res.status(statusCodes.FORBIDDEN).json({ errors: ["No token"] });
@@ -46,9 +47,9 @@ const verifyToken = async (req, res, next) => {
       }
     } catch (err) {
       if (
-        err.name === "TokenExpiredError" ||
-        err.name === "JsonWebTokenError" ||
-        err.name === "NotBeforeError"
+        err instanceof jwt.TokenExpiredError ||
+        err instanceof jwt.JsonWebTokenError ||
+        err instanceof jwt.NotBeforeError
       ) {
         log("security-middleware/verifyToken", err, levels.SECURITY);
 
