@@ -20,38 +20,40 @@ describe("Logbook tests", () => {
     agent = require("supertest").agent(server);
   });
 
-  test("Get logbooks - success", async () => {
-    logbookService.getLogbooks.mockResolvedValue([
-      {
-        user: "id",
-        entries: [],
-      },
-    ]);
+  describe("Get logbooks", () => {
+    test("Success", async () => {
+      logbookService.getLogbooks.mockResolvedValue([
+        {
+          user: "id",
+          entries: [],
+        },
+      ]);
 
-    const res = await agent.get("/api/logbooks/");
+      const res = await agent.get("/api/logbooks/");
 
-    expect(res.statusCode).toBe(200);
-    expect(res.body.errors).toHaveLength(0);
-    expect(res.body.logbooks).toHaveLength(1);
-  });
+      expect(res.statusCode).toBe(200);
+      expect(res.body.errors).toHaveLength(0);
+      expect(res.body.logbooks).toHaveLength(1);
+    });
 
-  test("Get logbooks - success - empty list", async () => {
-    logbookService.getLogbooks.mockResolvedValue([]);
+    test("Success - empty list", async () => {
+      logbookService.getLogbooks.mockResolvedValue([]);
 
-    const res = await agent.get("/api/logbooks/");
+      const res = await agent.get("/api/logbooks/");
 
-    expect(res.statusCode).toBe(200);
-    expect(res.body.errors).toHaveLength(0);
-    expect(res.body.logbooks).toHaveLength(0);
-  });
+      expect(res.statusCode).toBe(200);
+      expect(res.body.errors).toHaveLength(0);
+      expect(res.body.logbooks).toHaveLength(0);
+    });
 
-  test("Get logbooks - failure - exception", async () => {
-    logbookService.getLogbooks.mockRejectedValue(new TypeError("TEST"));
+    test("Failure - exception", async () => {
+      logbookService.getLogbooks.mockRejectedValue(new TypeError("TEST"));
 
-    const res = await agent.get("/api/logbooks/");
+      const res = await agent.get("/api/logbooks/");
 
-    expect(res.statusCode).toBe(500);
-    expect(res.body.errors).toHaveLength(1);
-    expect(res.body.logbooks).toHaveLength(0);
+      expect(res.statusCode).toBe(500);
+      expect(res.body.errors).toHaveLength(1);
+      expect(res.body.logbooks).toHaveLength(0);
+    });
   });
 });
