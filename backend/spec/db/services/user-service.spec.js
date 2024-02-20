@@ -9,7 +9,7 @@ jest.mock("../../../db/models/TokenValidity");
 
 describe("User service tests", () => {
   describe("Get user by ID", () => {
-    test("Get user by ID - success - no hash", async () => {
+    test("Success - no hash", async () => {
       User.findById.mockResolvedValue({
         _id: "id",
         name: "name",
@@ -22,7 +22,7 @@ describe("User service tests", () => {
       expect(res.password).toBe("hashId");
     });
 
-    test("Get user by ID - success - hash included", async () => {
+    test("Success - hash included", async () => {
       User.findById.mockResolvedValue({
         _id: "id",
         name: "name",
@@ -42,7 +42,7 @@ describe("User service tests", () => {
       expect(res.password.hashedPassword).toBe("hashyDooey");
     });
 
-    test("Get user by ID - failure - not found", async () => {
+    test("Failure - not found", async () => {
       User.findById.mockResolvedValue(null);
 
       const res = await userService.getUserById("id", false);
@@ -52,7 +52,7 @@ describe("User service tests", () => {
   });
 
   describe("Get user by name", () => {
-    test("Get user by name - success - no hash", async () => {
+    test("Success - no hash", async () => {
       User.findOne.mockResolvedValue({
         _id: "id",
         name: "name",
@@ -65,7 +65,7 @@ describe("User service tests", () => {
       expect(res.password).toBe("hashId");
     });
 
-    test("Get user by name - success - hash included", async () => {
+    test("Success - hash included", async () => {
       User.findOne.mockResolvedValue({
         _id: "id",
         name: "name",
@@ -85,7 +85,7 @@ describe("User service tests", () => {
       expect(res.password.hashedPassword).toBe("hashyDooey");
     });
 
-    test("Get user by name - failure - not found", async () => {
+    test("Failure - not found", async () => {
       User.findOne.mockResolvedValue(null);
 
       const res = await userService.getUserByName("name", false);
@@ -95,7 +95,7 @@ describe("User service tests", () => {
   });
 
   describe("Create user", () => {
-    test("Create user - success", async () => {
+    test("Success", async () => {
       User.create.mockResolvedValue({
         _id: "id",
         name: "name",
@@ -114,7 +114,7 @@ describe("User service tests", () => {
   });
 
   describe("Logout", () => {
-    test("Log out user - success - no entry existing", async () => {
+    test("Success - no entry existing", async () => {
       TokenValidity.findOne.mockResolvedValue(null);
 
       await userService.logUserOut("id");
@@ -122,7 +122,7 @@ describe("User service tests", () => {
       expect(TokenValidity.create).toHaveBeenCalledTimes(1);
     });
 
-    test("Log out user - success - entry exists", async () => {
+    test("Success - entry exists", async () => {
       let called = false;
       TokenValidity.findOne.mockResolvedValue({
         _id: "id",
@@ -141,7 +141,7 @@ describe("User service tests", () => {
   });
 
   describe("Get token validity timestamp", () => {
-    test("Get min timestamp - success - no entry existing", async () => {
+    test("Success - no entry existing", async () => {
       TokenValidity.findOne.mockResolvedValue(null);
 
       const timestamp = await userService.getMinValidTokenTimestamp("id");
@@ -149,7 +149,7 @@ describe("User service tests", () => {
       expect(timestamp).toBe(0);
     });
 
-    test("Get min timestamp - success - entry exists", async () => {
+    test("Success - entry exists", async () => {
       TokenValidity.findOne.mockResolvedValue({
         _id: "id",
         userId: "id",

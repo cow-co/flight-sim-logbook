@@ -7,6 +7,7 @@ const validation = require("../validation/security-validation");
 const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
 const securityConfig = require("../config/security");
+const { verifyToken } = require("../middlewares/security-middleware");
 
 router.post("/register", async (req, res) => {
   const username = req.bodyString("username");
@@ -92,7 +93,7 @@ router.post("/login", async (req, res) => {
         response.user.name = user.name;
         const token = jwt.sign(
           {
-            id: user._id,
+            userId: user._id,
           },
           securityConfig.jwtSecret,
           {
@@ -114,6 +115,28 @@ router.post("/login", async (req, res) => {
     }
   } catch (err) {
     log("POST /api/users/register", err, levels.WARN);
+    status = statusCodes.INTERNAL_SERVER_ERROR;
+    response.errors.push("Internal Server Error");
+  }
+
+  res.status(status).json(response);
+});
+
+router.post("/logout", verifyToken, async (req, res) => {
+  let status = statusCodes.OK;
+  let response = {
+    errors: [],
+  };
+
+  try {
+    await userService.logUserOut(req.data.userId);
+    log(
+      "POST /api/users/logout",
+      `User ${req.data.userId} logged out`,
+      levels.DEBUG
+    );
+  } catch (err) {
+    log("POST /api/users/logout", err, levels.WARN);
     status = statusCodes.INTERNAL_SERVER_ERROR;
     response.errors.push("Internal Server Error");
   }
