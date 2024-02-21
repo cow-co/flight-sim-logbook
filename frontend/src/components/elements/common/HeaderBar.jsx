@@ -9,7 +9,7 @@ import {
   createSuccessAlert,
 } from "../../../common/redux/dispatchers";
 
-const HeaderBar = () => {
+const HeaderBar = ({ handleLoginFormOpen, handleRegisterFormOpen }) => {
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.users.userId);
 
@@ -21,7 +21,7 @@ const HeaderBar = () => {
         dispatch(setUserId(""));
         dispatch(setToken(""));
       } else {
-        dispatch(setUserId(res.user.id));
+        dispatch(setUserId(res.userId));
       }
     };
     checkSession();
@@ -40,6 +40,15 @@ const HeaderBar = () => {
     }
   };
 
+  let loginoutButton = <Button onClick={handleLoginFormOpen}>Log In</Button>;
+  if (userId) {
+    loginoutButton = <Button onClick={handleLogout}>Log Out</Button>;
+  }
+
+  let registerButton = userId ? null : (
+    <Button onClick={handleRegisterFormOpen}>Register</Button>
+  );
+
   return (
     <AppBar position="static">
       <Toolbar>
@@ -48,6 +57,8 @@ const HeaderBar = () => {
             Logbook
           </Button>
         </Typography>
+        {registerButton}
+        {loginoutButton}
       </Toolbar>
     </AppBar>
   );

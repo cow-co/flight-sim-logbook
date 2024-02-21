@@ -20,7 +20,7 @@ const getToken = () => {
  * @param {string} confirmPassword Not used by backend if PKI is enabled
  * @returns The JSON from the response
  */
-const register = async (username, password, confirmPassword) => {
+const register = async (username, password, passwordConfirmation) => {
   let json = null;
   try {
     const response = await fetch(`${conf.apiURL}users/register`, {
@@ -31,7 +31,7 @@ const register = async (username, password, confirmPassword) => {
       body: JSON.stringify({
         username,
         password,
-        confirmPassword,
+        passwordConfirmation,
       }),
     });
     json = await response.json();

@@ -144,4 +144,27 @@ router.post("/logout", verifyToken, async (req, res) => {
   res.status(status).json(response);
 });
 
+router.get("/whoami", verifyToken, async (req, res) => {
+  log("GET /users/whoami", "Checking user status...", levels.DEBUG);
+  let response = {};
+  let status = statusCodes.OK;
+
+  try {
+    const user = await userService.getUserById(req.data.userId);
+    response = {
+      userId: user._id,
+      errors: [],
+    };
+  } catch (err) {
+    log("GET /users/whoami", err, levels.ERROR);
+    status = statusCodes.INTERNAL_SERVER_ERROR;
+    response = {
+      userId: null,
+      errors: ["Internal Server Error"],
+    };
+  }
+
+  res.status(status).json(response);
+});
+
 module.exports = router;

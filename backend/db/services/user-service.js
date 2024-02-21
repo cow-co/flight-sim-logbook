@@ -62,13 +62,13 @@ const createUser = async (username, hashedPassword) => {
     `Params: username: ${username}, password hash: ${hashedPassword}`,
     levels.DEBUG
   );
-  const createdUser = await User.create({
-    name: username,
-  });
   const pw = await HashedPassword.create({
     hashedPassword: hashedPassword,
   });
-  createdUser.password = pw._id;
+  const createdUser = await User.create({
+    name: username,
+    password: pw._id,
+  });
   await createdUser.save();
   return createdUser;
 };

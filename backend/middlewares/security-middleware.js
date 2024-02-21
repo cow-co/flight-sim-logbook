@@ -17,7 +17,6 @@ const verifyToken = async (req, res, next) => {
   log("security-middleware/verifyToken", "Verifying Token...", levels.DEBUG);
 
   const authHeader = req.headerString("authorization");
-  console.log(authHeader);
 
   if (!authHeader) {
     res.status(statusCodes.FORBIDDEN).json({ errors: ["No token"] });
