@@ -5,8 +5,9 @@ const { log, levels } = require("../utils/logger");
 const userService = require("../db/services/user-service");
 const validation = require("../validation/security-validation");
 const argon2 = require("argon2");
-const security = require("../config/security");
 const jwt = require("jsonwebtoken");
+const securityConfig = require("../config/security");
+const { verifyToken } = require("../middlewares/security-middleware");
 
 router.post("/register", async (req, res) => {
   const username = req.bodyString("username");
@@ -68,43 +69,74 @@ router.post("/login", async (req, res) => {
 
   log(
     "POST /api/users/login",
-    `Attempting login for user: username ${username}`,
+    `Logging in with username ${username}`,
     levels.DEBUG
   );
 
   let status = statusCodes.OK;
   let response = {
-    userId: null,
+    user: {
+      id: null,
+      name: null,
+    },
     token: null,
     errors: [],
   };
 
   try {
+    let verified = false;
     const user = await userService.getUserByName(username, true);
-
     if (user && user._id) {
-      const verified = await argon2.verify(
-        user.password.hashedPassword,
-        password
-      );
-
+      verified = await argon2.verify(user.password.hashedPassword, password);
       if (verified) {
-        const data = {
-          userId: user._id,
-        };
-        const jwt = jwt.sign(data, security.jwtSecret, { expiresIn: "2h" });
-        response.userId = user._id;
-        response.token = jwt;
-      } else {
-        status = statusCodes.UNAUTHENTICATED;
-        response.errors.push("Incorrect Credentials");
+        response.user.id = user._id;
+        response.user.name = user.name;
+        const token = jwt.sign(
+          {
+            userId: user._id,
+          },
+          securityConfig.jwtSecret,
+          {
+            expiresIn: "3h",
+          }
+        );
+        response.token = token;
       }
-    } else {
+    }
+
+    if (!verified) {
+      log(
+        "POST /api/users/login",
+        `Login failed for username ${username}`,
+        levels.SECURITY
+      );
       status = statusCodes.UNAUTHENTICATED;
       response.errors.push("Incorrect Credentials");
     }
   } catch (err) {
-    log("POST /api/users/login", err, levels.WARN);
+    log("POST /api/users/register", err, levels.WARN);
+    status = statusCodes.INTERNAL_SERVER_ERROR;
+    response.errors.push("Internal Server Error");
+  }
+
+  res.status(status).json(response);
+});
+
+router.post("/logout", verifyToken, async (req, res) => {
+  let status = statusCodes.OK;
+  let response = {
+    errors: [],
+  };
+
+  try {
+    await userService.logUserOut(req.data.userId);
+    log(
+      "POST /api/users/logout",
+      `User ${req.data.userId} logged out`,
+      levels.DEBUG
+    );
+  } catch (err) {
+    log("POST /api/users/logout", err, levels.WARN);
     status = statusCodes.INTERNAL_SERVER_ERROR;
     response.errors.push("Internal Server Error");
   }
