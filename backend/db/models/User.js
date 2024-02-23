@@ -11,7 +11,6 @@ const userSchema = new Schema({
   },
   password: {
     type: mongoose.SchemaTypes.ObjectId,
-    required: true,
     ref: "HashedPassword",
   },
 });

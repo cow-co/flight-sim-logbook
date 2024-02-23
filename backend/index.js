@@ -9,6 +9,7 @@ const { default: rateLimit } = require("express-rate-limit");
 const path = require("path");
 const sanitize = require("sanitize");
 const { levels, log } = require("./utils/logger");
+const securityConfig = require("./config/security");
 
 const logbooks = require("./api/logbooks");
 const users = require("./api/users");
@@ -68,7 +69,7 @@ const stop = () => {
 
 const serve = () => {
   if (process.env.NODE_ENV === "production") {
-    server = https.createServer(app).listen(port, async () => {
+    server = http.createServer(app).listen(port, async () => {
       log("index", `Server running on port ${port}`, levels.INFO);
     });
     app.use(express.static("client/build"));

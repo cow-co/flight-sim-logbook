@@ -122,7 +122,7 @@ router.post("/login", async (req, res) => {
   res.status(status).json(response);
 });
 
-router.post("/logout", verifyToken, async (req, res) => {
+router.delete("/logout", verifyToken, async (req, res) => {
   let status = statusCodes.OK;
   let response = {
     errors: [],
@@ -131,14 +131,37 @@ router.post("/logout", verifyToken, async (req, res) => {
   try {
     await userService.logUserOut(req.data.userId);
     log(
-      "POST /api/users/logout",
+      "DELETE /api/users/logout",
       `User ${req.data.userId} logged out`,
       levels.DEBUG
     );
   } catch (err) {
-    log("POST /api/users/logout", err, levels.WARN);
+    log("DELETE /api/users/logout", err, levels.WARN);
     status = statusCodes.INTERNAL_SERVER_ERROR;
     response.errors.push("Internal Server Error");
+  }
+
+  res.status(status).json(response);
+});
+
+router.get("/whoami", verifyToken, async (req, res) => {
+  log("GET /users/whoami", "Checking user status...", levels.DEBUG);
+  let response = {};
+  let status = statusCodes.OK;
+
+  try {
+    const user = await userService.getUserById(req.data.userId);
+    response = {
+      userId: user._id,
+      errors: [],
+    };
+  } catch (err) {
+    log("GET /users/whoami", err, levels.ERROR);
+    status = statusCodes.INTERNAL_SERVER_ERROR;
+    response = {
+      userId: null,
+      errors: ["Internal Server Error"],
+    };
   }
 
   res.status(status).json(response);

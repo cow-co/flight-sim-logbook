@@ -194,7 +194,7 @@ describe("User tests", () => {
 
   describe("Logout", () => {
     test("Success", async () => {
-      const res = await agent.post("/api/users/logout");
+      const res = await agent.delete("/api/users/logout");
 
       expect(res.statusCode).toBe(200);
       expect(res.body.errors).toHaveLength(0);
@@ -202,7 +202,7 @@ describe("User tests", () => {
 
     test("Failure - exception", async () => {
       userService.logUserOut.mockRejectedValue(new TypeError("TEST"));
-      const res = await agent.post("/api/users/logout");
+      const res = await agent.delete("/api/users/logout");
 
       expect(res.statusCode).toBe(500);
       expect(res.body.errors).toHaveLength(1);
