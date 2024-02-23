@@ -99,6 +99,7 @@ describe("User service tests", () => {
       User.create.mockResolvedValue({
         _id: "id",
         name: "name",
+        password: "hashId",
         save: async function () {},
       });
       HashedPassword.create.mockResolvedValue({
