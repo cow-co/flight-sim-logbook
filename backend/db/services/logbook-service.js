@@ -5,6 +5,9 @@ const getLogbooks = async () => {
   return await Logbook.find();
 };
 
+const getLogbooksForUser = async (userId) => {};
+
 module.exports = {
   getLogbooks,
+  getLogbooksForUser,
 };

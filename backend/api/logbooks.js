@@ -5,19 +5,20 @@ const { log, levels } = require("../utils/logger");
 const logbookService = require("../db/services/logbook-service");
 
 /**
- * Gets all logbooks
+ * Gets logbook for user
  */
-router.get("/", async (req, res) => {
+router.get("/:userId", async (req, res) => {
   let response = {
-    logbooks: [],
+    entries: [],
     errors: [],
   };
   let status = statusCodes.OK;
+  const id = req.paramString("userId");
 
   try {
-    response.logbooks = await logbookService.getLogbooks();
+    response.entries = await logbookService.getLogbooksForUser(id);
   } catch (err) {
-    log("GET /api/logbooks/", err, levels.WARN);
+    log(`GET /api/logbooks/${id}`, err, levels.WARN);
     response.errors = ["Internal Server Error"];
     status = statusCodes.INTERNAL_SERVER_ERROR;
   }
