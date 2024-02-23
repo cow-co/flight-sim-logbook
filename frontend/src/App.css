@@ -43,14 +43,6 @@
   margin: 5px;
 }
 
-.implant.active {
-  background-color: rgb(36, 138, 41);
-}
-
-.implant.inactive {
-  background-color: rgb(138, 36, 36);
-}
-
 .text-input {
   margin: 10px 0 !important;
 }
@@ -69,4 +61,20 @@
 
 .alert-message {
   z-index: 999999;
+}
+
+.aircraft-name {
+  font-weight: bold !important;
+}
+
+th {
+  font-weight: bold !important;
+}
+
+.MuiPaper-root.table-backer {
+  margin: 10px 0 0 0;
+}
+
+h2 {
+  text-align: center;
 }

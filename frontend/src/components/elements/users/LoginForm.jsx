@@ -14,8 +14,7 @@ import {
   createSuccessAlert,
 } from "../../../common/redux/dispatchers";
 
-const LoginForm = (props) => {
-  const { onClose, open } = props;
+const LoginForm = ({ onClose, open }) => {
   const [currentUsername, setCurrentUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();

@@ -1,9 +1,10 @@
-import { Box, Grid } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import AlertsBar from "../elements/common/AlertsBar";
 import { useState } from "react";
 import HeaderBar from "../elements/common/HeaderBar";
 import RegistrationForm from "../elements/users/RegistrationForm";
 import LoginForm from "../elements/users/LoginForm";
+import LogbookTable from "../elements/logbooks/LogbookTable";
 
 function MainPage() {
   const [loginOpen, setLoginOpen] = useState(false);
@@ -21,10 +22,8 @@ function MainPage() {
           open={registerOpen}
           onClose={() => setRegisterOpen(false)}
         />
-        <Grid container spacing={2}>
-          <Grid item xs={6}></Grid>
-          <Grid item xs={6}></Grid>
-        </Grid>
+        <Typography variant="h2">Logbook</Typography>
+        <LogbookTable />
       </Box>
       <AlertsBar />
     </>
