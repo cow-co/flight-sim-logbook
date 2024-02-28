@@ -8,6 +8,7 @@ const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
 const securityConfig = require("../config/security");
 const { verifyToken } = require("../middlewares/security-middleware");
+const logbookService = require("../db/services/logbook-service");
 
 router.post("/register", async (req, res) => {
   const username = req.bodyString("username");
@@ -49,6 +50,7 @@ router.post("/register", async (req, res) => {
         const hashedPassword = await argon2.hash(password);
         const created = await userService.createUser(username, hashedPassword);
         response.userId = created._id;
+        await logbookService.createLogbook(created._id);
       }
     } catch (err) {
       log("POST /api/users/register", err, levels.WARN);

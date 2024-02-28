@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -6,29 +6,25 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { fetchLogbooks } from "../../../common/api-calls";
+import { useSelector, useDispatch } from "react-redux";
 
 const LogbookTable = () => {
-  const [logbooks, setLogbooks] = useState([{
-    _id: "1",
-    aircraft: "MiG-21 FISHBED",
-    hours: 2,
-    ships: 2,
-    sead: false,
-    bvr: false,
-    bfm: true,
-    cas: false,
-    carrier: false
-  }, {
-    _id: "2",
-    aircraft: "F/A-18C",
-    hours: 2.5,
-    ships: 4,
-    sead: true,
-    bvr: true,
-    bfm: false,
-    cas: false,
-    carrier: true
-  }]);
+  const [logbooks, setLogbooks] = useState([]);
+  const userId = useSelector((state) => state.users.userId);
+
+  useEffect(() => {
+    async function callFetcher() {
+      const res = await fetchLogbooks(userId);
+      if (res.errors.length === 0) {
+        setLogbooks(res.entries);
+      }
+    }
+
+    if (userId) {
+      callFetcher();
+    }
+  }, [userId]);
 
   return (
     <TableContainer component={Paper} className="table-backer">

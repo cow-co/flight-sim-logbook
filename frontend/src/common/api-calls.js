@@ -119,4 +119,23 @@ const checkToken = async () => {
   return json;
 };
 
-export { register, login, logout, checkToken };
+const fetchLogbooks = async (userId) => {
+  let json = null;
+
+  try {
+    const response = await fetch(`${conf.apiURL}logbooks/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+    json = await response.json();
+  } catch (err) {
+    console.error(err);
+    json = {
+      errors: ["Error when calling API. Check console for details."],
+    };
+  }
+  return json;
+};
+
+export { register, login, logout, checkToken, fetchLogbooks };
